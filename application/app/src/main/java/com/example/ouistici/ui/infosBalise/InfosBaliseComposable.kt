@@ -32,6 +32,7 @@ import androidx.navigation.NavController
 import com.example.ouistici.model.Balise
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
+import com.example.ouistici.ui.theme.TestButtonColor
 
 @Composable
 fun InfosBalise(navController: NavController) {
@@ -94,9 +95,7 @@ fun InfosBalise(navController: NavController) {
         Surface(
             modifier = Modifier
                 .padding(8.dp)
-                .widthIn(max = 300.dp)
-                .height(300.dp),
-
+                .widthIn(max = 300.dp),
             shape = RoundedCornerShape(10.dp),
             color = BodyBackground,
             border = BorderStroke(2.dp, Color.Black),
@@ -104,9 +103,8 @@ fun InfosBalise(navController: NavController) {
         ) {
             Column(
                 modifier = Modifier
-                    .padding(8.dp)
-
-
+                    .padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 Text(
@@ -127,10 +125,21 @@ fun InfosBalise(navController: NavController) {
 
                 Button(
                     onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(Color.Red)
+                    colors = ButtonDefaults.buttonColors(TestButtonColor)
                 ) {
                     Text(
-                        text = "Tester sur la balise"
+                        text = "Tester sur la balise",
+                        color = Color.White
+                    )
+                }
+                Button(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier.padding(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
+                ) {
+                    Text(
+                        text = "Enregistrer",
+                        color = Color.White
                     )
                 }
             }

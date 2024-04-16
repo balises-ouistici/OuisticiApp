@@ -58,26 +58,28 @@ fun ListeBalises (navController: NavController) {
             color = Color.White,
             border = BorderStroke(2.dp, color = Color.Black)
         ) {
-            Column() {
+            Column(
 
-            }
-            // En-têtes du tableau
-            Row(
-                modifier = Modifier.fillMaxWidth()
             ) {
-                TableHeader(text = "Nom balise")
-                TableHeader(text = "Lieu")
-                TableHeader(text = "Message défaut")
-            }
+                // En-têtes du tableau
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    TableHeader(text = "Nom balise")
+                    TableHeader(text = "Lieu")
+                    TableHeader(text = "Message défaut")
+                }
 
 
 
-            // Liste des balises
-            LazyColumn {
-                items(balises) { balise ->
-                    BaliseRow(balise, navController)
+                // Liste des balises
+                LazyColumn {
+                    items(balises) { balise ->
+                        BaliseRow(balise, navController)
+                    }
                 }
             }
+
         }
     }
 }

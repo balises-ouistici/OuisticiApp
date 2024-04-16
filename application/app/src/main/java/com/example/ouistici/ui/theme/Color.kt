@@ -15,4 +15,5 @@ val Pink40 = Color(0xFF7D5260)
 val NavBackground = Color(0xFFD1D1D1)
 val BodyBackground = Color(0xFFE7E7E7)
 val FontColor = Color(0xFF000000)
+val TestButtonColor = Color(0xFFFFA500)
 
