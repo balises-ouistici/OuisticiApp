@@ -10,7 +10,7 @@ import java.io.File
 
 object Stub {
 
-    private val audioDir = File("app/src/main/res/raw/")
+    private val audioDir = File("res/raw/")
 
     val annVoc by lazy {
         createAnnonceVocale()
@@ -36,15 +36,15 @@ object Stub {
 
     private fun createAnnonceVocale() : List<AnnonceVocal> {
         return listOf(
-            AnnonceVocal("bonjour", getFileFromResource(R.raw.bonjour,"bonjour.m4a")),
-            AnnonceVocal("aurevoir", getFileFromResource(R.raw.aurevoir, "aurevoir.m4a"))
+            AnnonceVocal("bonjour", R.raw.bonjour,),
+            AnnonceVocal("aurevoir", R.raw.aurevoir)
         )
     }
 
     private fun createAnnonceTexte() : List<AnnonceTexte> {
         return listOf(
-            AnnonceTexte("comment", "Comment-allez vous ?", Langue("fr","francais"), getFileFromResource(R.raw.comment, "comment.m4a")),
-            AnnonceTexte("comment2", "Comment-allez vous ?", Langue("fr","francais"), getFileFromResource(R.raw.comment, "comment.m4a"))
+            AnnonceTexte("comment", "Comment-allez vous ?", Langue("fr","francais"), R.raw.comment),
+            AnnonceTexte("comment2", "Comment-allez vous ?", Langue("fr","francais"), R.raw.comment)
         )
     }
 
@@ -55,7 +55,7 @@ object Stub {
 
 
     private fun getFileFromResource(resourceId: Int, resourceName : String): File {
-        val file = File(audioDir, "$resourceName.mp3")
+        val file = File(audioDir, "$resourceName.m4a")
         return file
     }
 }

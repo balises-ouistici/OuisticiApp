@@ -1,11 +1,9 @@
 package com.example.ouistici.ui.infosBalise
 
+import android.media.MediaPlayer
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -28,6 +26,7 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -35,23 +34,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.ouistici.R
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.Balise
-import com.example.ouistici.ui.listeBalises.TableCell
-import com.example.ouistici.ui.listeBalises.TableHeaderCell
-import com.example.ouistici.ui.listeBalises.TableScreen
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
 import com.example.ouistici.ui.theme.TestButtonColor
-import java.io.File
 
 @Composable
-fun InfosBalise(navController: NavController, balise: Balise, player: AndroidAudioPlayer) {
+fun InfosBalise(navController: NavController, balise: Balise) {
 
     var sliderPosition by remember {
         mutableFloatStateOf(0f)
@@ -104,7 +99,7 @@ fun InfosBalise(navController: NavController, balise: Balise, player: AndroidAud
             color = FontColor
         )
         // Liste de toutes les annonces
-        TableScreen(balise = balise, player = player)
+        TableScreen(balise = balise)
 
 
 
@@ -187,10 +182,10 @@ fun RowScope.TableCell(
 
 @Composable
 fun RowScope.TableAudioCell(
-    player: AndroidAudioPlayer,
-    audioFile: File,
+    audioFile: Int,
     weight: Float,
 ) {
+    val context = LocalContext.current
     Row(
         Modifier
             .weight(weight)
@@ -198,9 +193,11 @@ fun RowScope.TableAudioCell(
             .height(46.dp)
             .padding(8.dp)
     ) {
+        var mediaPlayer : MediaPlayer? = null
+
         Button(
             onClick = {
-                player.playFile(audioFile)
+                mediaPlayer?.start()
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             modifier = Modifier
@@ -215,7 +212,8 @@ fun RowScope.TableAudioCell(
         }
         Button(
             onClick = {
-                player.stop()
+                mediaPlayer?.stop()
+                mediaPlayer?.prepare()
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             modifier = Modifier
@@ -227,12 +225,19 @@ fun RowScope.TableAudioCell(
                 text = "||"
             )
         }
+
+        DisposableEffect(Unit) {
+            mediaPlayer = MediaPlayer.create(context, audioFile)
+            onDispose {
+                mediaPlayer?.release()
+            }
+        }
     }
 }
 
 
 @Composable
-fun TableScreen(balise : Balise, player: AndroidAudioPlayer) {
+fun TableScreen(balise : Balise) {
     val column1Weight = .3f
     val column2Weight = .7f
     LazyColumn(
@@ -275,7 +280,6 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer) {
                 )
 
                 TableAudioCell(
-                    player = player,
                     audioFile = annonce.audio,
                     weight = column2Weight
                 )

@@ -176,8 +176,7 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                     balise?.let {
                         InfosBalise(
                             navController = navController,
-                            balise = it,
-                            player = player
+                            balise = it
                         )
                     }
                 }
