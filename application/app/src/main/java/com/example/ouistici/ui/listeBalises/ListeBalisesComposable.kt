@@ -114,28 +114,27 @@ fun TableScreen(balises : List<Balise>, navController: NavController) {
             }
         }
 
-        // Here are all the lines of your table.
         items(balises) { balise ->
             Row(Modifier.fillMaxWidth()) {
                 TableCell(
                     text = balise.nom,
                     weight = columnWeight,
                     textColor = Color.Black,
-                    onClick = { navController.navigate("infosBalise") }
+                    onClick = { navController.navigate("infosBalise/${balise.nom}") }
                 )
 
                 TableCell(
                     text = balise.lieu,
                     weight = columnWeight,
                     textColor = Color.Black,
-                    onClick = { navController.navigate("infosBalise") }
+                    onClick = { navController.navigate("infosBalise/${balise.nom}") }
                 )
 
                 TableCell(
                     text = balise.defaultMessage,
                     weight = columnWeight,
                     textColor = Color.Black,
-                    onClick = { navController.navigate("infosBalise") }
+                    onClick = { navController.navigate("infosBalise/${balise.nom}") }
                 )
             }
         }

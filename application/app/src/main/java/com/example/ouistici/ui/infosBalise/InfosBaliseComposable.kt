@@ -35,7 +35,7 @@ import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TestButtonColor
 
 @Composable
-fun InfosBalise(navController: NavController) {
+fun InfosBalise(navController: NavController, balise: Balise) {
 
     var sliderPosition by remember {
         mutableFloatStateOf(0f)
@@ -56,7 +56,7 @@ fun InfosBalise(navController: NavController) {
         Surface(
             modifier = Modifier
                 .padding(8.dp)
-                .widthIn(max = 300.dp)
+                .widthIn(max = 280.dp)
                 .fillMaxWidth(),
             shape = RoundedCornerShape(10.dp),
             color = Color.White,
@@ -65,15 +65,20 @@ fun InfosBalise(navController: NavController) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row() {
-                    Text(
-                        text = "Nom",
-                        color = FontColor
-                    )
-                }
+
+                Text(
+                    text = "Nom balise : " + balise.nom,
+                    color = FontColor
+                )
+                Text(
+                    text = "Lieu : " + balise.lieu,
+                    color = FontColor
+                )
+                Text(
+                    text = "Message défaut : " + balise.defaultMessage,
+                    color = FontColor
+                )
             }
-
-
         }
 
 

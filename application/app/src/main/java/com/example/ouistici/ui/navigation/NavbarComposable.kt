@@ -29,6 +29,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,6 +45,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.ouistici.R
+import com.example.ouistici.data.Stub
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.AndroidAudioRecorder
 import com.example.ouistici.model.Balise
@@ -61,6 +65,8 @@ import java.io.File
 @Composable
 fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlayer, cacheDir : File) {
     val navController = rememberNavController()
+    val balises by remember { mutableStateOf(Stub.bal) }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -127,8 +133,12 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                     )
                 }
 
-                composable(route = "infosBalise") {
-                    InfosBalise(navController = navController)
+                composable(route = "infosBalise/{nomBalise}") { backStackEntry ->
+                    val baliseNom = backStackEntry.arguments?.getString("nomBalise")
+                    val balise = balises.find { it.nom == baliseNom }
+                    balise?.let {
+                        InfosBalise(navController = navController, balise = it)
+                    }
                 }
 
                 composable(route = "settings") {
