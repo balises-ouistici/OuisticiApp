@@ -17,7 +17,7 @@ object Stub {
         createAnnonceTexte()
     }
 
-    val lAnno : List<Annonce> = createAnnonce1()
+    val anno : Annonce = createAnnonce1()
 
     val bal by lazy {
         createBalises()
@@ -26,8 +26,8 @@ object Stub {
 
     private fun createBalises(): List<Balise> {
         return listOf(
-            Balise("Balise1","Accueil",  "bonjour", lAnno, 50),
-            Balise("Balise2", "Accueil2", "aurevoir", lAnno, 30)
+            Balise("Balise1","Accueil",  "bonjour", anno, 50),
+            Balise("Balise2", "Accueil2", "aurevoir", anno, 30)
         )
     }
 
@@ -41,13 +41,12 @@ object Stub {
     private fun createAnnonceTexte() : List<AnnonceTexte> {
         return listOf(
             AnnonceTexte("comment", "Comment-allez vous ?", Langue("fr","francais"), R.raw.comment),
+            AnnonceTexte("comment2", "Comment-allez vous ?", Langue("fr","francais"), R.raw.comment)
         )
     }
 
 
-    private fun createAnnonce1() : List<Annonce> {
-        return listOf(
-            Annonce(annVoc, annTexte)
-        )
+    private fun createAnnonce1() : Annonce {
+        return Annonce(annVoc, annTexte)
     }
 }

@@ -4,7 +4,7 @@ class Balise(
     var nom : String,
     var lieu : String,
     var defaultMessage : String,
-    var lAnnonces : List<Annonce>,
+    var annonces : Annonce,
     var volume : Long
 
 ) {

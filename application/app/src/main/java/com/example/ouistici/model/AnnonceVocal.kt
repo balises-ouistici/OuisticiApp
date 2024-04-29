@@ -1,7 +1,8 @@
 package com.example.ouistici.model
 
-import java.io.File
-
-class AnnonceVocal(nom : String, audio : Int) {
+class AnnonceVocal(
+    var nom: String,
+    var audio: Int
+) {
 
 }

@@ -137,7 +137,11 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                     val baliseNom = backStackEntry.arguments?.getString("nomBalise")
                     val balise = balises.find { it.nom == baliseNom }
                     balise?.let {
-                        InfosBalise(navController = navController, balise = it)
+                        InfosBalise(
+                            navController = navController,
+                            balise = it,
+                            player = player
+                        )
                     }
                 }
 
