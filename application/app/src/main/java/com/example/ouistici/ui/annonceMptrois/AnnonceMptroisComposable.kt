@@ -36,6 +36,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.navigation.NavController
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.ui.theme.FontColor
@@ -44,16 +45,14 @@ import java.io.File
 @Composable
 fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, cacheDir : File) {
     var textValue by remember { mutableStateOf(TextFieldValue()) }
-
     val result = remember { mutableStateOf<Uri?>(null) }
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) {
         result.value = it
     }
 
-    val context = LocalContext.current
-    var mediaPlayer by remember { mutableStateOf<MediaPlayer?>(null) }
+    var mediaPlayer: MediaPlayer? by remember { mutableStateOf(null) }
 
-
+    var context = LocalContext.current
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -61,7 +60,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, cac
     ) {
         Spacer(modifier = Modifier.height(40.dp))
         Text(
-            text = "Choisir fichier mp3 :",
+            text = "Choisir fichier audio :",
             fontSize = 25.sp,
             color = FontColor
         )
@@ -84,41 +83,38 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, cac
             )
         }
 
-        val audioFile = File(cacheDir, result.toString())
-
         result.value?.let { audio ->
             Text(
                 color = Color.Black,
-                text = "Adresse fichier sélectionné : \"" + audio.path.toString() + "\""
+                text = "Adresse fichier sélectionné : \"${audio.path}\""
             )
+            DisposableEffect(audio) {
+                mediaPlayer?.release()
+                mediaPlayer = MediaPlayer.create(context, audio)
+                onDispose {
+                    mediaPlayer?.release()
+                }
+            }
         }
-
-
 
 
         Row {
             Button(
                 onClick = {
-                    // player.playFile(audioFile)
-                          mediaPlayer?.start()
-
+                    mediaPlayer?.start()
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
             ) {
-                Icon(
-                    imageVector = Icons.Default.PlayArrow,
-                    contentDescription = "Play arrow")
+                Icon(imageVector = Icons.Default.PlayArrow, contentDescription = "Play arrow")
             }
             Button(
                 onClick = {
-                    // player.stop()
                     mediaPlayer?.stop()
+                    mediaPlayer?.prepare()
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
             ) {
-                Text(
-                    text = "||"
-                )
+                Text(text = "||")
             }
         }
 
@@ -148,26 +144,8 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, cac
         }
 
 
-        DisposableEffect(Unit) {
-            result.value?.let { uri ->
-                Log.d("AnnonceMptrois", "URI du fichier audio : $uri")
-                // Créer un MediaPlayer lorsque l'URI est défini
-                if (mediaPlayer == null) {
-                    mediaPlayer = MediaPlayer.create(context, uri)
-                    mediaPlayer?.setOnCompletionListener { mediaPlayer ->
-                        // Libérer le MediaPlayer lorsqu'il a terminé de lire
-                        mediaPlayer.release()
-                    }
-                    Log.d("AnnonceMptrois", "MediaPlayer créé")
-                }
-            }
 
-            onDispose {
-                // Libérer le MediaPlayer lorsqu'il n'est plus nécessaire
-                mediaPlayer?.release()
-                Log.d("AnnonceMptrois", "MediaPlayer libéré")
-            }
-        }
+
 
     }
 }

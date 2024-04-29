@@ -9,7 +9,7 @@ import com.example.ouistici.model.Langue
 import java.io.File
 
 object Stub {
-    
+
     val annVoc by lazy {
         createAnnonceVocale()
     }
