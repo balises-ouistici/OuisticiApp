@@ -6,7 +6,7 @@ class AnnonceTexte(
     var nom : String,
     var contenu : String,
     var langue: Langue,
-    var audio : Int
+    var audio : File
 ) {
 
 }

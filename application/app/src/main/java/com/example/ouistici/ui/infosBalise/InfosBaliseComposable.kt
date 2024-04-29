@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -47,6 +48,7 @@ import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
 import com.example.ouistici.ui.theme.TestButtonColor
+import java.io.File
 
 @Composable
 fun InfosBalise(navController: NavController, balise: Balise, player: AndroidAudioPlayer) {
@@ -96,21 +98,18 @@ fun InfosBalise(navController: NavController, balise: Balise, player: AndroidAud
         }
 
 
-
         Text(
             text = "Liste des annonces",
             fontSize = 25.sp,
             color = FontColor
         )
-
         // Liste de toutes les annonces
-        TableScreen(balise = balise)
+        TableScreen(balise = balise, player = player)
+
+
+
 
         // Boite avec Volume de la balise
-
-
-
-
         Surface(
             modifier = Modifier
                 .padding(8.dp)
@@ -184,29 +183,45 @@ fun RowScope.TableCell(
     )
 }
 
-/*
+
+
 @Composable
 fun RowScope.TableAudioCell(
     player: AndroidAudioPlayer,
-    file: Int,
+    audioFile: File,
     weight: Float,
 ) {
-    Row {
+    Row(
+        Modifier
+            .weight(weight)
+            .border(1.dp, Color.Black)
+            .height(46.dp)
+            .padding(8.dp)
+    ) {
         Button(
             onClick = {
-                player.playFile(R.raw.comment ?: return@Button)
+                player.playFile(audioFile)
             },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            modifier = Modifier
+                .height(40.dp)
+                .width(70.dp)
+                .align(Alignment.CenterVertically)
         ) {
             Icon(
                 imageVector = Icons.Default.PlayArrow,
-                contentDescription = "Play arrow")
+                contentDescription = "Play arrow"
+            )
         }
         Button(
             onClick = {
                 player.stop()
             },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            modifier = Modifier
+                .height(40.dp)
+                .width(70.dp)
+                .align(Alignment.CenterVertically)
         ) {
             Text(
                 text = "||"
@@ -214,15 +229,16 @@ fun RowScope.TableAudioCell(
         }
     }
 }
-*/
+
 
 @Composable
-fun TableScreen(balise : Balise) {
+fun TableScreen(balise : Balise, player: AndroidAudioPlayer) {
     val column1Weight = .3f
     val column2Weight = .7f
     LazyColumn(
         Modifier
             .padding(16.dp)
+            .height(185.dp)
     ) {
         item {
             Row(Modifier.background(TableHeaderColor)) {
@@ -249,7 +265,7 @@ fun TableScreen(balise : Balise) {
         }
 
 
-        /*
+
         items(balise.annonces.lVocaux) { annonce ->
             Row(Modifier.fillMaxWidth()) {
                 TableCell(
@@ -260,11 +276,11 @@ fun TableScreen(balise : Balise) {
 
                 TableAudioCell(
                     player = player,
-                    // fichier
+                    audioFile = annonce.audio,
                     weight = column2Weight
                 )
             }
         }
-         */
+
     }
 }
