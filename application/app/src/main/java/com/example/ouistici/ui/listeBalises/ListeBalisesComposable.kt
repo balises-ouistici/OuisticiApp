@@ -1,23 +1,18 @@
 package com.example.ouistici.ui.listeBalises
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,10 +27,13 @@ import androidx.navigation.NavController
 import com.example.ouistici.data.Stub
 import com.example.ouistici.model.Balise
 import com.example.ouistici.ui.theme.FontColor
+import com.example.ouistici.ui.theme.TableHeaderColor
+
 
 @Composable
-fun ListeBalises (navController: NavController) {
+fun ListeBalises(navController: NavController) {
     val balises by remember { mutableStateOf(Stub.bal) }
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -47,79 +45,99 @@ fun ListeBalises (navController: NavController) {
             color = FontColor
         )
 
+        TableScreen(balises, navController)
 
-        Surface(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()
-                .fillMaxHeight(),
+    }
+}
 
-            shape = RoundedCornerShape(10.dp),
-            color = Color.White,
-            border = BorderStroke(2.dp, color = Color.Black)
-        ) {
-            Column(
-
-            ) {
-                // En-têtes du tableau
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    TableHeader(text = "Nom balise")
-                    TableHeader(text = "Lieu")
-                    TableHeader(text = "Message défaut")
-                }
-
+@Composable
+fun RowScope.TableHeaderCell(
+    text: String,
+    weight: Float,
+    textColor: Color,
+) {
+    Text(
+        text = text,
+        Modifier
+            .border(1.dp, Color.Black)
+            .weight(weight)
+            .padding(8.dp)
+            .height(50.dp),
+        color = textColor
+        )
+}
 
 
-                // Liste des balises
-                LazyColumn {
-                    items(balises) { balise ->
-                        BaliseRow(balise, navController)
-                    }
-                }
-            }
-
+@Composable
+fun RowScope.TableCell(
+    text: String,
+    weight: Float,
+    textColor: Color,
+    onClick: (() -> Unit)?
+) {
+    onClick?.let {
+        Modifier
+            .border(1.dp, Color.Black)
+            .weight(weight)
+            .padding(8.dp)
+            .height(50.dp)
+            .clickable(onClick = it)
+    }?.let {
+        Box(
+            it
+    ) {
+            Text(
+                text = text,
+                Modifier
+                .align(Alignment.Center),
+            color = textColor
+            )
         }
     }
 }
 
-@Composable
-fun TableHeader(text: String) {
-    Text(
-        text = text,
-        fontSize = 18.sp,
-        color = FontColor,
-        modifier = Modifier.padding(8.dp)
-            .background(Color.LightGray)
-            .border(width = 1.dp, color = Color.Black)
-            .padding(horizontal = 4.dp, vertical = 8.dp)
-    )
-}
 
 @Composable
-fun BaliseRow(balise: Balise, navController: NavController) {
-    Row(
-        modifier = Modifier.fillMaxWidth()
-            .border(width = 1.dp, color = Color.Black)
-            .clickable {
-                navController.navigate("infosBalise")
-            }
+fun TableScreen(balises : List<Balise>, navController: NavController) {
+    val columnWeight = .3f
+    LazyColumn(
+        Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
-        balise.nom?.let { TableCell(text = it) }
-        balise.lieu?.let { TableCell(text = it) }
-        balise.defaultMessage?.let { TableCell(text = it) }
-    }
-}
+        item {
+            Row(Modifier.background(TableHeaderColor)) {
+                TableHeaderCell(text = "Nom balise", weight = columnWeight, textColor = Color.Black)
+                TableHeaderCell(text = "Lieu", weight = columnWeight, textColor = Color.Black)
+                TableHeaderCell(text = "Message défaut", weight = columnWeight, textColor = Color.Black)
 
-@Composable
-fun TableCell(text: String) {
-    Text(
-        text = text,
-        fontSize = 16.sp,
-        color = FontColor,
-        modifier = Modifier.padding(8.dp)
-            .border(width = 1.dp, color = Color.Black)
-            .padding(horizontal = 4.dp, vertical = 8.dp)
-    )
+            }
+        }
+
+        // Here are all the lines of your table.
+        items(balises) { balise ->
+            Row(Modifier.fillMaxWidth()) {
+                TableCell(
+                    text = balise.nom,
+                    weight = columnWeight,
+                    textColor = Color.Black,
+                    onClick = { navController.navigate("infosBalise") }
+                )
+
+                TableCell(
+                    text = balise.lieu,
+                    weight = columnWeight,
+                    textColor = Color.Black,
+                    onClick = { navController.navigate("infosBalise") }
+                )
+
+                TableCell(
+                    text = balise.defaultMessage,
+                    weight = columnWeight,
+                    textColor = Color.Black,
+                    onClick = { navController.navigate("infosBalise") }
+                )
+            }
+        }
+    }
 }
