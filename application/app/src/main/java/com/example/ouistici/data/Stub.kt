@@ -9,9 +9,7 @@ import com.example.ouistici.model.Langue
 import java.io.File
 
 object Stub {
-
-    private val audioDir = File("res/raw/")
-
+    
     val annVoc by lazy {
         createAnnonceVocale()
     }
@@ -54,8 +52,5 @@ object Stub {
     }
 
 
-    private fun getFileFromResource(resourceId: Int, resourceName : String): File {
-        val file = File(audioDir, "$resourceName.m4a")
-        return file
-    }
+
 }
