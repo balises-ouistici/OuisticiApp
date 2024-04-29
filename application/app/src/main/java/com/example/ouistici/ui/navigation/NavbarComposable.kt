@@ -66,6 +66,8 @@ import java.io.File
 fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlayer, cacheDir : File) {
     val navController = rememberNavController()
     val balises by remember { mutableStateOf(Stub.bal) }
+    val isBottomAppBarVisible = remember { mutableStateOf(true) }
+
 
     Scaffold(
         topBar = {
@@ -90,21 +92,54 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
             )
         },
         bottomBar = {
-            BottomAppBar(
-                containerColor = NavBackground,
-                contentColor = Color.Black,
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                modifier = Modifier.height(70.dp),
-            ) {
-                val columnModifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
+            if (isBottomAppBarVisible.value) {
+                BottomAppBar(
+                    containerColor = NavBackground,
+                    contentColor = Color.Black,
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    modifier = Modifier.height(70.dp),
 
-                ClickableColumn(navController, "addAnnonce", "Ajouter", Icons.Filled.AddCircle, columnModifier)
-                ClickableColumn(navController, "manageAnnonce", "Modifier", Icons.Filled.Edit, columnModifier)
-                ClickableColumn(navController, "infosBalise", "Infos", Icons.Filled.Info, columnModifier)
-                ClickableColumn(navController, "settings", "Options", Icons.Filled.Settings, columnModifier)
-                ClickableColumn(navController, "listeBalises", "Balises", Icons.Filled.ExitToApp, columnModifier)
+                    ) {
+                    val columnModifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+
+                    ClickableColumn(
+                        navController,
+                        "addAnnonce",
+                        "Ajouter",
+                        Icons.Filled.AddCircle,
+                        columnModifier
+                    )
+                    ClickableColumn(
+                        navController,
+                        "manageAnnonce",
+                        "Modifier",
+                        Icons.Filled.Edit,
+                        columnModifier
+                    )
+                    ClickableColumn(
+                        navController,
+                        "infosBalise",
+                        "Infos",
+                        Icons.Filled.Info,
+                        columnModifier
+                    )
+                    ClickableColumn(
+                        navController,
+                        "settings",
+                        "Options",
+                        Icons.Filled.Settings,
+                        columnModifier
+                    )
+                    ClickableColumn(
+                        navController,
+                        "listeBalises",
+                        "Balises",
+                        Icons.Filled.ExitToApp,
+                        columnModifier
+                    )
+                }
             }
         }
     ) { innerPadding ->
@@ -134,6 +169,8 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                 }
 
                 composable(route = "infosBalise/{nomBalise}") { backStackEntry ->
+                    isBottomAppBarVisible.value = true
+
                     val baliseNom = backStackEntry.arguments?.getString("nomBalise")
                     val balise = balises.find { it.nom == baliseNom }
                     balise?.let {
@@ -152,6 +189,7 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                 }
 
                 composable(route = "listeBalises") {
+                    isBottomAppBarVisible.value = false
                     ListeBalises(
                         navController = navController
                     )
