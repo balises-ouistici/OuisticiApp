@@ -87,7 +87,7 @@ fun InfosBalise(navController: NavController, balise: Balise) {
                     color = FontColor
                 )
                 Text(
-                    text = "Message défaut : " + balise.defaultMessage,
+                    text = "Message défaut : " + balise.defaultMessage.nom,
                     color = FontColor
                 )
             }
