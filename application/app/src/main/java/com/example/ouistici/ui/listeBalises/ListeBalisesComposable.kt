@@ -130,12 +130,14 @@ fun TableScreen(balises : List<Balise>, navController: NavController) {
                     onClick = { navController.navigate("infosBalise/${balise.nom}") }
                 )
 
-                TableCell(
-                    text = balise.defaultMessage,
-                    weight = columnWeight,
-                    textColor = Color.Black,
-                    onClick = { navController.navigate("infosBalise/${balise.nom}") }
-                )
+                balise.defaultMessage?.let {
+                    TableCell(
+                        text = it,
+                        weight = columnWeight,
+                        textColor = Color.Black,
+                        onClick = { navController.navigate("infosBalise/${balise.nom}") }
+                    )
+                }
             }
         }
     }
