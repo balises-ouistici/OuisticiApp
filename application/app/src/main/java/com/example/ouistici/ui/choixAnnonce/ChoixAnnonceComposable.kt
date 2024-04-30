@@ -72,7 +72,7 @@ fun ChoixAnnonce(navController: NavController) {
                     .padding(15.dp)
             ) {
                 Text(
-                    text = "Choisir son par défaut : ",
+                    text = "Choisir annonce par défaut : ",
                     color = Color.Black
                 )
 
@@ -89,6 +89,8 @@ fun ChoixAnnonce(navController: NavController) {
                        )
                     }
 
+
+                    // Ne pas oublier de gérer le cas où il n'y a pas de message par défaut avec un if
                     Text(
                         text = "test", // Afficher le message par défaut de la balise
                         color = Color.Black

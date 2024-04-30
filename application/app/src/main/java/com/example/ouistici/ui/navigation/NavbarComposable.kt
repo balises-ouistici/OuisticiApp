@@ -1,6 +1,8 @@
 package com.example.ouistici.ui.navigation
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -48,7 +50,6 @@ import com.example.ouistici.R
 import com.example.ouistici.data.Stub
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.AndroidAudioRecorder
-import com.example.ouistici.model.Balise
 import com.example.ouistici.ui.ajouterAnnonce.AjouterAnnonce
 import com.example.ouistici.ui.annonceMptrois.AnnonceMptrois
 import com.example.ouistici.ui.annonceTexte.AnnonceTexte
@@ -61,6 +62,7 @@ import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.NavBackground
 import java.io.File
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlayer, cacheDir : File) {

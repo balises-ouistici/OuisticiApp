@@ -88,7 +88,7 @@ fun InfosBalise(navController: NavController, balise: Balise) {
                 )
                 if ( balise.defaultMessage == null ) {
                     Text(
-                        text = "Message défaut : 0Aucun",
+                        text = "Message défaut : Aucun",
                         color = FontColor
                     )
                 } else {
