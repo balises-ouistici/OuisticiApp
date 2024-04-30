@@ -4,28 +4,15 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.ouistici.R
 import com.example.ouistici.model.Annonce
-import com.example.ouistici.model.AnnonceTexte
-import com.example.ouistici.model.AnnonceVocal
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.JoursSemaine
 import com.example.ouistici.model.Langue
 import com.example.ouistici.model.PlageHoraire
 import com.example.ouistici.model.TypeAnnonce
-import java.io.File
 import java.time.LocalTime
 
 @RequiresApi(Build.VERSION_CODES.O)
 object Stub {
-
-    val annVoc by lazy {
-        createAnnonceVocale()
-    }
-
-    val annTexte by lazy {
-        createAnnonceTexte()
-    }
-
-    // val anno : Annonce = createAnnonce1()
 
     val lAnnonce by lazy {
         createAnnonce()
@@ -58,26 +45,6 @@ object Stub {
     }
 
 
-    private fun createAnnonceVocale() : List<AnnonceVocal> {
-        return listOf(
-            AnnonceVocal("bonjour", R.raw.bonjour,),
-            AnnonceVocal("aurevoir", R.raw.aurevoir)
-        )
-    }
-
-    private fun createAnnonceTexte() : List<AnnonceTexte> {
-        return listOf(
-            AnnonceTexte("comment", "Comment allez-vous ?", Langue("fr","francais"), R.raw.comment),
-            AnnonceTexte("comment2", "Comment allez-vous ?", Langue("fr","francais"), R.raw.comment)
-        )
-    }
-
-
-    /*
-    private fun createAnnonce1() : Annonce {
-        return Annonce(annVoc, annTexte)
-    }
-    */
 
     private fun createAnnonce() : List<Annonce> {
         return listOf(
