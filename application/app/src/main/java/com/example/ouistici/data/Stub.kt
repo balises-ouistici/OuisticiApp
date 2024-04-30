@@ -30,7 +30,7 @@ object Stub {
     private fun createBalises(): List<Balise> {
         return listOf(
             Balise("Balise1","Accueil",  lAnnonce.get(0), lAnnonce, 50, listOf(lPlages.get(0), lPlages.get(2))),
-            Balise("Balise2", "Accueil2", lAnnonce.get(2), lAnnonce, 30, listOf(lPlages.get(1), lPlages.get(3)))
+            Balise("Balise2", "Accueil2", null, lAnnonce, 30, listOf(lPlages.get(1), lPlages.get(3)))
         )
     }
 

@@ -86,10 +86,17 @@ fun InfosBalise(navController: NavController, balise: Balise) {
                     text = "Lieu : " + balise.lieu,
                     color = FontColor
                 )
-                Text(
-                    text = "Message défaut : " + balise.defaultMessage.nom,
-                    color = FontColor
-                )
+                if ( balise.defaultMessage == null ) {
+                    Text(
+                        text = "Message défaut : 0Aucun",
+                        color = FontColor
+                    )
+                } else {
+                    Text(
+                        text = "Message défaut : " + balise.defaultMessage?.nom,
+                        color = FontColor
+                    )
+                }
             }
         }
 
