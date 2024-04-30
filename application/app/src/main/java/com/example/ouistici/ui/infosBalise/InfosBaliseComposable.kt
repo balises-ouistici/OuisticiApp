@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.Balise
+import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
@@ -253,7 +254,9 @@ fun TableScreen(balise : Balise) {
             }
         }
 
-        items(balise.annonces.lTexte) { annonce ->
+
+
+        items(balise.annonces) { annonce ->
             Row(Modifier.fillMaxWidth()) {
                 TableCell(
                     text = annonce.nom,
@@ -261,30 +264,24 @@ fun TableScreen(balise : Balise) {
                     textColor = Color.Black
                 )
 
-                TableCell(
-                    text = annonce.contenu,
-                    weight = column2Weight,
-                    textColor = Color.Black
-                )
+
+                if ( annonce.type == TypeAnnonce.TEXTE ) {
+                    annonce.contenu?.let {
+                        TableCell(
+                            text = it,
+                            weight = column2Weight,
+                            textColor = Color.Black
+                        )
+                    }
+                }
+
+                if ( annonce.type == TypeAnnonce.AUDIO ) {
+                    TableAudioCell(
+                        audioFile = annonce.audio,
+                        weight = column2Weight
+                    )
+                }
             }
         }
-
-
-
-        items(balise.annonces.lVocaux) { annonce ->
-            Row(Modifier.fillMaxWidth()) {
-                TableCell(
-                    text = annonce.nom,
-                    weight = column1Weight,
-                    textColor = Color.Black
-                )
-
-                TableAudioCell(
-                    audioFile = annonce.audio,
-                    weight = column2Weight
-                )
-            }
-        }
-
     }
 }
