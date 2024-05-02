@@ -266,10 +266,15 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer) {
     val column2Weight = .7f
 
     if (balise.annonces.isEmpty()) {
-        Text(
-            text = "Il n'y a pas d'annonces",
-            color = FontColor
-        )
+        Column(
+            modifier = Modifier
+                .height(190.dp)
+        ) {
+            Text(
+                text = "Il n'y a pas d'annonces",
+                color = FontColor
+            )
+        }
         Spacer(modifier = Modifier.padding(12.dp))
     } else {
         LazyColumn(

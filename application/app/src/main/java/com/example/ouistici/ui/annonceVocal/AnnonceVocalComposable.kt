@@ -74,7 +74,7 @@ fun AnnonceVocale(
     var compteur : Int = balise.annonces.count()
 
 
-    var audioFile : File? = File(cacheDir, "audio"+compteur+".mp3")
+    var audioFile : File? = File(cacheDir, balise.nom+"-"+compteur+".mp3")
 
     var currentStep by remember { mutableStateOf(1) }
 
