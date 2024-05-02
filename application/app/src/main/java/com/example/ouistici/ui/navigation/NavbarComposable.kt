@@ -183,7 +183,8 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                         isBottomAppBarVisible.value = true
                         InfosBalise(
                             navController = navController,
-                            balise = selectedBalise
+                            balise = selectedBalise,
+                            player = player
                         )
                     }
                 }

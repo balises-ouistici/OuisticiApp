@@ -99,7 +99,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
         Button(
             onClick = {
                 if ( textValueInput != "" && textContenuInput != "" ) {
-                    balise.annonces?.add(Annonce(textValueInput, TypeAnnonce.TEXTE, R.raw.bonjour, textContenuInput, null))
+                    balise.annonces?.add(Annonce(textValueInput, TypeAnnonce.TEXTE, null, textContenuInput, null))
                     Toast.makeText(
                         context,
                         "Annonce ajoutée",

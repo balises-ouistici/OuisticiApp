@@ -14,11 +14,11 @@ import java.time.LocalTime
 @RequiresApi(Build.VERSION_CODES.O)
 object Stub {
 
-
+    /*
     val lAnnonce by lazy {
         createAnnonce()
     }
-/*
+
     val lPlages by lazy {
         createPlage()
     }
@@ -31,8 +31,8 @@ object Stub {
 
     private fun createBalises(): List<Balise> {
         return listOf(
-            Balise("Balise1","Accueil",  null, null, 50, null),
-            Balise("Balise2", null, null, null, 30, null)
+            Balise("Balise1","Accueil",  null, ArrayList(), 50, null),
+            Balise("Balise2", null, null, ArrayList(), 30, null)
         )
     }
 
@@ -50,7 +50,7 @@ object Stub {
 
 
 
-
+    /*
     private fun createAnnonce() : ArrayList<Annonce> {
         return arrayListOf(
             Annonce("bonjour", TypeAnnonce.AUDIO, R.raw.bonjour, null, null),
@@ -59,7 +59,7 @@ object Stub {
             Annonce("comment2", TypeAnnonce.TEXTE, R.raw.comment, "Comment allez-vous ?", Langue("fr","francais"))
             )
     }
-
+    */
 
 
 

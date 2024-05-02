@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -40,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.TypeAnnonce
@@ -48,9 +50,17 @@ import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
 import com.example.ouistici.ui.theme.TestButtonColor
+import java.io.File
 
 @Composable
-fun InfosBalise(navController: NavController, balise: Balise) {
+fun InfosBalise(
+    navController: NavController,
+    balise: Balise,
+    player: AndroidAudioPlayer
+) {
+
+    var currentStep by remember { mutableStateOf(1) }
+
 
     var sliderPosition by remember {
         mutableFloatStateOf(0f)
@@ -119,7 +129,7 @@ fun InfosBalise(navController: NavController, balise: Balise) {
             color = FontColor
         )
         // Liste de toutes les annonces
-        TableScreen(balise = balise)
+        TableScreen(balise = balise, player = player)
 
 
 
@@ -202,8 +212,9 @@ fun RowScope.TableCell(
 
 @Composable
 fun RowScope.TableAudioCell(
-    audioFile: Int,
+    audioFile: File?,
     weight: Float,
+    player: AndroidAudioPlayer
 ) {
     val context = LocalContext.current
     Row(
@@ -217,7 +228,7 @@ fun RowScope.TableAudioCell(
 
         Button(
             onClick = {
-                mediaPlayer?.start()
+                player.playFile(audioFile ?: return@Button)
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             modifier = Modifier
@@ -232,8 +243,7 @@ fun RowScope.TableAudioCell(
         }
         Button(
             onClick = {
-                mediaPlayer?.stop()
-                mediaPlayer?.prepare()
+                player.stop()
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             modifier = Modifier
@@ -246,22 +256,16 @@ fun RowScope.TableAudioCell(
             )
         }
 
-        DisposableEffect(Unit) {
-            mediaPlayer = MediaPlayer.create(context, audioFile)
-            onDispose {
-                mediaPlayer?.release()
-            }
-        }
     }
 }
 
 
 @Composable
-fun TableScreen(balise : Balise) {
+fun TableScreen(balise : Balise, player: AndroidAudioPlayer) {
     val column1Weight = .3f
     val column2Weight = .7f
 
-    if ( balise.annonces == null ) {
+    if (balise.annonces.isEmpty()) {
         Text(
             text = "Il n'y a pas d'annonces",
             color = FontColor
@@ -302,7 +306,8 @@ fun TableScreen(balise : Balise) {
                     if (annonce.type == TypeAnnonce.AUDIO) {
                         TableAudioCell(
                             audioFile = annonce.audio,
-                            weight = column2Weight
+                            weight = column2Weight,
+                            player = player
                         )
                     }
                 }
