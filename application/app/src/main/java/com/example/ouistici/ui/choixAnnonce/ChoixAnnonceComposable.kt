@@ -46,7 +46,7 @@ import com.example.ouistici.ui.theme.TestButtonColor
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
-fun ChoixAnnonce(navController: NavController) {
+fun ChoixAnnonce(navController: NavController, balise: Balise) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -73,7 +73,7 @@ fun ChoixAnnonce(navController: NavController) {
             ) {
                 Text(
                     text = "Choisir annonce par défaut : ",
-                    color = Color.Black
+                    color = FontColor
                 )
 
                 Column(
@@ -89,12 +89,17 @@ fun ChoixAnnonce(navController: NavController) {
                        )
                     }
 
-
-                    // Ne pas oublier de gérer le cas où il n'y a pas de message par défaut avec un if
-                    Text(
-                        text = "test", // Afficher le message par défaut de la balise
-                        color = Color.Black
-                    )
+                    if ( balise.defaultMessage == null ) {
+                        Text(
+                            text = "Aucun",
+                            color = FontColor
+                        )
+                    } else {
+                        Text(
+                            text = balise.defaultMessage!!.nom, // Afficher le message par défaut de la balise
+                            color = FontColor
+                        )
+                    }
                 }
             }
         }

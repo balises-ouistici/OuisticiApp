@@ -168,21 +168,23 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                 }
 
                 composable(route = "manageAnnonce") {
-                    ChoixAnnonce(
-                        navController = navController
-                    )
+                    val selectedBalise = baliseViewModel.selectedBalise
+                    if (selectedBalise != null) {
+                        ChoixAnnonce(
+                            navController = navController,
+                            balise = selectedBalise
+                        )
+                    }
                 }
 
                 composable(route = "infosBalise") { backStackEntry ->
-                    val selectedBalise = baliseViewModel.selectedBalise // Obtenez la balise sélectionnée à partir du ViewModel
+                    val selectedBalise = baliseViewModel.selectedBalise
                     if (selectedBalise != null) {
                         isBottomAppBarVisible.value = true
                         InfosBalise(
                             navController = navController,
-                            balise = selectedBalise // Passez la balise sélectionnée à InfosBalise
+                            balise = selectedBalise
                         )
-                    } else {
-
                     }
                 }
 
