@@ -3,6 +3,7 @@ package com.example.ouistici.ui.annonceVocal
 import android.content.Context
 import android.graphics.drawable.Icon
 import android.media.MediaRecorder
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -49,7 +50,9 @@ import androidx.navigation.NavController
 import com.example.ouistici.R
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.AndroidAudioRecorder
+import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
+import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.theme.FontColor
 import kotlinx.coroutines.delay
 import java.io.File
@@ -66,8 +69,12 @@ fun AnnonceVocale(
     balise: Balise
 ) {
     var textValue by remember { mutableStateOf(TextFieldValue()) }
+    var textValueInput by remember { mutableStateOf("") }
 
-    var audioFile : File? = File(cacheDir, "audio.mp3")
+    var compteur : Int = balise.annonces.count()
+
+
+    var audioFile : File? = File(cacheDir, "audio"+compteur+".mp3")
 
     var currentStep by remember { mutableStateOf(1) }
 
@@ -242,13 +249,45 @@ fun AnnonceVocale(
             value = textValue,
             onValueChange = {
                 textValue = it
+                textValueInput = it.text
             },
             label = { Text("Entrez le nom") },
             textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier.fillMaxWidth(),
         )
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                if ( textValueInput != "" && audioFile != null ) {
+                    balise.annonces?.add(Annonce(textValueInput, TypeAnnonce.AUDIO, audioFile, null, null))
+                    Toast.makeText(
+                        context,
+                        "Annonce ajoutée",
+                        Toast.LENGTH_LONG)
+                        .show()
+                    navController.navigate("annonceMptrois")
+                }
+                if ( audioFile == null && textValueInput == "" ) {
+                    Toast.makeText(
+                        context,
+                        "Action impossible, vous devez sélectionner un audio et saisir un nom",
+                        Toast.LENGTH_LONG)
+                        .show()
+                }
+                if ( audioFile == null && textValueInput != "" ) {
+                    Toast.makeText(
+                        context,
+                        "Action impossible, vous devez sélectionner un audio",
+                        Toast.LENGTH_LONG)
+                        .show()
+                }
+                if ( audioFile != null && textValueInput == "" ) {
+                    Toast.makeText(
+                        context,
+                        "Action impossible, vous devez saisir un nom",
+                        Toast.LENGTH_LONG)
+                        .show()
+                }
+            },
             modifier = Modifier.padding(16.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
         ) {
