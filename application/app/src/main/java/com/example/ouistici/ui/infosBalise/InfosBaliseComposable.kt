@@ -37,10 +37,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.TypeAnnonce
+import com.example.ouistici.ui.baliseViewModel.BaliseViewModel
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
@@ -48,6 +49,8 @@ import com.example.ouistici.ui.theme.TestButtonColor
 
 @Composable
 fun InfosBalise(navController: NavController, balise: Balise) {
+    val baliseViewModel: BaliseViewModel = viewModel()
+
 
     var sliderPosition by remember {
         mutableFloatStateOf(0f)

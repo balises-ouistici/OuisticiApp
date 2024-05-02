@@ -1,5 +1,7 @@
 package com.example.ouistici.ui.listeBalises
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -23,15 +25,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.ouistici.data.Stub
 import com.example.ouistici.model.Balise
+import com.example.ouistici.ui.baliseViewModel.BaliseViewModel
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ListeBalises(navController: NavController) {
+fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel) {
     val balises by remember { mutableStateOf(Stub.bal) }
 
 
@@ -45,7 +50,7 @@ fun ListeBalises(navController: NavController) {
             color = FontColor
         )
 
-        TableScreen(balises, navController)
+        TableScreen(balises, navController, baliseViewModel)
 
     }
 }
@@ -98,7 +103,7 @@ fun RowScope.TableCell(
 
 
 @Composable
-fun TableScreen(balises : List<Balise>, navController: NavController) {
+fun TableScreen(balises : List<Balise>, navController: NavController, baliseViewModel: BaliseViewModel) {
     val columnWeight = .3f
     LazyColumn(
         Modifier
@@ -120,14 +125,20 @@ fun TableScreen(balises : List<Balise>, navController: NavController) {
                     text = balise.nom,
                     weight = columnWeight,
                     textColor = Color.Black,
-                    onClick = { navController.navigate("infosBalise/${balise.nom}") }
+                    onClick = {
+                        baliseViewModel.selectedBalise = balise
+                        navController.navigate("infosBalise")
+                    }
                 )
 
                 TableCell(
                     text = balise.lieu,
                     weight = columnWeight,
                     textColor = Color.Black,
-                    onClick = { navController.navigate("infosBalise/${balise.nom}") }
+                    onClick = {
+                        baliseViewModel.selectedBalise = balise
+                        navController.navigate("infosBalise")
+                    }
                 )
 
                 if ( balise.defaultMessage == null ) {
@@ -135,14 +146,20 @@ fun TableScreen(balises : List<Balise>, navController: NavController) {
                         text = "Aucun",
                         weight = columnWeight,
                         textColor = Color.Black,
-                        onClick = { navController.navigate("infosBalise/${balise.nom}") }
+                        onClick = {
+                            baliseViewModel.selectedBalise = balise
+                            navController.navigate("infosBalise")
+                        }
                     )
                 } else {
                     TableCell(
                         text = balise.defaultMessage!!.nom,
                         weight = columnWeight,
                         textColor = Color.Black,
-                        onClick = { navController.navigate("infosBalise/${balise.nom}") }
+                        onClick = {
+                            baliseViewModel.selectedBalise = balise
+                            navController.navigate("infosBalise")
+                        }
                     )
                 }
             }

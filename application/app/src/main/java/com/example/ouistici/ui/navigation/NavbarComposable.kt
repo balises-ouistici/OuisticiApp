@@ -42,6 +42,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -54,6 +55,7 @@ import com.example.ouistici.ui.ajouterAnnonce.AjouterAnnonce
 import com.example.ouistici.ui.annonceMptrois.AnnonceMptrois
 import com.example.ouistici.ui.annonceTexte.AnnonceTexte
 import com.example.ouistici.ui.annonceVocal.AnnonceVocale
+import com.example.ouistici.ui.baliseViewModel.BaliseViewModel
 import com.example.ouistici.ui.choixAnnonce.ChoixAnnonce
 import com.example.ouistici.ui.infosBalise.InfosBalise
 import com.example.ouistici.ui.listeBalises.ListeBalises
@@ -67,6 +69,7 @@ import java.io.File
 @Composable
 fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlayer, cacheDir : File) {
     val navController = rememberNavController()
+    val baliseViewModel: BaliseViewModel = viewModel()
     val balises by remember { mutableStateOf(Stub.bal) }
     val isBottomAppBarVisible = remember { mutableStateOf(true) }
 
@@ -170,16 +173,16 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                     )
                 }
 
-                composable(route = "infosBalise/{nomBalise}") { backStackEntry ->
-                    isBottomAppBarVisible.value = true
-
-                    val baliseNom = backStackEntry.arguments?.getString("nomBalise")
-                    val balise = balises.find { it.nom == baliseNom }
-                    balise?.let {
+                composable(route = "infosBalise") { backStackEntry ->
+                    val selectedBalise = baliseViewModel.selectedBalise // Obtenez la balise sélectionnée à partir du ViewModel
+                    if (selectedBalise != null) {
+                        isBottomAppBarVisible.value = true
                         InfosBalise(
                             navController = navController,
-                            balise = it
+                            balise = selectedBalise // Passez la balise sélectionnée à InfosBalise
                         )
+                    } else {
+
                     }
                 }
 
@@ -192,7 +195,8 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                 composable(route = "listeBalises") {
                     isBottomAppBarVisible.value = false
                     ListeBalises(
-                        navController = navController
+                        navController = navController,
+                        baliseViewModel = baliseViewModel
                     )
                 }
 
