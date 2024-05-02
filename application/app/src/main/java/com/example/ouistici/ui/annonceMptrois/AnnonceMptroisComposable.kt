@@ -1,8 +1,9 @@
 package com.example.ouistici.ui.annonceMptrois
 
+import android.content.ContentResolver
+import android.content.Context
 import android.media.MediaPlayer
 import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,7 +39,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import androidx.navigation.NavController
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.Annonce
@@ -45,6 +46,8 @@ import com.example.ouistici.model.Balise
 import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.theme.FontColor
 import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 
 @Composable
 fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, cacheDir : File, balise: Balise) {
@@ -52,15 +55,20 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, cac
     var textValueInput by remember { mutableStateOf("") }
 
     val result = remember { mutableStateOf<Uri?>(null) }
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) {
-        result.value = it
-    }
     var audioFile by remember { mutableStateOf<File?>(null) }
+
+    var context = LocalContext.current
+
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        uri?.let { uriNotNull ->
+            val file = getFileFromUri(uriNotNull, context)
+            audioFile = file
+        }
+    }
 
 
     var mediaPlayer: MediaPlayer? by remember { mutableStateOf(null) }
 
-    var context = LocalContext.current
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -91,26 +99,10 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, cac
             )
         }
 
-        result.value?.let { audio ->
-            Text(
-                color = Color.Black,
-                text = "Adresse fichier sélectionné : \"${audio.path}\""
-            )
-            audioFile = audio.path?.let { File(it) }
-            DisposableEffect(audio) {
-                mediaPlayer?.release()
-                mediaPlayer = MediaPlayer.create(context, audio)
-                onDispose {
-                    mediaPlayer?.release()
-                }
-            }
-        }
-
-
         Row {
             Button(
                 onClick = {
-                    mediaPlayer?.start()
+                    audioFile?.let { player.playFile(it) }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
             ) {
@@ -118,8 +110,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, cac
             }
             Button(
                 onClick = {
-                    mediaPlayer?.stop()
-                    mediaPlayer?.prepare()
+                    player.stop()
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
             ) {
@@ -185,3 +176,17 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, cac
         }
     }
 }
+
+
+private fun getFileFromUri(uri: Uri, context: Context): File? {
+    val inputStream = context.contentResolver.openInputStream(uri)
+    val outputFile = File.createTempFile("temp", null, context.cacheDir)
+    inputStream?.use { input ->
+        FileOutputStream(outputFile).use { output ->
+            input.copyTo(output)
+        }
+    }
+    return outputFile
+}
+
+
