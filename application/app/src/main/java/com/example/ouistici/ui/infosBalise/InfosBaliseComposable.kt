@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.baliseViewModel.BaliseViewModel
@@ -49,8 +51,6 @@ import com.example.ouistici.ui.theme.TestButtonColor
 
 @Composable
 fun InfosBalise(navController: NavController, balise: Balise) {
-    val baliseViewModel: BaliseViewModel = viewModel()
-
 
     var sliderPosition by remember {
         mutableFloatStateOf(0f)
@@ -85,10 +85,19 @@ fun InfosBalise(navController: NavController, balise: Balise) {
                     text = "Nom balise : " + balise.nom,
                     color = FontColor
                 )
-                Text(
-                    text = "Lieu : " + balise.lieu,
-                    color = FontColor
-                )
+
+                if ( balise.lieu == null ) {
+                    Text(
+                        text = "Lieu : Non défini",
+                        color = FontColor
+                    )
+                } else {
+                    Text(
+                        text = "Lieu : " + balise.lieu,
+                        color = FontColor
+                    )
+                }
+
                 if ( balise.defaultMessage == null ) {
                     Text(
                         text = "Message défaut : Aucun",
@@ -251,45 +260,51 @@ fun RowScope.TableAudioCell(
 fun TableScreen(balise : Balise) {
     val column1Weight = .3f
     val column2Weight = .7f
-    LazyColumn(
-        Modifier
-            .padding(16.dp)
-            .height(185.dp)
-    ) {
-        item {
-            Row(Modifier.background(TableHeaderColor)) {
-                TableCell(text = "Nom", weight = column1Weight, textColor = Color.Black)
-                TableCell(text = "Contenu", weight = column2Weight, textColor = Color.Black)
 
+    if ( balise.annonces == null ) {
+        Text(
+            text = "Il n'y a pas d'annonces",
+            color = FontColor
+        )
+        Spacer(modifier = Modifier.padding(12.dp))
+    } else {
+        LazyColumn(
+            Modifier
+                .padding(16.dp)
+                .height(185.dp)
+        ) {
+            item {
+                Row(Modifier.background(TableHeaderColor)) {
+                    TableCell(text = "Nom", weight = column1Weight, textColor = Color.Black)
+                    TableCell(text = "Contenu", weight = column2Weight, textColor = Color.Black)
+
+                }
             }
-        }
 
+            items((balise.annonces as List<Annonce>)) { annonce ->
+                Row(Modifier.fillMaxWidth()) {
+                    TableCell(
+                        text = annonce.nom,
+                        weight = column1Weight,
+                        textColor = Color.Black
+                    )
 
+                    if (annonce.type == TypeAnnonce.TEXTE) {
+                        annonce.contenu?.let {
+                            TableCell(
+                                text = it,
+                                weight = column2Weight,
+                                textColor = Color.Black
+                            )
+                        }
+                    }
 
-        items(balise.annonces) { annonce ->
-            Row(Modifier.fillMaxWidth()) {
-                TableCell(
-                    text = annonce.nom,
-                    weight = column1Weight,
-                    textColor = Color.Black
-                )
-
-
-                if ( annonce.type == TypeAnnonce.TEXTE ) {
-                    annonce.contenu?.let {
-                        TableCell(
-                            text = it,
-                            weight = column2Weight,
-                            textColor = Color.Black
+                    if (annonce.type == TypeAnnonce.AUDIO) {
+                        TableAudioCell(
+                            audioFile = annonce.audio,
+                            weight = column2Weight
                         )
                     }
-                }
-
-                if ( annonce.type == TypeAnnonce.AUDIO ) {
-                    TableAudioCell(
-                        audioFile = annonce.audio,
-                        weight = column2Weight
-                    )
                 }
             }
         }

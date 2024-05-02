@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.ouistici.data.Stub
 import com.example.ouistici.model.Balise
@@ -131,15 +130,28 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                     }
                 )
 
-                TableCell(
-                    text = balise.lieu,
-                    weight = columnWeight,
-                    textColor = Color.Black,
-                    onClick = {
-                        baliseViewModel.selectedBalise = balise
-                        navController.navigate("infosBalise")
-                    }
-                )
+                if ( balise.lieu == null ) {
+                    TableCell(
+                        text = "Non défini",
+                        weight = columnWeight,
+                        textColor = Color.Black,
+                        onClick = {
+                            baliseViewModel.selectedBalise = balise
+                            navController.navigate("infosBalise")
+                        }
+                    )
+                } else {
+                    TableCell(
+                        text = balise.lieu!!,
+                        weight = columnWeight,
+                        textColor = Color.Black,
+                        onClick = {
+                            baliseViewModel.selectedBalise = balise
+                            navController.navigate("infosBalise")
+                        }
+                    )
+                }
+
 
                 if ( balise.defaultMessage == null ) {
                     TableCell(

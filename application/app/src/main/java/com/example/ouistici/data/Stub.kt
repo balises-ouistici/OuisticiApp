@@ -14,13 +14,15 @@ import java.time.LocalTime
 @RequiresApi(Build.VERSION_CODES.O)
 object Stub {
 
+
     val lAnnonce by lazy {
         createAnnonce()
     }
-
+/*
     val lPlages by lazy {
         createPlage()
     }
+    */
 
     val bal by lazy {
         createBalises()
@@ -29,11 +31,12 @@ object Stub {
 
     private fun createBalises(): List<Balise> {
         return listOf(
-            Balise("Balise1","Accueil",  lAnnonce.get(0), lAnnonce, 50, listOf(lPlages.get(0), lPlages.get(2))),
-            Balise("Balise2", "Accueil2", null, lAnnonce, 30, listOf(lPlages.get(1), lPlages.get(3)))
+            Balise("Balise1","Accueil",  null, null, 50, null),
+            Balise("Balise2", null, null, null, 30, null)
         )
     }
 
+    /*
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createPlage() : List<PlageHoraire> {
         return listOf(
@@ -43,6 +46,8 @@ object Stub {
             PlageHoraire(lAnnonce.get(3), listOf(JoursSemaine.LUNDI, JoursSemaine.MARDI, JoursSemaine.MERCREDI, JoursSemaine.JEUDI, JoursSemaine.VENDREDI, JoursSemaine.SAMEDI, JoursSemaine.DIMANCHE), LocalTime.of(15,0), LocalTime.of(21,30))
         )
     }
+    */
+
 
 
 
@@ -54,6 +59,8 @@ object Stub {
             Annonce("comment2", TypeAnnonce.TEXTE, R.raw.comment, "Comment allez-vous ?", Langue("fr","francais"))
             )
     }
+
+
 
 
 
