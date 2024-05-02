@@ -39,11 +39,12 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import com.example.ouistici.model.AndroidAudioPlayer
+import com.example.ouistici.model.Balise
 import com.example.ouistici.ui.theme.FontColor
 import java.io.File
 
 @Composable
-fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, cacheDir : File) {
+fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, cacheDir : File, balise: Balise) {
     var textValue by remember { mutableStateOf(TextFieldValue()) }
     val result = remember { mutableStateOf<Uri?>(null) }
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) {

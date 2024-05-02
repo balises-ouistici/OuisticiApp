@@ -46,8 +46,8 @@ object Stub {
 
 
 
-    private fun createAnnonce() : List<Annonce> {
-        return listOf(
+    private fun createAnnonce() : ArrayList<Annonce> {
+        return arrayListOf(
             Annonce("bonjour", TypeAnnonce.AUDIO, R.raw.bonjour, null, null),
             Annonce("comment", TypeAnnonce.TEXTE, R.raw.comment, "Comment allez-vous ?", Langue("fr","francais")),
             Annonce("aurevoir", TypeAnnonce.AUDIO, R.raw.aurevoir, null, null),

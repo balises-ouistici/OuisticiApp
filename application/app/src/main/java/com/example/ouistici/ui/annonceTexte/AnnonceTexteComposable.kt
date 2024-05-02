@@ -1,5 +1,6 @@
 package com.example.ouistici.ui.annonceTexte
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,17 +22,26 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.ouistici.R
+import com.example.ouistici.model.Annonce
+import com.example.ouistici.model.Balise
+import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.theme.FontColor
 
 @Composable
-fun AnnonceTexte(navController: NavController) {
+fun AnnonceTexte(navController: NavController, balise: Balise) {
     var textValue by remember { mutableStateOf(TextFieldValue()) }
     var textContenu by remember { mutableStateOf(TextFieldValue()) }
+    var textValueInput by remember { mutableStateOf("") }
+    var textContenuInput by remember { mutableStateOf("") }
+
+    var context = LocalContext.current
 
 
 
@@ -53,6 +63,7 @@ fun AnnonceTexte(navController: NavController) {
             value = textValue,
             onValueChange = {
                 textValue = it
+                textValueInput = it.text
             },
             label = { Text("Entrez le nom") },
             textStyle = TextStyle(fontSize = 18.sp),
@@ -66,6 +77,7 @@ fun AnnonceTexte(navController: NavController) {
             value = textContenu,
             onValueChange = {
                 textContenu = it
+                textContenuInput = it.text
             },
             label = { Text("Entrez le contenu qui sera lu par le synthétiseur vocal") },
             textStyle = TextStyle(fontSize = 18.sp),
@@ -85,7 +97,24 @@ fun AnnonceTexte(navController: NavController) {
 
         
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                if ( textValueInput != "" && textContenuInput != "" ) {
+                    balise.annonces.add(Annonce(textValueInput, TypeAnnonce.TEXTE, R.raw.bonjour, textContenuInput, null))
+                    Toast.makeText(
+                        context,
+                        "Annonce ajoutée",
+                        Toast.LENGTH_LONG)
+                        .show()
+                    navController.navigate("annonceTexte")
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Action impossible, vous devez remplir les champs",
+                        Toast.LENGTH_LONG)
+                        .show()
+
+                }
+            },
             modifier = Modifier.padding(16.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
         ) {

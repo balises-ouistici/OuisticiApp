@@ -49,6 +49,7 @@ import androidx.navigation.NavController
 import com.example.ouistici.R
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.AndroidAudioRecorder
+import com.example.ouistici.model.Balise
 import com.example.ouistici.ui.theme.FontColor
 import kotlinx.coroutines.delay
 import java.io.File
@@ -57,7 +58,13 @@ import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun AnnonceVocale(navController: NavController, recorder: AndroidAudioRecorder, player: AndroidAudioPlayer, cacheDir : File) {
+fun AnnonceVocale(
+    navController: NavController,
+    recorder: AndroidAudioRecorder,
+    player: AndroidAudioPlayer,
+    cacheDir : File,
+    balise: Balise
+) {
     var textValue by remember { mutableStateOf(TextFieldValue()) }
 
     var audioFile : File? = File(cacheDir, "audio.mp3")

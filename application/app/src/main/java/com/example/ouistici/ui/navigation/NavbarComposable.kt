@@ -205,28 +205,42 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                 // ROUTES AJOUT ANNONCE
 
                 composable(route = "annonceVocal") {
-                    AnnonceVocale(
-                        navController = navController,
-                        recorder = recorder,
-                        player = player,
-                        cacheDir = cacheDir
-                    )
+                    val selectedBalise = baliseViewModel.selectedBalise
+                    if (selectedBalise != null) {
+                        isBottomAppBarVisible.value = true
+                        AnnonceVocale(
+                            navController = navController,
+                            recorder = recorder,
+                            player = player,
+                            cacheDir = cacheDir,
+                            balise = selectedBalise
+                        )
+                    }
                 }
 
                 composable(route = "annonceTexte") {
-                    AnnonceTexte(
-                        navController = navController
-                    )
+                    val selectedBalise = baliseViewModel.selectedBalise
+                    if (selectedBalise != null) {
+                        isBottomAppBarVisible.value = true
+                        AnnonceTexte(
+                            navController = navController,
+                            balise = selectedBalise
+                        )
+                    }
                 }
 
                 composable(route = "annonceMptrois") {
-                    AnnonceMptrois(
-                        navController = navController,
-                        player = player,
-                        cacheDir = cacheDir
-                    )
+                    val selectedBalise = baliseViewModel.selectedBalise
+                    if (selectedBalise != null) {
+                        isBottomAppBarVisible.value = true
+                        AnnonceMptrois(
+                            navController = navController,
+                            player = player,
+                            cacheDir = cacheDir,
+                            balise = selectedBalise
+                        )
+                    }
                 }
-
             }
         }
     }
