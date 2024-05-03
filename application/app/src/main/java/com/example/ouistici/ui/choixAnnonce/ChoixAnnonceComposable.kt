@@ -1,5 +1,8 @@
 package com.example.ouistici.ui.choixAnnonce
 
+import android.annotation.SuppressLint
+import android.app.TimePickerDialog
+import android.content.Context
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -23,8 +26,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -32,12 +38,18 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DisplayMode.Companion.Picker
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TimePicker
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,7 +59,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -330,6 +345,7 @@ fun AddPlageHorairePopup(
     var heureDebut by remember { mutableStateOf(LocalTime.of(0,0)) }
     var heureFin by remember { mutableStateOf(LocalTime.of(0,0)) }
 
+
     val context = LocalContext.current
 
     // Contenu du popup
@@ -376,17 +392,18 @@ fun AddPlageHorairePopup(
                     text = "Choisir les périodes :",
                     fontWeight = FontWeight.SemiBold
                 )
-                TimePicker(
-                    heure = heureDebut,
-                    onHeureSelected = { heureDebut = it },
-                    label = "Heure de début"
-                )
+
+
+                // Emplacement heure début
+
+
+
+
+
                 Spacer(modifier = Modifier.height(16.dp))
-                TimePicker(
-                    heure = heureFin,
-                    onHeureSelected = { heureFin = it },
-                    label = "Heure de fin"
-                )
+                // Emplacement heure de fin
+
+
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -428,6 +445,9 @@ fun AddPlageHorairePopup(
         }
     }
 }
+
+
+
 
 
 @Composable
@@ -529,6 +549,7 @@ fun JoursSemaineSelector(
         Column(
             modifier = Modifier
                 .fillMaxHeight()
+                .fillMaxWidth()
         ) {
             for (jour in joursSemaine) {
                 Row(
@@ -554,81 +575,6 @@ fun JoursSemaineSelector(
 }
 
 
-
-
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun TimePicker(
-    heure: LocalTime,
-    onHeureSelected: (LocalTime) -> Unit,
-    modifier: Modifier = Modifier,
-    label: String = ""
-) {
-    var selectedTime by remember { mutableStateOf(heure) }
-
-    Column(modifier = modifier) {
-        if (label.isNotEmpty()) {
-            Text(text = label)
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            // Afficher l'heure sélectionnée
-            Text(text = selectedTime.format(DateTimeFormatter.ofPattern("HH:mm")))
-            Spacer(modifier = Modifier.width(8.dp))
-            // Ouvrir le sélecteur d'heure au clic
-            TimePickerIconButton(selectedTime, onHeureSelected)
-        }
-    }
-}
-
-
-
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun TimePickerIconButton(
-    selectedTime: LocalTime,
-    onHeureSelected: (LocalTime) -> Unit
-) {
-    var showDialog by remember { mutableStateOf(false) }
-
-    IconButton(onClick = { showDialog = true }) {
-        Icon(Icons.Filled.DateRange, contentDescription = "Select time")
-    }
-
-    if (showDialog) {
-        ShowTimePickerDialog(selectedTime = selectedTime, onHeureSelected = onHeureSelected) {
-            showDialog = false
-        }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun ShowTimePickerDialog(
-    selectedTime: LocalTime,
-    onHeureSelected: (LocalTime) -> Unit,
-    onDismissRequest: () -> Unit
-) {
-    val timeState = remember { mutableStateOf(selectedTime) }
-
-    // Afficher un dialogue personnalisé pour sélectionner l'heure
-    Dialog(onDismissRequest = onDismissRequest) {
-        TimePicker(
-            heure = timeState.value,
-            onHeureSelected = { heure ->
-                timeState.value = heure
-                onHeureSelected(heure)
-                onDismissRequest()
-            },
-            modifier = Modifier.padding(16.dp)
-        )
-    }
-}
 
 
 
