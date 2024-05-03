@@ -1,5 +1,8 @@
 package com.example.ouistici.ui.choixAnnonce
 
+import android.os.Build
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,8 +22,15 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
@@ -29,24 +39,40 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
+import com.example.ouistici.model.JoursSemaine
+import com.example.ouistici.model.PlageHoraire
+import com.example.ouistici.model.TypeAnnonce
+import com.example.ouistici.ui.infosBalise.TableAudioCell
+import com.example.ouistici.ui.infosBalise.TableCell
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
 import com.example.ouistici.ui.theme.TestButtonColor
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChoixAnnonce(navController: NavController, balise: Balise) {
+    val showAddPlageHorairePopup = remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -118,7 +144,7 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
         Spacer(modifier = Modifier.height(30.dp))
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { showAddPlageHorairePopup.value = true },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
         ) {
             Text(
@@ -127,9 +153,236 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
             )
         }
 
-        TableScreen()
+        if (showAddPlageHorairePopup.value) {
+            AddPlageHorairePopup(
+                balise = balise,
+                onPlageHoraireAdded = { plageHoraire ->
+                    balise.plage?.add(plageHoraire)
+                    showAddPlageHorairePopup.value = false
+                },
+                onDismiss = { showAddPlageHorairePopup.value = false },
+                navController = navController
+            )
+        }
+
+        TableScreen(balise)
+    }
+}
 
 
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun AddPlageHorairePopup(
+    balise : Balise,
+    onPlageHoraireAdded: (PlageHoraire) -> Unit,
+    onDismiss: () -> Unit,
+    navController: NavController
+) {
+    // États pour les champs du formulaire
+    var selectedAnnonce by remember { mutableStateOf<Annonce?>(null) }
+    var selectedJours by remember { mutableStateOf<List<JoursSemaine>>(emptyList()) }
+    var heureDebut by remember { mutableStateOf(LocalTime.of(0,0)) }
+    var heureFin by remember { mutableStateOf(LocalTime.of(0,0)) }
+
+    val context = LocalContext.current
+
+    // Contenu du popup
+    Dialog(
+        onDismissRequest = onDismiss
+    ) {
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier.width(300.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(text = "Ajouter une plage horaire", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(16.dp))
+                AnnonceList(
+                    annonces = balise.annonces,
+                    onAnnonceSelected = { selectedAnnonce = it }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                JoursSemaineSelector(
+                    selectedJours = selectedJours,
+                    onJoursSelected = { selectedJours = it }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                TimePicker(
+                    heure = heureDebut,
+                    onHeureSelected = { heureDebut = it },
+                    label = "Heure de début"
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                TimePicker(
+                    heure = heureFin,
+                    onHeureSelected = { heureFin = it },
+                    label = "Heure de fin"
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(
+                        onClick = {
+                            // Création de la plage horaire
+                            if (selectedAnnonce != null && selectedJours.isNotEmpty()) {
+                                balise.plage?.add(PlageHoraire(selectedAnnonce!!, selectedJours, heureDebut, heureFin))
+                                Toast.makeText(
+                                    context,
+                                    "Annonce ajoutée",
+                                    Toast.LENGTH_LONG)
+                                    .show()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Problème",
+                                    Toast.LENGTH_LONG)
+                                    .show()
+                            }
+                            onDismiss()
+                            navController.navigate("manageAnnonce")
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text(text = "Ajouter", color = Color.White)
+                    }
+                    Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                    ) {
+                        Text(text = "Annuler", color = Color.White)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun AnnonceList(
+    annonces: List<Annonce>,
+    onAnnonceSelected: (Annonce) -> Unit
+) {
+    LazyColumn {
+        items(annonces) { annonce ->
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onAnnonceSelected(annonce) }
+                    .padding(16.dp)
+            ) {
+                Text(text = annonce.nom)
+            }
+        }
+    }
+}
+
+
+@Composable
+fun JoursSemaineSelector(
+    selectedJours: List<JoursSemaine>,
+    onJoursSelected: (List<JoursSemaine>) -> Unit
+) {
+    val joursSemaine = JoursSemaine.values()
+
+    Row {
+        for (jour in joursSemaine) {
+            Checkbox(
+                checked = selectedJours.contains(jour),
+                onCheckedChange = { isChecked ->
+                    val updatedList = if (isChecked) {
+                        selectedJours + jour
+                    } else {
+                        selectedJours - jour
+                    }
+                    onJoursSelected(updatedList)
+                },
+                modifier = Modifier.padding(8.dp)
+            )
+            Text(text = jour.name)
+        }
+    }
+}
+
+
+
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun TimePicker(
+    heure: LocalTime,
+    onHeureSelected: (LocalTime) -> Unit,
+    modifier: Modifier = Modifier,
+    label: String = ""
+) {
+    var selectedTime by remember { mutableStateOf(heure) }
+
+    Column(modifier = modifier) {
+        if (label.isNotEmpty()) {
+            Text(text = label)
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            // Afficher l'heure sélectionnée
+            Text(text = selectedTime.format(DateTimeFormatter.ofPattern("HH:mm")))
+            Spacer(modifier = Modifier.width(8.dp))
+            // Ouvrir le sélecteur d'heure au clic
+            TimePickerIconButton(selectedTime, onHeureSelected)
+        }
+    }
+}
+
+
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun TimePickerIconButton(
+    selectedTime: LocalTime,
+    onHeureSelected: (LocalTime) -> Unit
+) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    IconButton(onClick = { showDialog = true }) {
+        Icon(Icons.Filled.DateRange, contentDescription = "Select time")
+    }
+
+    if (showDialog) {
+        ShowTimePickerDialog(selectedTime = selectedTime, onHeureSelected = onHeureSelected) {
+            showDialog = false
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ShowTimePickerDialog(
+    selectedTime: LocalTime,
+    onHeureSelected: (LocalTime) -> Unit,
+    onDismissRequest: () -> Unit
+) {
+    val timeState = remember { mutableStateOf(selectedTime) }
+
+    // Afficher un dialogue personnalisé pour sélectionner l'heure
+    Dialog(onDismissRequest = onDismissRequest) {
+        TimePicker(
+            heure = timeState.value,
+            onHeureSelected = { heure ->
+                timeState.value = heure
+                onHeureSelected(heure)
+                onDismissRequest()
+            },
+            modifier = Modifier.padding(16.dp)
+        )
     }
 }
 
@@ -153,6 +406,23 @@ fun RowScope.TableHeaderCell(
     )
 }
 
+
+@Composable
+fun RowScope.TableJoursCell(
+    jours: List<JoursSemaine>,
+    weight: Float,
+    textColor: Color,
+) {
+    Text(
+        text = jours.joinToString(", ") { it.name },
+        Modifier
+            .border(1.dp, Color.Black)
+            .weight(weight)
+            .padding(8.dp)
+            .height(50.dp),
+        color = textColor
+    )
+}
 
 @Composable
 fun RowScope.TableCell(
@@ -183,8 +453,10 @@ fun RowScope.TableCell(
 }
 
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TableScreen() {
+fun TableScreen(balise : Balise) {
     val column1Weight = .3f
     val column2Weight = .2f
 
@@ -203,6 +475,35 @@ fun TableScreen() {
         }
 
         // SYSTEME D'AJOUT DES PLAGES HORAIRES QUAND BOUTON APPUYE
+        items((balise.plage as List<PlageHoraire>)) { plages ->
+            Row(Modifier.fillMaxWidth()) {
+                TableCell(
+                    text = plages.nomMessage.nom,
+                    weight = column1Weight,
+                    textColor = Color.Black
+                )
+                    
+                TableJoursCell(
+                    jours = plages.jours,
+                    weight = column1Weight,
+                    textColor = Color.Black
+                )
+
+                TableCell(
+                    text = plages.heureDebut.toString(),
+                    weight = column1Weight,
+                    textColor = Color.Black
+                )
+
+                TableCell(
+                    text = plages.heureFin.toString(),
+                    weight = column1Weight,
+                    textColor = Color.Black
+                )
+
+            }
+        }
+
     }
 }
 
@@ -237,3 +538,5 @@ fun OnOffButton() {
         )
     }
 }
+
+

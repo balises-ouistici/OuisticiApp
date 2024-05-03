@@ -6,7 +6,7 @@ class Balise(
     var defaultMessage : Annonce?,
     var annonces : ArrayList<Annonce>,
     var volume : Long,
-    var plage : List<PlageHoraire>?
+    var plage : ArrayList<PlageHoraire>
 ) {
 
 }
