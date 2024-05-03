@@ -7,12 +7,15 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,7 +23,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DateRange
@@ -91,7 +96,8 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
             ) {
                 Text(
                     text = "Choisir annonce par défaut : ",
-                    color = FontColor
+                    color = FontColor,
+                    modifier = Modifier.padding(vertical = 10.dp)
                 )
 
                 Column(
@@ -123,7 +129,8 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
 
                     if (showDefaultMessagePopup.value) {
                         DefaultMessagePopup(
-                            balise = balise
+                            balise = balise,
+                            navController = navController,
                         ) { showDefaultMessagePopup.value = false }
                     }
                 }
@@ -173,6 +180,7 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
 @Composable
 fun DefaultMessagePopup(
     balise: Balise,
+    navController: NavController,
     onDismiss: () -> Unit
 ) {
     var selectedAnnonce: Annonce? by remember { mutableStateOf(null) }
@@ -189,9 +197,9 @@ fun DefaultMessagePopup(
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text(text = "Ajouter une plage horaire", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(text = "Liste des annonces", fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 Spacer(modifier = Modifier.height(16.dp))
-                AnnonceList(
+                AnnonceDefaultMessageList(
                     annonces = balise.annonces,
                     selectedAnnonce = selectedAnnonce,
                     onAnnonceSelected = { selectedAnnonce = it }
@@ -234,6 +242,72 @@ fun DefaultMessagePopup(
                 }
             }
         }
+
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier.width(300.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(text = "Liste des annonces", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(16.dp))
+                AnnonceDefaultMessageList(
+                    annonces = balise.annonces,
+                    selectedAnnonce = selectedAnnonce,
+                    onAnnonceSelected = { selectedAnnonce = it }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    if ( balise.annonces.isEmpty() ) {
+                        Button(
+                            onClick = {
+                                navController.navigate("addAnnonce")
+                                onDismiss()
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                            modifier = Modifier.padding(end = 8.dp)
+                        ) {
+                            Text(text = "Créer annonce", color = Color.White)
+                        }
+                    } else {
+                        Button(
+                            onClick = {
+                                if (selectedAnnonce != null) {
+                                    balise.defaultMessage = selectedAnnonce
+                                    Toast.makeText(
+                                        context,
+                                        "Nouvelle annonce par défaut",
+                                        Toast.LENGTH_LONG)
+                                        .show()
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Action impossible",
+                                        Toast.LENGTH_LONG)
+                                        .show()
+                                }
+                                onDismiss()
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                            modifier = Modifier.padding(end = 8.dp)
+                        ) {
+                            Text(text = "Définir", color = Color.White)
+                        }
+                    }
+                    Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                    ) {
+                        Text(text = "Annuler", color = Color.White)
+                    }
+                }
+            }
+        }
+
     }
 }
 
@@ -271,17 +345,37 @@ fun AddPlageHorairePopup(
             ) {
                 Text(text = "Ajouter une plage horaire", fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 Spacer(modifier = Modifier.height(16.dp))
-                AnnonceList(
-                    annonces = balise.annonces,
-                    selectedAnnonce = selectedAnnonce,
-                    onAnnonceSelected = { selectedAnnonce = it }
+                Text(
+                    text = "Choisir annonce :",
+                    fontWeight = FontWeight.SemiBold
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                if ( balise.annonces.isEmpty() )  {
+                    Text(
+                        text = "Créez d'abord une annonce"
+                    )
+                    Spacer(modifier = Modifier.height(65.dp))
+                } else {
+                    AnnonceList(
+                        annonces = balise.annonces,
+                        selectedAnnonce = selectedAnnonce,
+                        onAnnonceSelected = { selectedAnnonce = it }
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                Text(
+                    text = "Choisir les jours d'activations :",
+                    fontWeight = FontWeight.SemiBold
+                )
                 JoursSemaineSelector(
                     selectedJours = selectedJours,
                     onJoursSelected = { selectedJours = it }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Choisir les périodes :",
+                    fontWeight = FontWeight.SemiBold
+                )
                 TimePicker(
                     heure = heureDebut,
                     onHeureSelected = { heureDebut = it },
@@ -311,7 +405,7 @@ fun AddPlageHorairePopup(
                             } else {
                                 Toast.makeText(
                                     context,
-                                    "Problème",
+                                    "Informations manquantes",
                                     Toast.LENGTH_LONG)
                                     .show()
                             }
@@ -335,29 +429,6 @@ fun AddPlageHorairePopup(
     }
 }
 
-/*
-@Composable
-fun AnnonceList(
-    annonces: List<Annonce>,
-    onAnnonceSelected: (Annonce) -> Unit
-) {
-    LazyColumn(
-        modifier = Modifier
-            .height(100.dp)
-    ) {
-        items(annonces) { annonce ->
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onAnnonceSelected(annonce) }
-                    .padding(16.dp)
-            ) {
-                Text(text = annonce.nom)
-            }
-        }
-    }
-}
-*/
 
 @Composable
 fun AnnonceList(
@@ -399,27 +470,85 @@ fun AnnonceList(
 
 
 @Composable
+fun AnnonceDefaultMessageList(
+    annonces: List<Annonce>,
+    selectedAnnonce: Annonce?,
+    onAnnonceSelected: (Annonce) -> Unit
+) {
+    if ( annonces.isEmpty() ) {
+        Text(
+            text = "Créez d'abord une annonce"
+        )
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .height(200.dp)
+        ) {
+            items(annonces) { annonce ->
+                val isSelected = annonce == selectedAnnonce
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onAnnonceSelected(annonce) }
+                        .padding(16.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = annonce.nom)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        if (isSelected) {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = "Selected",
+                                tint = Color.Green // Change the color as desired
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+@Composable
 fun JoursSemaineSelector(
     selectedJours: List<JoursSemaine>,
     onJoursSelected: (List<JoursSemaine>) -> Unit
 ) {
     val joursSemaine = JoursSemaine.values()
 
-    Row {
-        for (jour in joursSemaine) {
-            Checkbox(
-                checked = selectedJours.contains(jour),
-                onCheckedChange = { isChecked ->
-                    val updatedList = if (isChecked) {
-                        selectedJours + jour
-                    } else {
-                        selectedJours - jour
-                    }
-                    onJoursSelected(updatedList)
-                },
-                modifier = Modifier.padding(8.dp)
-            )
-            Text(text = jour.name)
+    Box(
+        modifier = Modifier
+            .height(200.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+        ) {
+            for (jour in joursSemaine) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = selectedJours.contains(jour),
+                        onCheckedChange = { isChecked ->
+                            val updatedList = if (isChecked) {
+                                selectedJours + jour
+                            } else {
+                                selectedJours - jour
+                            }
+                            onJoursSelected(updatedList)
+                        },
+                        modifier = Modifier.padding(8.dp)
+                    )
+                    Text(text = jour.name)
+                }
+            }
         }
     }
 }
