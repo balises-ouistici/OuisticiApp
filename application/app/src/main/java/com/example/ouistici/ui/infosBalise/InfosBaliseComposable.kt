@@ -77,11 +77,11 @@ fun InfosBalise(
         )
 
         // Boite avec nom, lieu, message par défaut
-
         Surface(
             modifier = Modifier
                 .padding(8.dp)
                 .widthIn(max = 280.dp)
+                .height(70.dp)
                 .fillMaxWidth(),
             shape = RoundedCornerShape(10.dp),
             color = Color.White,
