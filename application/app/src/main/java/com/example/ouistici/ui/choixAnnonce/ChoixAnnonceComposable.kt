@@ -18,22 +18,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -48,7 +42,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -57,14 +50,10 @@ import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.JoursSemaine
 import com.example.ouistici.model.PlageHoraire
-import com.example.ouistici.model.TypeAnnonce
-import com.example.ouistici.ui.infosBalise.TableAudioCell
 import com.example.ouistici.ui.infosBalise.TableCell
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
-import com.example.ouistici.ui.theme.TestButtonColor
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -72,6 +61,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun ChoixAnnonce(navController: NavController, balise: Balise) {
     val showAddPlageHorairePopup = remember { mutableStateOf(false) }
+    val showDefaultMessagePopup = remember { mutableStateOf(false) }
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -106,7 +97,7 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = { showDefaultMessagePopup.value = true },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                     ) {
                        Text(
@@ -125,6 +116,14 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                             text = balise.defaultMessage!!.nom, // Afficher le message par défaut de la balise
                             color = FontColor
                         )
+                    }
+
+
+
+                    if (showDefaultMessagePopup.value) {
+                        DefaultMessagePopup(
+                            balise = balise
+                        ) { showDefaultMessagePopup.value = false }
                     }
                 }
             }
@@ -168,6 +167,77 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
         TableScreen(balise)
     }
 }
+
+
+@Composable
+fun DefaultMessagePopup(
+    balise: Balise,
+    onDismiss: () -> Unit
+) {
+    var selectedAnnonce: Annonce? by remember { mutableStateOf(null) }
+
+    val context = LocalContext.current
+
+    Dialog(
+        onDismissRequest = onDismiss
+    ) {
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier.width(300.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(text = "Ajouter une plage horaire", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(16.dp))
+                AnnonceList(
+                    annonces = balise.annonces,
+                    onAnnonceSelected = { selectedAnnonce = it }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(
+                        onClick = {
+                            // Création de la plage horaire
+                            if (selectedAnnonce != null) {
+                                balise.defaultMessage = selectedAnnonce
+                                Toast.makeText(
+                                    context,
+                                    "Nouvelle annonce par défaut",
+                                    Toast.LENGTH_LONG)
+                                    .show()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Action impossible",
+                                    Toast.LENGTH_LONG)
+                                    .show()
+                            }
+                            onDismiss()
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text(text = "Ajouter", color = Color.White)
+                    }
+                    Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                    ) {
+                        Text(text = "Annuler", color = Color.White)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -482,7 +552,7 @@ fun TableScreen(balise : Balise) {
                     weight = column1Weight,
                     textColor = Color.Black
                 )
-                    
+
                 TableJoursCell(
                     jours = plages.jours,
                     weight = column1Weight,
