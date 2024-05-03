@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -192,6 +193,7 @@ fun DefaultMessagePopup(
                 Spacer(modifier = Modifier.height(16.dp))
                 AnnonceList(
                     annonces = balise.annonces,
+                    selectedAnnonce = selectedAnnonce,
                     onAnnonceSelected = { selectedAnnonce = it }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -271,6 +273,7 @@ fun AddPlageHorairePopup(
                 Spacer(modifier = Modifier.height(16.dp))
                 AnnonceList(
                     annonces = balise.annonces,
+                    selectedAnnonce = selectedAnnonce,
                     onAnnonceSelected = { selectedAnnonce = it }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -332,13 +335,16 @@ fun AddPlageHorairePopup(
     }
 }
 
-
+/*
 @Composable
 fun AnnonceList(
     annonces: List<Annonce>,
     onAnnonceSelected: (Annonce) -> Unit
 ) {
-    LazyColumn {
+    LazyColumn(
+        modifier = Modifier
+            .height(100.dp)
+    ) {
         items(annonces) { annonce ->
             Box(
                 modifier = Modifier
@@ -351,6 +357,45 @@ fun AnnonceList(
         }
     }
 }
+*/
+
+@Composable
+fun AnnonceList(
+    annonces: List<Annonce>,
+    selectedAnnonce: Annonce?,
+    onAnnonceSelected: (Annonce) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier
+            .height(100.dp)
+    ) {
+        items(annonces) { annonce ->
+            val isSelected = annonce == selectedAnnonce
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onAnnonceSelected(annonce) }
+                    .padding(16.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = annonce.nom)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    if (isSelected) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = "Selected",
+                            tint = Color.Green // Change the color as desired
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 
 
 @Composable
