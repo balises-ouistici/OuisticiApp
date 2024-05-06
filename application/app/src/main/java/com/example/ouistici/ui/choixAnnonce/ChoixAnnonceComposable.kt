@@ -712,7 +712,7 @@ fun RowScope.TableJoursCell(
     textColor: Color,
 ) {
     Text(
-        text = jours.joinToString(", ") { it.name },
+        text = jours.joinToString(", ") { it.name.take(2) },
         Modifier
             .border(1.dp, Color.Black)
             .weight(weight)
@@ -723,30 +723,24 @@ fun RowScope.TableJoursCell(
 }
 
 @Composable
-fun RowScope.TableCell(
+fun RowScope.TableCells(
     text: String,
     weight: Float,
     textColor: Color,
-    onClick: (() -> Unit)?
 ) {
-    onClick?.let {
-        Modifier
+    Box(
+        modifier = Modifier
             .border(1.dp, Color.Black)
             .weight(weight)
             .padding(8.dp)
             .height(50.dp)
-            .clickable(onClick = it)
-    }?.let {
-        Box(
-            it
-        ) {
-            Text(
-                text = text,
-                Modifier
-                    .align(Alignment.Center),
-                color = textColor
-            )
-        }
+    ) {
+        Text(
+            text = text,
+            Modifier
+                .align(Alignment.Center),
+            color = textColor
+        )
     }
 }
 
@@ -775,7 +769,7 @@ fun TableScreen(balise : Balise) {
         // SYSTEME D'AJOUT DES PLAGES HORAIRES QUAND BOUTON APPUYE
         items((balise.plage as List<PlageHoraire>)) { plages ->
             Row(Modifier.fillMaxWidth()) {
-                TableCell(
+                TableCells(
                     text = plages.nomMessage.nom,
                     weight = column1Weight,
                     textColor = Color.Black
@@ -787,15 +781,15 @@ fun TableScreen(balise : Balise) {
                     textColor = Color.Black
                 )
 
-                TableCell(
+                TableCells(
                     text = plages.heureDebut.toString(),
-                    weight = column1Weight,
+                    weight = column2Weight,
                     textColor = Color.Black
                 )
 
-                TableCell(
+                TableCells(
                     text = plages.heureFin.toString(),
-                    weight = column1Weight,
+                    weight = column2Weight,
                     textColor = Color.Black
                 )
 
