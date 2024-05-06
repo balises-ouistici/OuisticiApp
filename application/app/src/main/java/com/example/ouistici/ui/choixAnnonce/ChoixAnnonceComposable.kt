@@ -15,6 +15,7 @@ import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -42,14 +44,17 @@ import androidx.compose.material3.DisplayMode.Companion.Picker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TimePicker
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -66,6 +71,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
@@ -77,6 +83,7 @@ import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -331,6 +338,7 @@ fun DefaultMessagePopup(
 
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AddPlageHorairePopup(
@@ -342,11 +350,40 @@ fun AddPlageHorairePopup(
     // États pour les champs du formulaire
     var selectedAnnonce by remember { mutableStateOf<Annonce?>(null) }
     var selectedJours by remember { mutableStateOf<List<JoursSemaine>>(emptyList()) }
-    var heureDebut by remember { mutableStateOf(LocalTime.of(0,0)) }
-    var heureFin by remember { mutableStateOf(LocalTime.of(0,0)) }
+    var heureDebut by remember { mutableStateOf<LocalTime?>(null) }
+    var heureFin by remember { mutableStateOf<LocalTime?>(null) }
 
 
     val context = LocalContext.current
+
+
+    val mCalendar = Calendar.getInstance()
+    val mHour = mCalendar[Calendar.HOUR_OF_DAY]
+    val mMinute = mCalendar[Calendar.MINUTE]
+
+
+    val mTimeStart = remember { mutableStateOf("") }
+
+    val mTimeEnd = remember { mutableStateOf("") }
+
+
+    val mTimePickerDialogHeureDebut = TimePickerDialog(
+        context,
+        {_, mHour : Int, mMinute: Int ->
+            heureDebut = LocalTime.of(mHour,mMinute)
+            mTimeStart.value = "$mHour:$mMinute"
+        }, mHour, mMinute, true
+    )
+
+    val mTimePickerDialogHeureFin = TimePickerDialog(
+        context,
+        {_, mHour : Int, mMinute: Int ->
+            heureFin = LocalTime.of(mHour,mMinute)
+            mTimeEnd.value = "$mHour:$mMinute"
+        }, mHour, mMinute, true
+    )
+
+
 
     // Contenu du popup
     Dialog(
@@ -387,24 +424,49 @@ fun AddPlageHorairePopup(
                     selectedJours = selectedJours,
                     onJoursSelected = { selectedJours = it }
                 )
+
+
                 Spacer(modifier = Modifier.height(16.dp))
+
+
                 Text(
                     text = "Choisir les périodes :",
                     fontWeight = FontWeight.SemiBold
                 )
 
 
-                // Emplacement heure début
-
-
-
+                if ( heureDebut == null ) {
+                    Text(text = "Heure début : Aucune")
+                } else {
+                    Text(text = "Heure début : ${mTimeStart.value}")
+                }
+                Button(
+                    onClick = { mTimePickerDialogHeureDebut.show() },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF0F9D58))
+                ) {
+                    Text(text = "Choisir heure début", color = Color.White)
+                }
 
 
                 Spacer(modifier = Modifier.height(16.dp))
-                // Emplacement heure de fin
 
+
+                if ( heureFin == null ) {
+                    Text(text = "Heure fin : Aucune")
+                } else {
+                    Text(text = "Heure fin : ${mTimeEnd.value}")
+                }
+
+                Button(
+                    onClick = { mTimePickerDialogHeureFin.show() },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF0F9D58))
+                ) {
+                    Text(text = "Choisir heure fin", color = Color.White)
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
+
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
@@ -412,13 +474,21 @@ fun AddPlageHorairePopup(
                     Button(
                         onClick = {
                             // Création de la plage horaire
-                            if (selectedAnnonce != null && selectedJours.isNotEmpty()) {
-                                balise.plage?.add(PlageHoraire(selectedAnnonce!!, selectedJours, heureDebut, heureFin))
-                                Toast.makeText(
-                                    context,
-                                    "Annonce ajoutée",
-                                    Toast.LENGTH_LONG)
-                                    .show()
+                            if (selectedAnnonce != null && selectedJours.isNotEmpty() && heureDebut != null && heureFin != null) {
+                                if ( heureDebut!! >= heureFin!! ) {
+                                    Toast.makeText(
+                                        context,
+                                        "L'heure de fin ne peut pas être avant celle du début !",
+                                        Toast.LENGTH_LONG)
+                                        .show()
+                                } else {
+                                    balise.plage?.add(PlageHoraire(selectedAnnonce!!, selectedJours, heureDebut!!, heureFin!!))
+                                    Toast.makeText(
+                                        context,
+                                        "Annonce ajoutée",
+                                        Toast.LENGTH_LONG)
+                                        .show()
+                                }
                             } else {
                                 Toast.makeText(
                                     context,
@@ -446,6 +516,101 @@ fun AddPlageHorairePopup(
     }
 }
 
+
+@Composable
+fun TimePickerDialog(
+    heure : LocalTime
+) {
+    // Fetching local context
+    val mContext = LocalContext.current
+
+    // Declaring and initializing a calendar
+    val mCalendar = Calendar.getInstance()
+    val mHour = mCalendar[Calendar.HOUR_OF_DAY]
+    val mMinute = mCalendar[Calendar.MINUTE]
+
+    // Value for storing time as a string
+    val mTime = remember { mutableStateOf("") }
+
+    // Creating a TimePicker dialod
+    val mTimePickerDialog = TimePickerDialog(
+        mContext,
+        {_, mHour : Int, mMinute: Int ->
+            mTime.value = "$mHour:$mMinute"
+        }, mHour, mMinute, false
+    )
+
+    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+
+        // On button click, TimePicker is
+        // displayed, user can select a time
+        Button(onClick = { mTimePickerDialog.show() }, colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF0F9D58))) {
+            Text(text = "Open Time Picker", color = Color.White)
+        }
+
+        // Add a spacer of 100dp
+        Spacer(modifier = Modifier.size(100.dp))
+
+        // Display selected time
+        Text(text = "Selected Time: ${mTime.value}", fontSize = 30.sp)
+    }
+}
+
+
+/*
+@Composable
+fun TimePickerDialog(
+    title: String = "Select Time",
+    onDismissRequest: () -> Unit,
+    confirmButton: @Composable (() -> Unit),
+    dismissButton: @Composable (() -> Unit)? = null,
+    containerColor: Color = MaterialTheme.colorScheme.surface,
+    content: @Composable () -> Unit,
+) {
+    Dialog(
+        onDismissRequest = onDismissRequest,
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false
+        ),
+    ) {
+        Surface(
+            shape = MaterialTheme.shapes.extraLarge,
+            tonalElevation = 6.dp,
+            modifier = Modifier
+                .width(IntrinsicSize.Min)
+                .height(IntrinsicSize.Min)
+                .background(
+                    shape = MaterialTheme.shapes.extraLarge,
+                    color = containerColor
+                ),
+            color = containerColor
+        ) {
+            Column(
+                modifier = Modifier.padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 20.dp),
+                    text = title,
+                    style = MaterialTheme.typography.labelMedium
+                )
+                content()
+                Row(
+                    modifier = Modifier
+                        .height(40.dp)
+                        .fillMaxWidth()
+                ) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    dismissButton?.invoke()
+                    confirmButton()
+                }
+            }
+        }
+    }
+}
+*/
 
 
 
