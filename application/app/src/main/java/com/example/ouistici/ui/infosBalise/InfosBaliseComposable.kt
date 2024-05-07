@@ -70,6 +70,7 @@ import com.example.ouistici.model.PlageHoraire
 import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.baliseViewModel.BaliseViewModel
 import com.example.ouistici.ui.choixAnnonce.AnnonceList
+import com.example.ouistici.ui.choixAnnonce.DefaultMessagePopup
 import com.example.ouistici.ui.choixAnnonce.JoursSemaineSelector
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
@@ -360,7 +361,204 @@ fun ModifyInfosBalisePopup(
 
 
 
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ModifyAnnoncesBaliseTextePopup(
+    annonce: Annonce,
+    navController: NavController,
+    onDismiss: () -> Unit
+) {
+    val context = LocalContext.current
 
+    var nomAnnonce by remember { mutableStateOf(annonce.nom) }
+    var contenuAnnonceTexte by remember { mutableStateOf(annonce.contenu ?: "") }
+
+    Dialog(
+        onDismissRequest = onDismiss
+    ) {
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .width(300.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    text = "Informations annonce",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Nom annonce :",
+                    fontWeight = FontWeight.SemiBold
+                )
+                TextField(
+                    value = nomAnnonce,
+                    onValueChange = { nomAnnonce = it },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "Contenu :",
+                    fontWeight = FontWeight.SemiBold
+                )
+                TextField(
+                    value = contenuAnnonceTexte,
+                    onValueChange = { contenuAnnonceTexte = it },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "Langue :",
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                // FAIRE CHANGEMENT DE LANGUE
+
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(
+                        onClick = {
+                            if (nomAnnonce != "") {
+
+                                annonce.contenu = contenuAnnonceTexte
+                                // PAREIL SAUVEGARDER LA LANGUE DE L'ANNONCE
+
+                                annonce.nom = nomAnnonce
+                                Toast.makeText(
+                                    context,
+                                    "Informations modifiées",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                                navController.navigate("infosBalise")
+                                onDismiss()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "L'annonce doit avoir un nom !",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text(text = "Ajouter", color = Color.White)
+                    }
+                    Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                    ) {
+                        Text(text = "Annuler", color = Color.White)
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ModifyAnnoncesBaliseAudioPopup(
+    annonce: Annonce,
+    navController: NavController,
+    onDismiss: () -> Unit
+) {
+    val context = LocalContext.current
+
+    var nomAnnonce by remember { mutableStateOf(annonce.nom) }
+
+    Dialog(
+        onDismissRequest = onDismiss
+    ) {
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .width(300.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    text = "Informations annonce",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Nom annonce :",
+                    fontWeight = FontWeight.SemiBold
+                )
+                TextField(
+                    value = nomAnnonce,
+                    onValueChange = { nomAnnonce = it },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(
+                        onClick = {
+                            if (nomAnnonce != "") {
+                                annonce.nom = nomAnnonce
+                                Toast.makeText(
+                                    context,
+                                    "Information modifiée",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                                navController.navigate("infosBalise")
+                                onDismiss()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "L'annonce doit avoir un nom !",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text(text = "Ajouter", color = Color.White)
+                    }
+                    Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                    ) {
+                        Text(text = "Annuler", color = Color.White)
+                    }
+                }
+            }
+        }
+    }
+}
 
 
 
@@ -383,61 +581,6 @@ fun RowScope.TableCell(
             .height(30.dp),
         color = textColor
     )
-}
-
-
-@Composable
-fun RowScope.TableEditTextButtonCell(
-    weight: Float,
-) {
-    OutlinedButton(
-        onClick = { /*TODO*/ },
-        shape = RectangleShape,
-        border = BorderStroke(1.dp, Color.Black),
-        colors = ButtonDefaults.buttonColors(
-            contentColor = Color.Black,
-            containerColor = BodyBackground
-        ),
-        contentPadding = PaddingValues(8.dp),
-        modifier = Modifier
-            .height(45.dp)
-            .weight(weight)
-            .border(1.dp, Color.Black)
-    ) {
-        Icon(
-            imageVector = Icons.Default.Edit,
-            contentDescription = "Modifier l'annonce",
-            modifier = Modifier.size(15.dp)
-        )
-    }
-}
-
-
-
-@Composable
-fun RowScope.TableEditAudioButtonCell(
-    weight: Float,
-) {
-    OutlinedButton(
-        onClick = { /*TODO*/ },
-        shape = RectangleShape,
-        border = BorderStroke(1.dp, Color.Black),
-        colors = ButtonDefaults.buttonColors(
-            contentColor = Color.Black,
-            containerColor = BodyBackground
-        ),
-        contentPadding = PaddingValues(8.dp),
-        modifier = Modifier
-            .height(45.dp)
-            .weight(weight)
-            .border(1.dp, Color.Black)
-    ) {
-        Icon(
-            imageVector = Icons.Default.Edit,
-            contentDescription = "Changer le nom de l'annonce",
-            modifier = Modifier.size(15.dp)
-        )
-    }
 }
 
 
@@ -490,6 +633,7 @@ fun RowScope.TableAudioCell(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavController) {
     val column1Weight = .3f
@@ -497,6 +641,10 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
     val column3Weight = .13f
 
     val context = LocalContext.current
+
+    val showModifyAnnonceTextPopup = remember { mutableStateOf(false) }
+    val showModifyAnnonceAudioPopup = remember { mutableStateOf(false) }
+
 
     if (balise.annonces.isEmpty()) {
         Column(
@@ -539,7 +687,37 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                                 textColor = Color.Black
                             )
 
-                            TableEditTextButtonCell(weight = column3Weight)
+                            OutlinedButton(
+                                onClick = {
+                                    showModifyAnnonceTextPopup.value = true
+                                },
+                                shape = RectangleShape,
+                                border = BorderStroke(1.dp, Color.Black),
+                                colors = ButtonDefaults.buttonColors(
+                                    contentColor = Color.Black,
+                                    containerColor = BodyBackground
+                                ),
+                                contentPadding = PaddingValues(8.dp),
+                                modifier = Modifier
+                                    .height(45.dp)
+                                    .weight(column3Weight)
+                                    .border(1.dp, Color.Black)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = "Changer le nom de l'annonce",
+                                    modifier = Modifier.size(15.dp)
+                                )
+                            }
+
+
+                            if (showModifyAnnonceTextPopup.value) {
+                                ModifyAnnoncesBaliseTextePopup(
+                                    annonce = annonce,
+                                    navController = navController
+                                ) { showModifyAnnonceTextPopup.value = false }
+                            }
+
                         }
                     }
 
@@ -550,8 +728,36 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                             player = player
                         )
 
+                        OutlinedButton(
+                            onClick = {
+                                showModifyAnnonceAudioPopup.value = true
+                            },
+                            shape = RectangleShape,
+                            border = BorderStroke(1.dp, Color.Black),
+                            colors = ButtonDefaults.buttonColors(
+                                contentColor = Color.Black,
+                                containerColor = BodyBackground
+                            ),
+                            contentPadding = PaddingValues(8.dp),
+                            modifier = Modifier
+                                .height(45.dp)
+                                .weight(column3Weight)
+                                .border(1.dp, Color.Black)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Changer le nom de l'annonce",
+                                modifier = Modifier.size(15.dp)
+                            )
+                        }
 
-                        TableEditAudioButtonCell(weight = column3Weight)
+                        if (showModifyAnnonceAudioPopup.value) {
+                            ModifyAnnoncesBaliseAudioPopup(
+                                annonce = annonce,
+                                navController = navController
+                            ) { showModifyAnnonceAudioPopup.value = false }
+                        }
+
                     }
 
                     OutlinedButton(
