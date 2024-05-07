@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -36,7 +37,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
@@ -45,6 +48,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -63,6 +67,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -93,7 +98,9 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
 
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            // .verticalScroll(rememberScrollState())
+        ,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
@@ -699,7 +706,7 @@ fun RowScope.TableHeaderCell(
             .border(1.dp, Color.Black)
             .weight(weight)
             .padding(8.dp)
-            .height(50.dp),
+            .height(30.dp),
         color = textColor
     )
 }
@@ -711,15 +718,27 @@ fun RowScope.TableJoursCell(
     weight: Float,
     textColor: Color,
 ) {
-    Text(
-        text = jours.joinToString(", ") { it.name.take(2) },
-        Modifier
-            .border(1.dp, Color.Black)
-            .weight(weight)
-            .padding(8.dp)
-            .height(50.dp),
-        color = textColor
-    )
+    if ( jours.count() == 7 ) {
+        Text(
+            text = "Tous les jours",
+            Modifier
+                .border(1.dp, Color.Black)
+                .weight(weight)
+                .padding(8.dp)
+                .height(50.dp),
+            color = textColor
+        )
+    } else {
+        Text(
+            text = jours.joinToString(", ") { it.name.take(2) },
+            Modifier
+                .border(1.dp, Color.Black)
+                .weight(weight)
+                .padding(8.dp)
+                .height(50.dp),
+            color = textColor
+        )
+    }
 }
 
 @Composable
@@ -749,8 +768,10 @@ fun RowScope.TableCells(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TableScreen(balise : Balise) {
-    val column1Weight = .3f
-    val column2Weight = .2f
+    val column1Weight = .24f
+    val columnJours = .28f
+    val column2Weight = .22f
+    val column3Weight = .13f
 
     LazyColumn(
         Modifier
@@ -760,9 +781,9 @@ fun TableScreen(balise : Balise) {
         item {
             Row(Modifier.background(TableHeaderColor)) {
                 TableHeaderCell(text = "Nom mess", weight = column1Weight, textColor = Color.Black)
-                TableHeaderCell(text = "Jours", weight = column1Weight, textColor = Color.Black)
-                TableHeaderCell(text = "H Dep", weight = column2Weight, textColor = Color.Black)
-                TableHeaderCell(text = "H Fin", weight = column2Weight, textColor = Color.Black)
+                TableHeaderCell(text = "Jours", weight = columnJours, textColor = Color.Black)
+                TableHeaderCell(text = "Horaires", weight = column2Weight, textColor = Color.Black)
+                TableHeaderCell(text = "", weight = .26f, textColor = Color.Black)
             }
         }
 
@@ -777,21 +798,58 @@ fun TableScreen(balise : Balise) {
 
                 TableJoursCell(
                     jours = plages.jours,
-                    weight = column1Weight,
+                    weight = columnJours,
                     textColor = Color.Black
                 )
 
                 TableCells(
-                    text = plages.heureDebut.toString(),
+                    text = "de " + plages.heureDebut.toString() + "\nà " + plages.heureFin.toString(),
                     weight = column2Weight,
                     textColor = Color.Black
                 )
 
-                TableCells(
-                    text = plages.heureFin.toString(),
-                    weight = column2Weight,
-                    textColor = Color.Black
-                )
+
+                OutlinedButton(
+                    onClick = { /*TODO*/ },
+                    shape = RectangleShape,
+                    border = BorderStroke(1.dp, Color.Black),
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.Black,
+                        containerColor = BodyBackground
+                    ),
+                    contentPadding = PaddingValues(8.dp),
+                    modifier = Modifier
+                        .weight(column3Weight)
+                        .height(66.dp)
+                        .border(1.dp, Color.Black)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Modifier plage horaire",
+                        modifier = Modifier.size(10.dp)
+                    )
+                }
+
+                OutlinedButton(
+                    onClick = { /*TODO*/ },
+                    shape = RectangleShape,
+                    border = BorderStroke(1.dp, Color.Black),
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.Black,
+                        containerColor = BodyBackground
+                    ),
+                    contentPadding = PaddingValues(8.dp),
+                    modifier = Modifier
+                        .weight(column3Weight)
+                        .height(66.dp)
+                        .border(1.dp, Color.Black)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Supprimer plage horaire",
+                        modifier = Modifier.size(10.dp)
+                    )
+                }
 
             }
         }
