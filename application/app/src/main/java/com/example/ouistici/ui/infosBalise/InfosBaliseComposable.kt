@@ -262,14 +262,14 @@ fun RowScope.TableEditTextButtonCell(
         ),
         contentPadding = PaddingValues(8.dp),
         modifier = Modifier
-            .width(45.dp)
             .height(45.dp)
+            .weight(weight)
             .border(1.dp, Color.Black)
     ) {
         Icon(
             imageVector = Icons.Default.Edit,
             contentDescription = "Modifier l'annonce",
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier.size(15.dp)
         )
     }
 }
@@ -290,14 +290,14 @@ fun RowScope.TableEditAudioButtonCell(
         ),
         contentPadding = PaddingValues(8.dp),
         modifier = Modifier
-            .width(45.dp)
             .height(45.dp)
+            .weight(weight)
             .border(1.dp, Color.Black)
     ) {
         Icon(
             imageVector = Icons.Default.Edit,
             contentDescription = "Changer le nom de l'annonce",
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier.size(15.dp)
         )
     }
 }
@@ -327,7 +327,6 @@ fun RowScope.TableAudioCell(
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             modifier = Modifier
                 .height(40.dp)
-                .width(70.dp)
                 .align(Alignment.CenterVertically)
         ) {
             Icon(
@@ -342,7 +341,6 @@ fun RowScope.TableAudioCell(
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             modifier = Modifier
                 .height(40.dp)
-                .width(70.dp)
                 .align(Alignment.CenterVertically)
         ) {
             Text(
@@ -356,9 +354,9 @@ fun RowScope.TableAudioCell(
 
 @Composable
 fun TableScreen(balise : Balise, player: AndroidAudioPlayer) {
-    val column1Weight = .29f
-    val column2Weight = .47f
-    val column3Weight = .24f
+    val column1Weight = .3f
+    val column2Weight = .44f
+    val column3Weight = .13f
 
     if (balise.annonces.isEmpty()) {
         Column(
@@ -381,7 +379,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer) {
                 Row(Modifier.background(TableHeaderColor)) {
                     TableCell(text = "Nom", weight = column1Weight, textColor = Color.Black)
                     TableCell(text = "Contenu", weight = column2Weight, textColor = Color.Black)
-                    TableCell(text= "", weight = column3Weight, textColor = Color.Black)
+                    TableCell(text= "", weight = .26f, textColor = Color.Black)
                 }
             }
 
@@ -426,14 +424,14 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer) {
                         ),
                         contentPadding = PaddingValues(8.dp),
                         modifier = Modifier
-                            .width(45.dp)
                             .height(45.dp)
+                            .weight(column3Weight)
                             .border(1.dp, Color.Black)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Supprimer annonce",
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(15.dp)
                         )
                     }
 
