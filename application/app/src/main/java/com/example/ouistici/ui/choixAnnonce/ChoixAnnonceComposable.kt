@@ -222,7 +222,9 @@ fun DefaultMessagePopup(
     ) {
         Surface(
             shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.width(300.dp)
+            modifier = Modifier
+                .width(300.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             Column(
                 modifier = Modifier.padding(16.dp)
@@ -399,7 +401,9 @@ fun AddPlageHorairePopup(
     ) {
         Surface(
             shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.width(300.dp)
+            modifier = Modifier
+                .width(300.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             Column(
                 modifier = Modifier.padding(16.dp)
