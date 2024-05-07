@@ -4,7 +4,9 @@ import android.media.MediaPlayer
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -12,16 +14,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
@@ -36,6 +44,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -77,50 +87,100 @@ fun InfosBalise(
         )
 
         // Boite avec nom, lieu, message par défaut
-        Surface(
-            modifier = Modifier
-                .padding(8.dp)
-                .widthIn(max = 280.dp)
-                .height(70.dp)
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(10.dp),
-            color = Color.White,
-            border = BorderStroke(2.dp, color = Color.Black)
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+        Row {
+            Surface(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .widthIn(max = 280.dp)
+                    .height(70.dp)
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(10.dp),
+                color = Color.White,
+                border = BorderStroke(2.dp, color = Color.Black)
             ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
-                Text(
-                    text = "Nom balise : " + balise.nom,
-                    color = FontColor
-                )
-
-                if ( balise.lieu == null ) {
                     Text(
-                        text = "Lieu : Non défini",
+                        text = "Nom balise : " + balise.nom,
                         color = FontColor
                     )
-                } else {
-                    Text(
-                        text = "Lieu : " + balise.lieu,
-                        color = FontColor
+
+                    if ( balise.lieu == null ) {
+                        Text(
+                            text = "Lieu : Non défini",
+                            color = FontColor
+                        )
+                    } else {
+                        Text(
+                            text = "Lieu : " + balise.lieu,
+                            color = FontColor
+                        )
+                    }
+
+                    if ( balise.defaultMessage == null ) {
+                        Text(
+                            text = "Message défaut : Aucun",
+                            color = FontColor
+                        )
+                    } else {
+                        Text(
+                            text = "Message défaut : " + balise.defaultMessage?.nom,
+                            color = FontColor
+                        )
+                    }
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .padding(vertical = 10.dp)
+            ) {
+                // Bouton pour modifier le nom de la balise
+                OutlinedButton(
+                    onClick = { /*TODO*/ },
+                    shape = RectangleShape,
+                    border = BorderStroke(1.dp, Color.Black),
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.Black,
+                        containerColor = BodyBackground
+                    ),
+                    contentPadding = PaddingValues(8.dp),
+                    modifier = Modifier
+                        .width(22.dp)
+                        .height(22.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Changer le nom de la balise",
+                        modifier = Modifier.size(20.dp)
                     )
                 }
 
-                if ( balise.defaultMessage == null ) {
-                    Text(
-                        text = "Message défaut : Aucun",
-                        color = FontColor
-                    )
-                } else {
-                    Text(
-                        text = "Message défaut : " + balise.defaultMessage?.nom,
-                        color = FontColor
+
+                // Bouton pour modifier le lieu de la balise
+                OutlinedButton(
+                    onClick = { /*TODO*/ },
+                    shape = RectangleShape,
+                    border = BorderStroke(1.dp, Color.Black),
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.Black,
+                        containerColor = BodyBackground
+                    ),
+                    contentPadding = PaddingValues(8.dp),
+                    modifier = Modifier
+                        .width(22.dp)
+                        .height(22.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Changer l'emplacement de la balise",
+                        modifier = Modifier.size(20.dp)
                     )
                 }
             }
         }
+
 
 
         Text(
@@ -191,6 +251,7 @@ fun InfosBalise(
 }
 
 
+
 @Composable
 fun RowScope.TableCell(
     text: String,
@@ -206,6 +267,61 @@ fun RowScope.TableCell(
             .height(30.dp),
         color = textColor
     )
+}
+
+
+@Composable
+fun RowScope.TableEditTextButtonCell(
+    weight: Float,
+) {
+    OutlinedButton(
+        onClick = { /*TODO*/ },
+        shape = RectangleShape,
+        border = BorderStroke(1.dp, Color.Black),
+        colors = ButtonDefaults.buttonColors(
+            contentColor = Color.Black,
+            containerColor = BodyBackground
+        ),
+        contentPadding = PaddingValues(8.dp),
+        modifier = Modifier
+            .width(45.dp)
+            .height(45.dp)
+            .border(1.dp, Color.Black)
+    ) {
+        Icon(
+            imageVector = Icons.Default.Edit,
+            contentDescription = "Modifier l'annonce",
+            modifier = Modifier.size(20.dp)
+        )
+    }
+}
+
+
+
+@Composable
+fun RowScope.TableEditAudioButtonCell(
+    weight: Float,
+) {
+    OutlinedButton(
+        onClick = { /*TODO*/ },
+        shape = RectangleShape,
+        border = BorderStroke(1.dp, Color.Black),
+        colors = ButtonDefaults.buttonColors(
+            contentColor = Color.Black,
+            containerColor = BodyBackground
+        ),
+        contentPadding = PaddingValues(8.dp),
+        modifier = Modifier
+            .width(45.dp)
+            .height(45.dp)
+            .border(1.dp, Color.Black)
+    ) {
+        Icon(
+            imageVector = Icons.Default.Edit,
+            contentDescription = "Changer le nom de l'annonce",
+            modifier = Modifier.size(20.dp)
+        )
+    }
 }
 
 
@@ -262,8 +378,9 @@ fun RowScope.TableAudioCell(
 
 @Composable
 fun TableScreen(balise : Balise, player: AndroidAudioPlayer) {
-    val column1Weight = .3f
-    val column2Weight = .7f
+    val column1Weight = .29f
+    val column2Weight = .47f
+    val column3Weight = .24f
 
     if (balise.annonces.isEmpty()) {
         Column(
@@ -286,7 +403,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer) {
                 Row(Modifier.background(TableHeaderColor)) {
                     TableCell(text = "Nom", weight = column1Weight, textColor = Color.Black)
                     TableCell(text = "Contenu", weight = column2Weight, textColor = Color.Black)
-
+                    TableCell(text= "", weight = column3Weight, textColor = Color.Black)
                 }
             }
 
@@ -305,6 +422,8 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer) {
                                 weight = column2Weight,
                                 textColor = Color.Black
                             )
+
+                            TableEditTextButtonCell(weight = column3Weight)
                         }
                     }
 
@@ -314,7 +433,32 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer) {
                             weight = column2Weight,
                             player = player
                         )
+
+
+                        TableEditAudioButtonCell(weight = column3Weight)
                     }
+
+                    OutlinedButton(
+                        onClick = { /*TODO*/ },
+                        shape = RectangleShape,
+                        border = BorderStroke(1.dp, Color.Black),
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = Color.Black,
+                            containerColor = BodyBackground
+                        ),
+                        contentPadding = PaddingValues(8.dp),
+                        modifier = Modifier
+                            .width(45.dp)
+                            .height(45.dp)
+                            .border(1.dp, Color.Black)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Supprimer annonce",
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+
                 }
             }
         }
