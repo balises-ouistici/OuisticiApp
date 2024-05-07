@@ -1,5 +1,6 @@
 package com.example.ouistici.ui.infosBalise
 
+import android.app.ProgressDialog.show
 import android.media.MediaPlayer
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -419,13 +420,29 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
 
                     OutlinedButton(
                         onClick = {
-                            balise.annonces.remove(annonce)
-                            Toast.makeText(
-                                context,
-                                "Annonce supprimée",
-                                Toast.LENGTH_LONG)
-                                .show()
-                            navController.navigate("infosBalise")
+                            var verif = false
+                            for (i in balise.plage ) {
+                                if ( annonce == i.nomMessage ) {
+                                    verif = true
+                                    Toast.makeText(
+                                        context,
+                                        "Annonce non supprimable, elle est utilisée dans une plage horaire",
+                                        Toast.LENGTH_LONG)
+                                        .show()
+                                }
+                            }
+                            if ( verif == false ) {
+                                if ( balise.defaultMessage == annonce ) {
+                                    balise.defaultMessage = null
+                                }
+                                balise.annonces.remove(annonce)
+                                Toast.makeText(
+                                    context,
+                                    "Annonce supprimée",
+                                    Toast.LENGTH_LONG)
+                                    .show()
+                                navController.navigate("infosBalise")
+                            }
                         },
                         shape = RectangleShape,
                         border = BorderStroke(1.dp, Color.Black),
