@@ -82,6 +82,7 @@ import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.JoursSemaine
 import com.example.ouistici.model.PlageHoraire
+import com.example.ouistici.ui.infosBalise.ModifyAnnoncesBaliseTextePopup
 import com.example.ouistici.ui.infosBalise.TableCell
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
@@ -348,7 +349,6 @@ fun DefaultMessagePopup(
 
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AddPlageHorairePopup(
@@ -497,7 +497,7 @@ fun AddPlageHorairePopup(
                                     balise.plage?.add(PlageHoraire(selectedAnnonce!!, selectedJours, heureDebut!!, heureFin!!))
                                     Toast.makeText(
                                         context,
-                                        "Annonce ajoutée",
+                                        "Plage horaire ajoutée",
                                         Toast.LENGTH_LONG)
                                         .show()
                                     onDismiss()
@@ -527,6 +527,206 @@ fun AddPlageHorairePopup(
         }
     }
 }
+
+
+
+
+
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ModifyPlageHorairePopup(
+    balise : Balise,
+    plageHoraire : PlageHoraire? = null,
+    navController: NavController,
+    onDismiss: () -> Unit
+) {
+    // États pour les champs du formulaire
+    var selectedAnnonce by remember { mutableStateOf(plageHoraire?.nomMessage) }
+    var selectedJours by remember { mutableStateOf(plageHoraire?.jours ?: emptyList()) }
+    var heureDebut by remember { mutableStateOf(plageHoraire?.heureDebut) }
+    var heureFin by remember { mutableStateOf(plageHoraire?.heureFin) }
+
+
+    val context = LocalContext.current
+
+
+
+
+    val mTimeStart = remember { mutableStateOf("") }
+
+    val mTimeEnd = remember { mutableStateOf("") }
+
+
+    val mTimePickerDialogHeureDebut = heureDebut?.let {
+        TimePickerDialog(
+        context,
+        {_, mHour : Int, mMinute: Int ->
+            heureDebut = LocalTime.of(mHour,mMinute)
+            mTimeStart.value = "$mHour:$mMinute"
+        }, it.hour, it.minute, true
+    )
+    }
+
+    val mTimePickerDialogHeureFin = heureFin?.let {
+        TimePickerDialog(
+        context,
+        {_, mHour : Int, mMinute: Int ->
+            heureFin = LocalTime.of(mHour,mMinute)
+            mTimeEnd.value = "$mHour:$mMinute"
+        }, it.hour, it.minute, true
+    )
+    }
+
+
+
+    // Contenu du popup
+    Dialog(
+        onDismissRequest = onDismiss
+    ) {
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .width(300.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(text = "Modifier une plage horaire", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Choisir annonce :",
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                AnnonceList(
+                    annonces = balise.annonces,
+                    selectedAnnonce = selectedAnnonce,
+                    onAnnonceSelected = { selectedAnnonce = it }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+
+                Text(
+                    text = "Choisir les jours d'activations :",
+                    fontWeight = FontWeight.SemiBold
+                )
+                JoursSemaineSelector(
+                    selectedJours = selectedJours,
+                    onJoursSelected = { selectedJours = it }
+                )
+
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+
+                Text(
+                    text = "Choisir les périodes :",
+                    fontWeight = FontWeight.SemiBold
+                )
+
+
+                if ( heureDebut == null ) {
+                    Text(text = "Heure début : Aucune")
+                } else {
+                    Text(text = "Heure début : ${heureDebut}")
+                }
+                Button(
+                    onClick = {
+                        if (mTimePickerDialogHeureDebut != null) {
+                            mTimePickerDialogHeureDebut.show()
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF0F9D58))
+                ) {
+                    Text(text = "Choisir heure début", color = Color.White)
+                }
+
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+
+                if ( heureFin == null ) {
+                    Text(text = "Heure fin : Aucune")
+                } else {
+                    Text(text = "Heure fin : ${heureFin}")
+                }
+
+                Button(
+                    onClick = {
+                        if (mTimePickerDialogHeureFin != null) {
+                            mTimePickerDialogHeureFin.show()
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF0F9D58))
+                ) {
+                    Text(text = "Choisir heure fin", color = Color.White)
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(
+                        onClick = {
+                            // Création de la plage horaire
+                            if (selectedAnnonce != null && selectedJours.isNotEmpty() && heureDebut != null && heureFin != null) {
+                                if ( heureDebut!! >= heureFin!! ) {
+                                    Toast.makeText(
+                                        context,
+                                        "L'heure de fin ne peut pas être avant celle du début !",
+                                        Toast.LENGTH_LONG)
+                                        .show()
+                                } else {
+                                    plageHoraire?.nomMessage = selectedAnnonce as Annonce
+                                    plageHoraire?.jours = selectedJours
+                                    plageHoraire?.heureDebut = heureDebut as LocalTime
+                                    plageHoraire?.heureFin = heureFin as LocalTime
+
+                                    Toast.makeText(
+                                        context,
+                                        "Plage horaire modifiée",
+                                        Toast.LENGTH_LONG)
+                                        .show()
+                                    onDismiss()
+                                    navController.navigate("manageAnnonce")
+                                }
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Informations manquantes",
+                                    Toast.LENGTH_LONG)
+                                    .show()
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text(text = "Modifier", color = Color.White)
+                    }
+                    Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                    ) {
+                        Text(text = "Annuler", color = Color.White)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
 
 
 
@@ -742,6 +942,10 @@ fun TableScreen(balise : Balise, navController: NavController) {
 
     val context = LocalContext.current
 
+    val showModifyPlagePopup = remember { mutableStateOf(false) }
+
+
+
     LazyColumn(
         Modifier
             .fillMaxSize()
@@ -779,7 +983,7 @@ fun TableScreen(balise : Balise, navController: NavController) {
 
 
                 OutlinedButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { showModifyPlagePopup.value = true },
                     shape = RectangleShape,
                     border = BorderStroke(1.dp, Color.Black),
                     colors = ButtonDefaults.buttonColors(
@@ -798,6 +1002,16 @@ fun TableScreen(balise : Balise, navController: NavController) {
                         modifier = Modifier.size(10.dp)
                     )
                 }
+
+                if (showModifyPlagePopup.value) {
+                    ModifyPlageHorairePopup(
+                        balise = balise,
+                        plageHoraire = plages,
+                        navController = navController
+                    ) { showModifyPlagePopup.value = false }
+                }
+
+
 
                 OutlinedButton(
                     onClick = {
