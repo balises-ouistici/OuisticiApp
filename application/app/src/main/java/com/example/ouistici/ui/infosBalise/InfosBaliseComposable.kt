@@ -1,6 +1,7 @@
 package com.example.ouistici.ui.infosBalise
 
 import android.media.MediaPlayer
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -167,7 +168,7 @@ fun InfosBalise(
             color = FontColor
         )
         // Liste de toutes les annonces
-        TableScreen(balise = balise, player = player)
+        TableScreen(balise = balise, player = player, navController = navController)
 
 
 
@@ -353,10 +354,12 @@ fun RowScope.TableAudioCell(
 
 
 @Composable
-fun TableScreen(balise : Balise, player: AndroidAudioPlayer) {
+fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavController) {
     val column1Weight = .3f
     val column2Weight = .44f
     val column3Weight = .13f
+
+    val context = LocalContext.current
 
     if (balise.annonces.isEmpty()) {
         Column(
@@ -415,7 +418,15 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer) {
                     }
 
                     OutlinedButton(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            balise.annonces.remove(annonce)
+                            Toast.makeText(
+                                context,
+                                "Annonce supprimée",
+                                Toast.LENGTH_LONG)
+                                .show()
+                            navController.navigate("infosBalise")
+                        },
                         shape = RectangleShape,
                         border = BorderStroke(1.dp, Color.Black),
                         colors = ButtonDefaults.buttonColors(

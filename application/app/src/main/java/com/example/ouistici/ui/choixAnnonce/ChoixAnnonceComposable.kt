@@ -202,7 +202,7 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
             )
         }
 
-        TableScreen(balise)
+        TableScreen(balise, navController)
     }
 }
 
@@ -730,11 +730,13 @@ fun RowScope.TableCells(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TableScreen(balise : Balise) {
+fun TableScreen(balise : Balise, navController: NavController) {
     val column1Weight = .24f
     val columnJours = .28f
     val column2Weight = .22f
     val column3Weight = .13f
+
+    val context = LocalContext.current
 
     LazyColumn(
         Modifier
@@ -794,7 +796,15 @@ fun TableScreen(balise : Balise) {
                 }
 
                 OutlinedButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        balise.plage.remove(plages)
+                        Toast.makeText(
+                            context,
+                            "Plage horaire supprimée",
+                            Toast.LENGTH_LONG)
+                            .show()
+                        navController.navigate("manageAnnonce")
+                },
                     shape = RectangleShape,
                     border = BorderStroke(1.dp, Color.Black),
                     colors = ButtonDefaults.buttonColors(
