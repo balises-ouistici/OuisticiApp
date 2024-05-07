@@ -132,52 +132,26 @@ fun InfosBalise(
                     }
                 }
             }
-            Column(
+            // Bouton pour modifier le nom de la balise
+            OutlinedButton(
+                onClick = { /*TODO*/ },
+                shape = RectangleShape,
+                border = BorderStroke(1.dp, Color.Black),
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = Color.Black,
+                    containerColor = BodyBackground
+                ),
+                contentPadding = PaddingValues(8.dp),
                 modifier = Modifier
-                    .padding(vertical = 10.dp)
+                    .width(50.dp)
+                    .height(75.dp)
+                    .padding(vertical = 15.dp)
             ) {
-                // Bouton pour modifier le nom de la balise
-                OutlinedButton(
-                    onClick = { /*TODO*/ },
-                    shape = RectangleShape,
-                    border = BorderStroke(1.dp, Color.Black),
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = Color.Black,
-                        containerColor = BodyBackground
-                    ),
-                    contentPadding = PaddingValues(8.dp),
-                    modifier = Modifier
-                        .width(22.dp)
-                        .height(22.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = "Changer le nom de la balise",
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
-
-
-                // Bouton pour modifier le lieu de la balise
-                OutlinedButton(
-                    onClick = { /*TODO*/ },
-                    shape = RectangleShape,
-                    border = BorderStroke(1.dp, Color.Black),
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = Color.Black,
-                        containerColor = BodyBackground
-                    ),
-                    contentPadding = PaddingValues(8.dp),
-                    modifier = Modifier
-                        .width(22.dp)
-                        .height(22.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = "Changer l'emplacement de la balise",
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Changer les informations de la balise",
+                    modifier = Modifier.size(20.dp)
+                )
             }
         }
 
