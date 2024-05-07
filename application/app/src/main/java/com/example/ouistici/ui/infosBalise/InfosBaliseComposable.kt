@@ -1,11 +1,15 @@
 package com.example.ouistici.ui.infosBalise
 
 import android.app.ProgressDialog.show
+import android.app.TimePickerDialog
 import android.media.MediaPlayer
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -38,6 +42,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -51,21 +56,30 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
+import com.example.ouistici.model.JoursSemaine
+import com.example.ouistici.model.PlageHoraire
 import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.baliseViewModel.BaliseViewModel
+import com.example.ouistici.ui.choixAnnonce.AnnonceList
+import com.example.ouistici.ui.choixAnnonce.JoursSemaineSelector
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
 import com.example.ouistici.ui.theme.TestButtonColor
 import java.io.File
+import java.time.LocalTime
+import java.util.Calendar
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun InfosBalise(
     navController: NavController,
@@ -74,6 +88,9 @@ fun InfosBalise(
 ) {
 
     var currentStep by remember { mutableStateOf(1) }
+
+
+    val showModifyInfosBalisePopup = remember { mutableStateOf(false) }
 
 
     var sliderPosition by remember {
@@ -140,7 +157,9 @@ fun InfosBalise(
             }
             // Bouton pour modifier le nom de la balise
             OutlinedButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                      showModifyInfosBalisePopup.value = true
+                },
                 shape = RectangleShape,
                 border = BorderStroke(1.dp, Color.Black),
                 colors = ButtonDefaults.buttonColors(
@@ -158,6 +177,12 @@ fun InfosBalise(
                     contentDescription = "Changer les informations de la balise",
                     modifier = Modifier.size(20.dp)
                 )
+            }
+
+            if ( showModifyInfosBalisePopup.value ) {
+                ModifyInfosBalisePopup(
+                    balise = balise,
+                ) { showModifyInfosBalisePopup.value = false }
             }
         }
 
@@ -230,7 +255,118 @@ fun InfosBalise(
     }
 }
 
+// POPUP POUR INFOS BALISES
 
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ModifyInfosBalisePopup(
+    balise : Balise,
+    onDismiss: () -> Unit
+) {
+    val context = LocalContext.current
+
+    var nomBalise by remember { mutableStateOf(balise.nom) }
+    var lieuBalise by remember { mutableStateOf(balise.lieu ?: "") }
+
+    // Contenu du popup
+    Dialog(
+        onDismissRequest = onDismiss
+    ) {
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .width(300.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(text = "Informations balises", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Nom balise :",
+                    fontWeight = FontWeight.SemiBold
+                )
+                TextField(
+                    value = nomBalise,
+                    onValueChange = { nomBalise = it },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "Lieu :",
+                    fontWeight = FontWeight.SemiBold
+                )
+                TextField(
+                    value = lieuBalise,
+                    onValueChange = { lieuBalise = it },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "Pour changer le message par défaut, allez dans modifier et cliquez sur le bouton \"Choisir\".",
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(
+                        onClick = {
+                            if ( nomBalise != "" ) {
+                                if ( lieuBalise != "" ) {
+                                    balise.lieu = lieuBalise
+                                } else {
+                                    balise.lieu = null
+                                }
+                                balise.nom = nomBalise
+                                Toast.makeText(
+                                    context,
+                                    "Informations modifiées",
+                                    Toast.LENGTH_LONG)
+                                    .show()
+                                onDismiss()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "La balise doit avoir un nom !",
+                                    Toast.LENGTH_LONG)
+                                    .show()
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text(text = "Ajouter", color = Color.White)
+                    }
+                    Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                    ) {
+                        Text(text = "Annuler", color = Color.White)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+// TABLEAU
 
 @Composable
 fun RowScope.TableCell(
