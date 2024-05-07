@@ -98,7 +98,8 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
 
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             // .verticalScroll(rememberScrollState())
         ,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -524,44 +525,6 @@ fun AddPlageHorairePopup(
 }
 
 
-@Composable
-fun TimePickerDialog(
-    heure : LocalTime
-) {
-    // Fetching local context
-    val mContext = LocalContext.current
-
-    // Declaring and initializing a calendar
-    val mCalendar = Calendar.getInstance()
-    val mHour = mCalendar[Calendar.HOUR_OF_DAY]
-    val mMinute = mCalendar[Calendar.MINUTE]
-
-    // Value for storing time as a string
-    val mTime = remember { mutableStateOf("") }
-
-    // Creating a TimePicker dialod
-    val mTimePickerDialog = TimePickerDialog(
-        mContext,
-        {_, mHour : Int, mMinute: Int ->
-            mTime.value = "$mHour:$mMinute"
-        }, mHour, mMinute, false
-    )
-
-    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-
-        // On button click, TimePicker is
-        // displayed, user can select a time
-        Button(onClick = { mTimePickerDialog.show() }, colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF0F9D58))) {
-            Text(text = "Open Time Picker", color = Color.White)
-        }
-
-        // Add a spacer of 100dp
-        Spacer(modifier = Modifier.size(100.dp))
-
-        // Display selected time
-        Text(text = "Selected Time: ${mTime.value}", fontSize = 30.sp)
-    }
-}
 
 
 
