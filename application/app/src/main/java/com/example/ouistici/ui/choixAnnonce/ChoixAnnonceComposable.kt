@@ -151,7 +151,7 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                 color = Color.Black
             )
 
-            OnOffButton()
+            OnOffButton(balise)
         }
 
         Spacer(modifier = Modifier.height(30.dp))
@@ -1026,8 +1026,8 @@ fun TableScreen(balise : Balise, navController: NavController) {
 
 
 @Composable
-fun OnOffButton() {
-    val checkedState = remember { mutableStateOf(false) }
+fun OnOffButton(balise: Balise) {
+    val checkedState = remember { mutableStateOf(balise.sysOnOff) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -1036,6 +1036,7 @@ fun OnOffButton() {
             checked = checkedState.value,
             onCheckedChange = { isChecked ->
                 checkedState.value = isChecked
+                balise.sysOnOff = checkedState.value
             },
             colors = SwitchDefaults.colors(
                 checkedThumbColor = Color.White,

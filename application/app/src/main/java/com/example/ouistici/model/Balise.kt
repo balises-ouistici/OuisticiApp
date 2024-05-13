@@ -6,7 +6,8 @@ class Balise(
     var defaultMessage : Annonce?,
     var annonces : ArrayList<Annonce>,
     var volume : Long,
-    var plages : ArrayList<PlageHoraire>
+    var plages : ArrayList<PlageHoraire>,
+    var sysOnOff : Boolean
 ) {
     fun createId(): Int {
         if ( annonces.isEmpty() ) {

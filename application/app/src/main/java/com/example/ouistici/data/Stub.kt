@@ -24,8 +24,8 @@ object Stub {
 
     private fun createBalises(): List<Balise> {
         return listOf(
-            Balise("Balise1","Accueil",  null, ArrayList(), 50, ArrayList()),
-            Balise("Balise2", null, null, ArrayList(), 30, ArrayList())
+            Balise("Balise1","Accueil",  null, ArrayList(), 50, ArrayList(), true),
+            Balise("Balise2", null, null, ArrayList(), 30, ArrayList(), false)
         )
     }
 
