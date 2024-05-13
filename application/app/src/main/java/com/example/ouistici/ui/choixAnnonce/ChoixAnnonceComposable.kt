@@ -145,12 +145,12 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        Row(
-            modifier = Modifier.padding(vertical = 8.dp)
-        ) {
+        Row {
             Text(
                 text = "Système de plage horaires : ",
-                color = Color.Black
+                color = Color.Black,
+                modifier = Modifier.padding(vertical = 10.dp)
+
             )
 
             OnOffButton(balise, navController)
