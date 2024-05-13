@@ -31,7 +31,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -48,7 +47,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.ouistici.R
-import com.example.ouistici.data.Stub
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.AndroidAudioRecorder
 import com.example.ouistici.ui.ajouterAnnonce.AjouterAnnonce
@@ -70,7 +68,6 @@ import java.io.File
 fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlayer, cacheDir : File) {
     val navController = rememberNavController()
     val baliseViewModel: BaliseViewModel = viewModel()
-    val balises by remember { mutableStateOf(Stub.bal) }
     val isBottomAppBarVisible = remember { mutableStateOf(true) }
 
 
@@ -237,7 +234,6 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                         AnnonceMptrois(
                             navController = navController,
                             player = player,
-                            cacheDir = cacheDir,
                             balise = selectedBalise
                         )
                     }

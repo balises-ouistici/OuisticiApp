@@ -261,13 +261,13 @@ fun AnnonceVocale(
         Button(
             onClick = {
                 if ( textValueInput != "" && audioFile != null ) {
-                    balise.annonces?.add(Annonce(textValueInput, TypeAnnonce.AUDIO, audioFile, null, null))
+                    balise.annonces.add(Annonce(balise.createId(), textValueInput, TypeAnnonce.AUDIO, audioFile, null, null))
                     Toast.makeText(
                         context,
                         "Annonce ajoutée",
                         Toast.LENGTH_LONG)
                         .show()
-                    navController.navigate("annonceMptrois")
+                    navController.navigate("annonceVocal")
                 }
                 if ( audioFile == null && textValueInput == "" ) {
                     Toast.makeText(

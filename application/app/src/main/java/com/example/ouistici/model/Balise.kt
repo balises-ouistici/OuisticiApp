@@ -8,5 +8,12 @@ class Balise(
     var volume : Long,
     var plage : ArrayList<PlageHoraire>
 ) {
-
+    fun createId(): Int {
+        var idTemp = 0
+        if ( annonces.isEmpty() ) {
+            return idTemp
+        }
+        idTemp = annonces.maxOf { it.id } + 1
+        return idTemp
+    }
 }

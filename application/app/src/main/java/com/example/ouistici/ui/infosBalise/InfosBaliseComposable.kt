@@ -47,6 +47,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -645,6 +646,8 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
     val showModifyAnnonceTextPopup = remember { mutableStateOf(false) }
     val showModifyAnnonceAudioPopup = remember { mutableStateOf(false) }
 
+    val idAnnonceEdit = remember { mutableIntStateOf(0) }
+
 
     if (balise.annonces.isEmpty()) {
         Column(
@@ -689,6 +692,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
 
                             OutlinedButton(
                                 onClick = {
+                                    idAnnonceEdit.intValue = balise.annonces.indexOf(annonce)
                                     showModifyAnnonceTextPopup.value = true
                                 },
                                 shape = RectangleShape,
@@ -713,7 +717,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
 
                             if (showModifyAnnonceTextPopup.value) {
                                 ModifyAnnoncesBaliseTextePopup(
-                                    annonce = annonce,
+                                    annonce = balise.annonces.get(idAnnonceEdit.intValue),
                                     navController = navController
                                 ) { showModifyAnnonceTextPopup.value = false }
                             }
@@ -730,6 +734,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
 
                         OutlinedButton(
                             onClick = {
+                                idAnnonceEdit.intValue=balise.annonces.indexOf(annonce)
                                 showModifyAnnonceAudioPopup.value = true
                             },
                             shape = RectangleShape,
@@ -753,8 +758,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
 
                         if (showModifyAnnonceAudioPopup.value) {
                             ModifyAnnoncesBaliseAudioPopup(
-                                annonce = annonce,
-                                navController = navController
+                                annonce = balise.annonces.get(idAnnonceEdit.intValue),                                navController = navController
                             ) { showModifyAnnonceAudioPopup.value = false }
                         }
 

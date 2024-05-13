@@ -1,6 +1,5 @@
 package com.example.ouistici.ui.annonceMptrois
 
-import android.content.ContentResolver
 import android.content.Context
 import android.media.MediaPlayer
 import android.net.Uri
@@ -27,8 +26,6 @@ import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,17 +46,15 @@ import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.theme.FontColor
 import java.io.File
 import java.io.FileOutputStream
-import java.io.InputStream
 
 @Composable
-fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, cacheDir : File, balise: Balise) {
+fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, balise: Balise) {
     var textValue by remember { mutableStateOf(TextFieldValue()) }
     var textValueInput by remember { mutableStateOf("") }
 
-    val result = remember { mutableStateOf<Uri?>(null) }
     var audioFile by remember { mutableStateOf<File?>(null) }
 
-    var context = LocalContext.current
+    val context = LocalContext.current
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let { uriNotNull ->
@@ -68,8 +63,6 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, cac
         }
     }
 
-
-    var mediaPlayer: MediaPlayer? by remember { mutableStateOf(null) }
 
 
     Column(
@@ -139,7 +132,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, cac
         Button(
             onClick = {
                 if ( textValueInput != "" && audioFile != null ) {
-                    balise.annonces?.add(Annonce(textValueInput, TypeAnnonce.AUDIO, audioFile, null, null))
+                    balise.annonces.add(Annonce(balise.createId(), textValueInput, TypeAnnonce.AUDIO, audioFile, null, null))
                     Toast.makeText(
                         context,
                         "Annonce ajoutée",
