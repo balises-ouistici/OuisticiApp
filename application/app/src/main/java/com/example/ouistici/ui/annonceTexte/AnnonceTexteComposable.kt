@@ -139,9 +139,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                 }
             }
         }
-
-        Text(text = langueSelectionnee.toString())
-
+        
 
         Spacer(modifier = Modifier.height(50.dp))
 
