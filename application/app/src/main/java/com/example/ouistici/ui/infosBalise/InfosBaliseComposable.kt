@@ -767,7 +767,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                     OutlinedButton(
                         onClick = {
                             var verif = false
-                            for (i in balise.plage ) {
+                            for (i in balise.plages ) {
                                 if ( annonce == i.nomMessage ) {
                                     verif = true
                                     Toast.makeText(

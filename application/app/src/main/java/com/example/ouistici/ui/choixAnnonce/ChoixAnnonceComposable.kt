@@ -61,6 +61,7 @@ import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -195,7 +196,7 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
             AddPlageHorairePopup(
                 balise = balise,
                 onPlageHoraireAdded = { plageHoraire ->
-                    balise.plage?.add(plageHoraire)
+                    balise.plages.add(plageHoraire)
                     showAddPlageHorairePopup.value = false
                 },
                 onDismiss = { showAddPlageHorairePopup.value = false },
@@ -494,7 +495,7 @@ fun AddPlageHorairePopup(
                                         Toast.LENGTH_LONG)
                                         .show()
                                 } else {
-                                    balise.plage?.add(PlageHoraire(selectedAnnonce!!, selectedJours, heureDebut!!, heureFin!!))
+                                    balise.plages?.add(PlageHoraire(selectedAnnonce!!, selectedJours, heureDebut!!, heureFin!!))
                                     Toast.makeText(
                                         context,
                                         "Plage horaire ajoutée",
@@ -944,6 +945,7 @@ fun TableScreen(balise : Balise, navController: NavController) {
 
     val showModifyPlagePopup = remember { mutableStateOf(false) }
 
+    val idPlageEdit = remember { mutableIntStateOf(0) }
 
 
     LazyColumn(
@@ -961,29 +963,32 @@ fun TableScreen(balise : Balise, navController: NavController) {
         }
 
         // SYSTEME D'AJOUT DES PLAGES HORAIRES QUAND BOUTON APPUYE
-        items((balise.plage as List<PlageHoraire>)) { plages ->
+        items((balise.plages as List<PlageHoraire>)) { plage ->
             Row(Modifier.fillMaxWidth()) {
                 TableCells(
-                    text = plages.nomMessage.nom,
+                    text = plage.nomMessage.nom,
                     weight = column1Weight,
                     textColor = Color.Black
                 )
 
                 TableJoursCell(
-                    jours = plages.jours,
+                    jours = plage.jours,
                     weight = columnJours,
                     textColor = Color.Black
                 )
 
                 TableCells(
-                    text = "de " + plages.heureDebut.toString() + "\nà " + plages.heureFin.toString(),
+                    text = "de " + plage.heureDebut.toString() + "\nà " + plage.heureFin.toString(),
                     weight = column2Weight,
                     textColor = Color.Black
                 )
 
 
                 OutlinedButton(
-                    onClick = { showModifyPlagePopup.value = true },
+                    onClick = {
+                        idPlageEdit.intValue = balise.plages.indexOf(plage)
+                        showModifyPlagePopup.value = true
+                    },
                     shape = RectangleShape,
                     border = BorderStroke(1.dp, Color.Black),
                     colors = ButtonDefaults.buttonColors(
@@ -1006,7 +1011,7 @@ fun TableScreen(balise : Balise, navController: NavController) {
                 if (showModifyPlagePopup.value) {
                     ModifyPlageHorairePopup(
                         balise = balise,
-                        plageHoraire = plages,
+                        plageHoraire = balise.plages.get(idPlageEdit.intValue),
                         navController = navController
                     ) { showModifyPlagePopup.value = false }
                 }
@@ -1015,7 +1020,7 @@ fun TableScreen(balise : Balise, navController: NavController) {
 
                 OutlinedButton(
                     onClick = {
-                        balise.plage.remove(plages)
+                        balise.plages.remove(plage)
                         Toast.makeText(
                             context,
                             "Plage horaire supprimée",
