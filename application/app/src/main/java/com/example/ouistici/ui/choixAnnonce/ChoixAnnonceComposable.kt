@@ -91,6 +91,7 @@ import com.example.ouistici.ui.theme.TableHeaderColor
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import kotlin.time.Duration.Companion.hours
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -378,6 +379,7 @@ fun AddPlageHorairePopup(
     val mTimeEnd = remember { mutableStateOf("") }
 
 
+
     val mTimePickerDialogHeureDebut = TimePickerDialog(
         context,
         {_, mHour : Int, mMinute: Int ->
@@ -451,7 +453,7 @@ fun AddPlageHorairePopup(
                 if ( heureDebut == null ) {
                     Text(text = "Heure début : Aucune")
                 } else {
-                    Text(text = "Heure début : ${mTimeStart.value}")
+                    Text(text = "Heure début : ${heureDebut}")
                 }
                 Button(
                     onClick = { mTimePickerDialogHeureDebut.show() },
@@ -467,7 +469,7 @@ fun AddPlageHorairePopup(
                 if ( heureFin == null ) {
                     Text(text = "Heure fin : Aucune")
                 } else {
-                    Text(text = "Heure fin : ${mTimeEnd.value}")
+                    Text(text = "Heure fin : ${heureFin}")
                 }
 
                 Button(
