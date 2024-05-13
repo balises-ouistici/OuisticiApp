@@ -8,6 +8,5 @@ class PlageHoraire(
     var jours : List<JoursSemaine>,
     var heureDebut : LocalTime,
     var heureFin : LocalTime
-) {
+)
 
-}

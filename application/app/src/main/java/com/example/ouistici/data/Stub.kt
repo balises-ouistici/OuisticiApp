@@ -2,14 +2,7 @@ package com.example.ouistici.data
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.example.ouistici.R
-import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
-import com.example.ouistici.model.JoursSemaine
-import com.example.ouistici.model.Langue
-import com.example.ouistici.model.PlageHoraire
-import com.example.ouistici.model.TypeAnnonce
-import java.time.LocalTime
 
 @RequiresApi(Build.VERSION_CODES.O)
 object Stub {

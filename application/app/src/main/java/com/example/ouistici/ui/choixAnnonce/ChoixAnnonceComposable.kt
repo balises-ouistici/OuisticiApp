@@ -1,8 +1,6 @@
 package com.example.ouistici.ui.choixAnnonce
 
-import android.annotation.SuppressLint
 import android.app.TimePickerDialog
-import android.content.Context
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -10,12 +8,9 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -29,36 +24,22 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.DisplayMode.Companion.Picker
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TimePicker
-import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -70,28 +51,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.JoursSemaine
 import com.example.ouistici.model.PlageHoraire
-import com.example.ouistici.ui.infosBalise.ModifyAnnoncesBaliseTextePopup
-import com.example.ouistici.ui.infosBalise.TableCell
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
-import kotlin.time.Duration.Companion.hours
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -453,7 +426,7 @@ fun AddPlageHorairePopup(
                 if ( heureDebut == null ) {
                     Text(text = "Heure début : Aucune")
                 } else {
-                    Text(text = "Heure début : ${heureDebut}")
+                    Text(text = "Heure début : $heureDebut")
                 }
                 Button(
                     onClick = { mTimePickerDialogHeureDebut.show() },
@@ -469,7 +442,7 @@ fun AddPlageHorairePopup(
                 if ( heureFin == null ) {
                     Text(text = "Heure fin : Aucune")
                 } else {
-                    Text(text = "Heure fin : ${heureFin}")
+                    Text(text = "Heure fin : $heureFin")
                 }
 
                 Button(
@@ -497,7 +470,7 @@ fun AddPlageHorairePopup(
                                         Toast.LENGTH_LONG)
                                         .show()
                                 } else {
-                                    balise.plages?.add(PlageHoraire(selectedAnnonce!!, selectedJours, heureDebut!!, heureFin!!))
+                                    balise.plages.add(PlageHoraire(selectedAnnonce!!, selectedJours, heureDebut!!, heureFin!!))
                                     Toast.makeText(
                                         context,
                                         "Plage horaire ajoutée",
@@ -634,13 +607,11 @@ fun ModifyPlageHorairePopup(
                 if ( heureDebut == null ) {
                     Text(text = "Heure début : Aucune")
                 } else {
-                    Text(text = "Heure début : ${heureDebut}")
+                    Text(text = "Heure début : $heureDebut")
                 }
                 Button(
                     onClick = {
-                        if (mTimePickerDialogHeureDebut != null) {
-                            mTimePickerDialogHeureDebut.show()
-                        }
+                        mTimePickerDialogHeureDebut?.show()
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF0F9D58))
                 ) {
@@ -654,14 +625,12 @@ fun ModifyPlageHorairePopup(
                 if ( heureFin == null ) {
                     Text(text = "Heure fin : Aucune")
                 } else {
-                    Text(text = "Heure fin : ${heureFin}")
+                    Text(text = "Heure fin : $heureFin")
                 }
 
                 Button(
                     onClick = {
-                        if (mTimePickerDialogHeureFin != null) {
-                            mTimePickerDialogHeureFin.show()
-                        }
+                        mTimePickerDialogHeureFin?.show()
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF0F9D58))
                 ) {
@@ -824,7 +793,7 @@ fun JoursSemaineSelector(
     selectedJours: List<JoursSemaine>,
     onJoursSelected: (List<JoursSemaine>) -> Unit
 ) {
-    val joursSemaine = JoursSemaine.values()
+    val joursSemaine = JoursSemaine.entries.toTypedArray()
 
     Box(
         modifier = Modifier
@@ -1013,7 +982,7 @@ fun TableScreen(balise : Balise, navController: NavController) {
                 if (showModifyPlagePopup.value) {
                     ModifyPlageHorairePopup(
                         balise = balise,
-                        plageHoraire = balise.plages.get(idPlageEdit.intValue),
+                        plageHoraire = balise.plages[idPlageEdit.intValue],
                         navController = navController
                     ) { showModifyPlagePopup.value = false }
                 }

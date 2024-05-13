@@ -2,7 +2,6 @@ package com.example.ouistici.model
 
 import android.content.Context
 import android.media.MediaRecorder
-import android.media.MediaRecorder.OutputFormat.MPEG_4
 import android.os.Build
 import java.io.File
 import java.io.FileOutputStream

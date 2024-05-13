@@ -9,11 +9,9 @@ class Balise(
     var plages : ArrayList<PlageHoraire>
 ) {
     fun createId(): Int {
-        var idTemp = 0
         if ( annonces.isEmpty() ) {
-            return idTemp
+            return 0
         }
-        idTemp = annonces.maxOf { it.id } + 1
-        return idTemp
+       return annonces.maxOf { it.id } + 1
     }
 }

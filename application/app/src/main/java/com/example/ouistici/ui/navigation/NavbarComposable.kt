@@ -1,6 +1,5 @@
 package com.example.ouistici.ui.navigation
 
-import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Edit
@@ -174,7 +172,7 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                     }
                 }
 
-                composable(route = "infosBalise") { backStackEntry ->
+                composable(route = "infosBalise") {
                     val selectedBalise = baliseViewModel.selectedBalise
                     if (selectedBalise != null) {
                         isBottomAppBarVisible.value = true
@@ -262,30 +260,6 @@ fun ClickableColumn(navController: NavController, destination: String, text: Str
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 4.dp)
-        )
-    }
-}
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Topbar() {
-    val logo = painterResource(id = R.drawable.logo)
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Logo de l'application") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.White
-                ),
-                modifier = Modifier.height(70.dp)
-            )
-        }
-    ) {
-        Image(
-            painter = logo,
-            contentDescription = "Logo de l'application",
-            modifier = Modifier.width(300.dp)
         )
     }
 }

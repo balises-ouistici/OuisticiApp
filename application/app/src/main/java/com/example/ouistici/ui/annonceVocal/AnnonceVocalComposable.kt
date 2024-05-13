@@ -1,8 +1,5 @@
 package com.example.ouistici.ui.annonceVocal
 
-import android.content.Context
-import android.graphics.drawable.Icon
-import android.media.MediaRecorder
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -19,10 +16,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.outlined.PlayArrow
-import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -30,10 +24,10 @@ import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -73,15 +67,15 @@ fun AnnonceVocale(
     var textValue by remember { mutableStateOf(TextFieldValue()) }
     var textValueInput by remember { mutableStateOf("") }
 
-    var compteur : Int = balise.annonces.count()
+    val compteur : Int = balise.annonces.count()
 
 
-    var audioFile : File? = File(cacheDir, balise.nom+"-"+compteur+".mp3")
+    val audioFile = File(cacheDir, balise.nom+"-"+compteur+".mp3")
 
     var currentStep by remember { mutableStateOf(1) }
 
     var time by remember {
-        mutableStateOf(0L)
+        mutableLongStateOf(0L)
     }
 
     var isRunning by remember {
@@ -89,7 +83,7 @@ fun AnnonceVocale(
     }
 
     var startTime by remember {
-        mutableStateOf(0L)
+        mutableLongStateOf(0L)
     }
 
     val context = LocalContext.current
@@ -216,7 +210,7 @@ fun AnnonceVocale(
                 Row {
                     Button(
                         onClick = {
-                            player.playFile(audioFile ?: return@Button)
+                            player.playFile(audioFile)
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
                     ) {

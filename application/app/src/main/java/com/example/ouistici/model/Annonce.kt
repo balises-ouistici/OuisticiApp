@@ -9,6 +9,5 @@ class Annonce (
     var audio : File?,
     var contenu : String?,
     var langue : Langue?
-) {
+)
 
-}

@@ -48,7 +48,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
     var langueSelectionnee by remember { mutableStateOf(Langue("", "")) }
     var expanded by remember { mutableStateOf(false) }
 
-    var context = LocalContext.current
+    val context = LocalContext.current
 
 
 
@@ -173,19 +173,4 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
         }
 
     }
-}
-
-
-@Composable
-fun DropdownMenuItemLangue(
-    langue: Langue,
-    onClick: (Langue) -> Unit
-) {
-    Text(
-        text = langue.getLangueName(),
-        fontSize = 16.sp,
-        modifier = Modifier
-            .clickable(onClick = { onClick(langue) })
-            .padding(vertical = 8.dp, horizontal = 16.dp)
-    )
 }

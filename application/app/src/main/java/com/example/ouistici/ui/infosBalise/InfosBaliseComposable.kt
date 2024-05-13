@@ -1,8 +1,5 @@
 package com.example.ouistici.ui.infosBalise
 
-import android.app.ProgressDialog.show
-import android.app.TimePickerDialog
-import android.media.MediaPlayer
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -10,7 +7,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -29,11 +25,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -44,7 +38,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -55,31 +48,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
-import com.example.ouistici.model.JoursSemaine
-import com.example.ouistici.model.PlageHoraire
 import com.example.ouistici.model.TypeAnnonce
-import com.example.ouistici.ui.baliseViewModel.BaliseViewModel
-import com.example.ouistici.ui.choixAnnonce.AnnonceList
-import com.example.ouistici.ui.choixAnnonce.DefaultMessagePopup
-import com.example.ouistici.ui.choixAnnonce.JoursSemaineSelector
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
 import com.example.ouistici.ui.theme.TestButtonColor
 import java.io.File
-import java.time.LocalTime
-import java.util.Calendar
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -88,12 +71,7 @@ fun InfosBalise(
     balise: Balise,
     player: AndroidAudioPlayer
 ) {
-
-    var currentStep by remember { mutableStateOf(1) }
-
-
     val showModifyInfosBalisePopup = remember { mutableStateOf(false) }
-
 
     var sliderPosition by remember {
         mutableFloatStateOf(0f)
@@ -592,7 +570,6 @@ fun RowScope.TableAudioCell(
     weight: Float,
     player: AndroidAudioPlayer
 ) {
-    val context = LocalContext.current
     Row(
         Modifier
             .weight(weight)
@@ -600,8 +577,6 @@ fun RowScope.TableAudioCell(
             .height(46.dp)
             .padding(8.dp)
     ) {
-        var mediaPlayer : MediaPlayer? = null
-
         Button(
             onClick = {
                 player.playFile(audioFile ?: return@Button)
@@ -717,7 +692,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
 
                             if (showModifyAnnonceTextPopup.value) {
                                 ModifyAnnoncesBaliseTextePopup(
-                                    annonce = balise.annonces.get(idAnnonceEdit.intValue),
+                                    annonce = balise.annonces[idAnnonceEdit.intValue],
                                     navController = navController
                                 ) { showModifyAnnonceTextPopup.value = false }
                             }
@@ -758,7 +733,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
 
                         if (showModifyAnnonceAudioPopup.value) {
                             ModifyAnnoncesBaliseAudioPopup(
-                                annonce = balise.annonces.get(idAnnonceEdit.intValue),                                navController = navController
+                                annonce = balise.annonces[idAnnonceEdit.intValue],                                navController = navController
                             ) { showModifyAnnonceAudioPopup.value = false }
                         }
 
@@ -777,7 +752,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                                         .show()
                                 }
                             }
-                            if ( verif == false ) {
+                            if (!verif) {
                                 if ( balise.defaultMessage == annonce ) {
                                     balise.defaultMessage = null
                                 }
