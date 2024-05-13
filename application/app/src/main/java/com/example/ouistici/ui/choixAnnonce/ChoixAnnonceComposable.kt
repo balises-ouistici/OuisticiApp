@@ -802,7 +802,7 @@ fun JoursSemaineSelector(
     selectedJours: List<JoursSemaine>,
     onJoursSelected: (List<JoursSemaine>) -> Unit
 ) {
-    val joursSemaine = JoursSemaine.entries.toTypedArray()
+    val joursSemaine = JoursSemaine.values().toList()
 
     Box(
         modifier = Modifier
@@ -812,29 +812,38 @@ fun JoursSemaineSelector(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .width(300.dp)
         ) {
             for (jour in joursSemaine) {
+                val isChecked = selectedJours.contains(jour)
+                val onClick = {
+                    val updatedList = if (isChecked) {
+                        selectedJours - jour
+                    } else {
+                        selectedJours + jour
+                    }
+                    onJoursSelected(updatedList)
+                }
+
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clickable { onClick() }
+                        .padding(vertical = 8.dp)
                 ) {
                     Checkbox(
-                        checked = selectedJours.contains(jour),
-                        onCheckedChange = { isChecked ->
-                            val updatedList = if (isChecked) {
-                                selectedJours + jour
-                            } else {
-                                selectedJours - jour
-                            }
-                            onJoursSelected(updatedList)
-                        },
+                        checked = isChecked,
+                        onCheckedChange = null,
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
-                    Text(text = jour.name)
+                    Text(text = jour.name, modifier = Modifier.fillMaxWidth())
                 }
             }
         }
     }
 }
+
+
 
 
 
