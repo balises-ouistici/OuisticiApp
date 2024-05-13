@@ -8,7 +8,7 @@ class LangueManager {
     companion object {
         val languesDisponibles = listOf(
             Langue("fr", "Français"),
-            Langue("en", "Anglais")
+            Langue("en", "English")
         )
 
         var langueActuelle: Langue by mutableStateOf(languesDisponibles.first())

@@ -159,7 +159,7 @@ fun InfosBalise(
             // Bouton pour modifier le nom de la balise
             OutlinedButton(
                 onClick = {
-                      showModifyInfosBalisePopup.value = true
+                    showModifyInfosBalisePopup.value = true
                 },
                 shape = RectangleShape,
                 border = BorderStroke(1.dp, Color.Black),
@@ -209,7 +209,7 @@ fun InfosBalise(
             color = BodyBackground,
             border = BorderStroke(2.dp, Color.Black),
 
-        ) {
+            ) {
             Column(
                 modifier = Modifier
                     .padding(8.dp),

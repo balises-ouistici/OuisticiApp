@@ -139,7 +139,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                 }
             }
         }
-        
+
 
         Spacer(modifier = Modifier.height(50.dp))
 
