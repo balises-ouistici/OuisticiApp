@@ -299,6 +299,12 @@ fun ModifyInfosBalisePopup(
                     horizontalArrangement = Arrangement.End
                 ) {
                     Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                    ) {
+                        Text(text = "Annuler", color = Color.White)
+                    }
+                    Button(
                         onClick = {
                             if ( nomBalise != "" ) {
                                 if ( lieuBalise != "" ) {
@@ -324,13 +330,7 @@ fun ModifyInfosBalisePopup(
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
-                        Text(text = "Ajouter", color = Color.White)
-                    }
-                    Button(
-                        onClick = onDismiss,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
-                    ) {
-                        Text(text = "Annuler", color = Color.White)
+                        Text(text = "Modifier", color = Color.White)
                     }
                 }
             }
@@ -411,6 +411,12 @@ fun ModifyAnnoncesBaliseTextePopup(
                     horizontalArrangement = Arrangement.End
                 ) {
                     Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                    ) {
+                        Text(text = "Annuler", color = Color.White)
+                    }
+                    Button(
                         onClick = {
                             if (nomAnnonce != "") {
 
@@ -439,12 +445,6 @@ fun ModifyAnnoncesBaliseTextePopup(
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
                         Text(text = "Ajouter", color = Color.White)
-                    }
-                    Button(
-                        onClick = onDismiss,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
-                    ) {
-                        Text(text = "Annuler", color = Color.White)
                     }
                 }
             }
@@ -502,6 +502,12 @@ fun ModifyAnnoncesBaliseAudioPopup(
                     horizontalArrangement = Arrangement.End
                 ) {
                     Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                    ) {
+                        Text(text = "Annuler", color = Color.White)
+                    }
+                    Button(
                         onClick = {
                             if (nomAnnonce != "") {
                                 annonce.nom = nomAnnonce
@@ -525,13 +531,7 @@ fun ModifyAnnoncesBaliseAudioPopup(
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
-                        Text(text = "Ajouter", color = Color.White)
-                    }
-                    Button(
-                        onClick = onDismiss,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
-                    ) {
-                        Text(text = "Annuler", color = Color.White)
+                        Text(text = "Modifier", color = Color.White)
                     }
                 }
             }

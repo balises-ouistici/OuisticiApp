@@ -292,6 +292,12 @@ fun DefaultMessagePopup(
                         }
                     } else {
                         Button(
+                            onClick = onDismiss,
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                        ) {
+                            Text(text = "Annuler", color = Color.White)
+                        }
+                        Button(
                             onClick = {
                                 if (selectedAnnonce != null) {
                                     balise.defaultMessage = selectedAnnonce
@@ -314,12 +320,6 @@ fun DefaultMessagePopup(
                         ) {
                             Text(text = "Définir", color = Color.White)
                         }
-                    }
-                    Button(
-                        onClick = onDismiss,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
-                    ) {
-                        Text(text = "Annuler", color = Color.White)
                     }
                 }
             }
@@ -469,6 +469,12 @@ fun AddPlageHorairePopup(
                     horizontalArrangement = Arrangement.End
                 ) {
                     Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                    ) {
+                        Text(text = "Annuler", color = Color.White)
+                    }
+                    Button(
                         onClick = {
                             // Création de la plage horaire
                             if (selectedAnnonce != null && selectedJours.isNotEmpty() && heureDebut != null && heureFin != null) {
@@ -500,12 +506,6 @@ fun AddPlageHorairePopup(
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
                         Text(text = "Ajouter", color = Color.White)
-                    }
-                    Button(
-                        onClick = onDismiss,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
-                    ) {
-                        Text(text = "Annuler", color = Color.White)
                     }
                 }
             }
@@ -654,6 +654,12 @@ fun ModifyPlageHorairePopup(
                     horizontalArrangement = Arrangement.End
                 ) {
                     Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                    ) {
+                        Text(text = "Annuler", color = Color.White)
+                    }
+                    Button(
                         onClick = {
                             // Création de la plage horaire
                             if (selectedAnnonce != null && selectedJours.isNotEmpty() && heureDebut != null && heureFin != null) {
@@ -689,12 +695,6 @@ fun ModifyPlageHorairePopup(
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
                         Text(text = "Modifier", color = Color.White)
-                    }
-                    Button(
-                        onClick = onDismiss,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
-                    ) {
-                        Text(text = "Annuler", color = Color.White)
                     }
                 }
             }
@@ -811,7 +811,6 @@ fun JoursSemaineSelector(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxHeight()
                 .fillMaxWidth()
         ) {
             for (jour in joursSemaine) {
@@ -828,7 +827,7 @@ fun JoursSemaineSelector(
                             }
                             onJoursSelected(updatedList)
                         },
-                        modifier = Modifier.padding(8.dp)
+                        modifier = Modifier.padding(horizontal = 8.dp)
                     )
                     Text(text = jour.name)
                 }
