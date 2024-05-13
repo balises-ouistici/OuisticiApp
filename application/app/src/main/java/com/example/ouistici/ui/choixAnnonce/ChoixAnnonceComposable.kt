@@ -145,40 +145,49 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        Row {
+        Row(
+            modifier = Modifier.padding(vertical = 8.dp)
+        ) {
             Text(
                 text = "Système de plage horaires : ",
                 color = Color.Black
             )
 
-            OnOffButton(balise)
+            OnOffButton(balise, navController)
         }
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        Button(
-            onClick = { showAddPlageHorairePopup.value = true },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
-        ) {
-            Text(
-                text = "Ajouter une plage horaire",
-                color = Color.White
-            )
-        }
+        if ( balise.sysOnOff ) {
+            Button(
+                onClick = { showAddPlageHorairePopup.value = true },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
+            ) {
+                Text(
+                    text = "Ajouter une plage horaire",
+                    color = Color.White
+                )
+            }
 
-        if (showAddPlageHorairePopup.value) {
-            AddPlageHorairePopup(
-                balise = balise,
-                onPlageHoraireAdded = { plageHoraire ->
-                    balise.plages.add(plageHoraire)
-                    showAddPlageHorairePopup.value = false
-                },
-                onDismiss = { showAddPlageHorairePopup.value = false },
-                navController = navController
-            )
+            if (showAddPlageHorairePopup.value) {
+                AddPlageHorairePopup(
+                    balise = balise,
+                    onPlageHoraireAdded = { plageHoraire ->
+                        balise.plages.add(plageHoraire)
+                        showAddPlageHorairePopup.value = false
+                    },
+                    onDismiss = { showAddPlageHorairePopup.value = false },
+                    navController = navController
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = if (balise.sysOnOff) 0f else 0.5f))
+            ) {
+                TableScreen(balise, navController)
+            }
         }
-
-        TableScreen(balise, navController)
     }
 }
 
@@ -1026,7 +1035,7 @@ fun TableScreen(balise : Balise, navController: NavController) {
 
 
 @Composable
-fun OnOffButton(balise: Balise) {
+fun OnOffButton(balise: Balise, navController: NavController) {
     val checkedState = remember { mutableStateOf(balise.sysOnOff) }
 
     Row(
@@ -1037,6 +1046,7 @@ fun OnOffButton(balise: Balise) {
             onCheckedChange = { isChecked ->
                 checkedState.value = isChecked
                 balise.sysOnOff = checkedState.value
+                navController.navigate("manageAnnonce")
             },
             colors = SwitchDefaults.colors(
                 checkedThumbColor = Color.White,

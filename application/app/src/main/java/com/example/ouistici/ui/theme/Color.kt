@@ -17,4 +17,5 @@ val BodyBackground = Color(0xFFE7E7E7)
 val FontColor = Color(0xFF000000)
 val TestButtonColor = Color(0xFFFFA500)
 val TableHeaderColor = Color(0xFFB4B4B4)
+val NotAddButton = Color(0xFF646464)
 
