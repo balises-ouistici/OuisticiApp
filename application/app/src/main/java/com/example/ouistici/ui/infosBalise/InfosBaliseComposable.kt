@@ -213,20 +213,20 @@ fun InfosBalise(
 
                 Button(
                     onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(TestButtonColor)
-                ) {
-                    Text(
-                        text = "Tester sur la balise",
-                        color = Color.White
-                    )
-                }
-                Button(
-                    onClick = { /*TODO*/ },
                     modifier = Modifier.padding(16.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                 ) {
                     Text(
                         text = "Enregistrer",
+                        color = Color.White
+                    )
+                }
+                Button(
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(TestButtonColor)
+                ) {
+                    Text(
+                        text = "Tester sur la balise",
                         color = Color.White
                     )
                 }
