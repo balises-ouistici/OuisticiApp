@@ -23,9 +23,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.ouistici.R
 import com.example.ouistici.data.Stub
 import com.example.ouistici.model.Balise
 import com.example.ouistici.ui.baliseViewModel.BaliseViewModel
@@ -44,7 +47,7 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel)
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = "Liste des balises",
+            text = stringResource(R.string.liste_des_balises),
             fontSize = 25.sp,
             color = FontColor
         )
@@ -104,6 +107,8 @@ fun RowScope.TableCell(
 @Composable
 fun TableScreen(balises : List<Balise>, navController: NavController, baliseViewModel: BaliseViewModel) {
     val columnWeight = .3f
+    val context = LocalContext.current
+    
     LazyColumn(
         Modifier
             .fillMaxSize()
@@ -111,9 +116,9 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
     ) {
         item {
             Row(Modifier.background(TableHeaderColor)) {
-                TableHeaderCell(text = "Nom balise", weight = columnWeight, textColor = Color.Black)
-                TableHeaderCell(text = "Lieu", weight = columnWeight, textColor = Color.Black)
-                TableHeaderCell(text = "Message défaut", weight = columnWeight, textColor = Color.Black)
+                TableHeaderCell(text = stringResource(R.string.nom_balise), weight = columnWeight, textColor = Color.Black)
+                TableHeaderCell(text = stringResource(R.string.lieu), weight = columnWeight, textColor = Color.Black)
+                TableHeaderCell(text = stringResource(R.string.message_d_faut), weight = columnWeight, textColor = Color.Black)
 
             }
         }
@@ -132,7 +137,7 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
 
                 if ( balise.lieu == null ) {
                     TableCell(
-                        text = "Non défini",
+                        text = context.getString(R.string.non_defini),
                         weight = columnWeight,
                         textColor = Color.Black,
                         onClick = {
@@ -155,7 +160,7 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
 
                 if ( balise.defaultMessage == null ) {
                     TableCell(
-                        text = "Aucun",
+                        text = context.getString(R.string.aucun),
                         weight = columnWeight,
                         textColor = Color.Black,
                         onClick = {

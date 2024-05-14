@@ -1,3 +1,120 @@
 <resources>
+    <!--
+    Attention certains string sont indiqués
+    dans une page mais peuvent être présents dans les autres
+    sans forcément être mentionné
+    -->
+
+    <!-- Nom de l'application -->
     <string name="app_name">Ouistici</string>
+
+    <!-- Page paramètres application -->
+    <string name="parametres_de_l_application">Paramètres de l\'application</string>
+    <string name="enregistrer">Enregistrer</string>
+    <string name="changer_la_langue_de_l_application">"Changer la langue de l'application : "</string>
+
+    <!-- Navbar -->
+    <string name="ajouter">Ajouter</string>
+    <string name="modifier">Modifier</string>
+    <string name="infos">Infos</string>
+    <string name="options">Options</string>
+    <string name="balises">Balises</string>
+
+    <!-- Page liste des balises -->
+    <string name="liste_des_balises">Liste des balises</string>
+    <string name="nom_balise">Nom balise</string>
+    <string name="lieu">Lieu</string>
+    <string name="message_d_faut">Message défaut</string>
+    <string name="non_defini">Non défini</string>
+    <string name="aucun">Aucun</string>
+
+    <!-- Page informations de la balise -->
+    <string name="informations_balise">Informations balise</string>
+    <string name="nom_balise_info">Nom balise : %1$s</string>
+    <string name="lieu_non_d_fini">Lieu : Non défini</string>
+    <string name="lieu_info">Lieu : %1$s</string>
+    <string name="message_d_faut_aucun">Message défaut : Aucun</string>
+    <string name="message_d_faut_info">Message défaut : %1$s</string>
+    <string name="changer_les_informations_de_la_balise">Changer les informations de la balise</string>
+    <string name="liste_des_annonces">Liste des annonces</string>
+    <string name="volume_de_la_balise">Volume de la balise</string>
+    <string name="tester_sur_la_balise">Tester sur la balise</string>
+    <string name="nom_balise_info_popup">"Nom balise : "</string>
+    <string name="lieu_info_popup">Lieu :</string>
+    <string name="descri_info_popup">Pour changer le message par défaut, allez dans modifier et cliquez sur le bouton \"Choisir\".</string>
+    <string name="annuler">Annuler</string>
+    <string name="informations_modifi_es">Informations modifiées</string>
+    <string name="la_balise_doit_avoir_un_nom">La balise doit avoir un nom !</string>
+    <string name="informations_annonce">Informations annonce</string>
+    <string name="nom_annonce">Nom annonce :</string>
+    <string name="contenu">Contenu :</string>
+    <string name="langue">Langue :</string>
+    <string name="l_annonce_doit_avoir_un_nom">L\'annonce doit avoir un nom !</string>
+    <string name="il_n_y_a_pas_d_annonces">Il n\'y a pas d\'annonces</string>
+    <string name="nom">Nom</string>
+    <string name="contenu_tableau">Contenu</string>
+    <string name="changer_le_nom_de_l_annonce">Changer le nom de l\'annonce</string>
+    <string name="annonce_non_supprimable_elle_est_utilis_e_dans_une_plage_horaire">Annonce non supprimable, elle est utilisée dans une plage horaire</string>
+    <string name="annonce_supprim_e">Annonce supprimée</string>
+    <string name="supprimer_annonce">Supprimer annonce</string>
+
+    <!-- Page choix des annonces -->
+    <string name="choix_des_annonces">Choix des annonces</string>
+    <string name="choisir_annonce_par_d_faut">"Choisir annonce par défaut : "</string>
+    <string name="choisir">Choisir</string>
+    <string name="syst_me_de_plage_horaires">"Système de plage horaires : "</string>
+    <string name="ajouter_une_plage_horaire">Ajouter une plage horaire</string>
+    <string name="nouvelle_annonce_par_d_faut">Nouvelle annonce par défaut</string>
+    <string name="action_impossible">Action impossible</string>
+    <string name="cr_er_annonce">Créer annonce</string>
+    <string name="d_finir">Définir</string>
+    <string name="choisir_annonce">Choisir annonce :</string>
+    <string name="cr_ez_d_abord_une_annonce">Créez d\'abord une annonce</string>
+    <string name="choisir_les_jours_d_activations">Choisir les jours d\'activations :</string>
+    <string name="choisir_les_p_riodes">Choisir les périodes :</string>
+    <string name="heure_d_but_aucune">Heure début : Aucune</string>
+    <string name="heure_d_but_objet">Heure début : %1$s</string>
+    <string name="choisir_heure_d_but">Choisir heure début</string>
+    <string name="heure_fin_aucune">Heure fin : Aucune</string>
+    <string name="heure_fin_objet">Heure fin : %1$s</string>
+    <string name="choisir_heure_fin">Choisir heure fin</string>
+    <string name="l_heure_de_fin_ne_peut_pas_tre_avant_celle_du_d_but">L\'heure de fin ne peut pas être avant celle du début !</string>
+    <string name="plage_horaire_ajout_e">Plage horaire ajoutée</string>
+    <string name="informations_manquantes">Informations manquantes</string>
+    <string name="modifier_une_plage_horaire">Modifier une plage horaire</string>
+    <string name="tous_les_jours">Tous les jours</string>
+    <string name="nom_mess">Nom mess</string>
+    <string name="jours">Jours</string>
+    <string name="horaires">Horaires</string>
+    <string name="de_a">de %1$s \nà %2$s</string>
+    <string name="modifier_plage_horaire">Modifier plage horaire</string>
+    <string name="plage_horaire_supprim_e">Plage horaire supprimée</string>
+    <string name="supprimer_plage_horaire">Supprimer plage horaire</string>
+
+    <!-- Page annonce vocale -->
+    <string name="enregistrer_annonce">Enregistrer annonce</string>
+    <string name="commencer_l_enregistrement">Commencer l\'enregistrement</string>
+    <string name="arr_ter_l_enregistrement">Arrêter l\'enregistrement</string>
+    <string name="entrez_le_nom">Entrez le nom</string>
+    <string name="annonce_ajout_e">Annonce ajoutée</string>
+    <string name="action_impossible_vous_devez_enregistrer_un_audio_et_saisir_un_nom">Action impossible, vous devez enregistrer un audio et saisir un nom</string>
+    <string name="action_impossible_vous_devez_enregistrer_un_audio">Action impossible, vous devez enregistrer un audio</string>
+    <string name="action_impossible_vous_devez_saisir_un_nom">Action impossible, vous devez saisir un nom</string>
+
+    <!-- Page text to speech -->
+    <string name="synth_tiseur_vocal">Synthétiseur vocal</string>
+    <string name="entrez_le_contenu_qui_sera_lu_par_le_synth_tiseur_vocal">Entrez le contenu qui sera lu par le synthétiseur vocal</string>
+    <string name="langue_de_la_voix">Langue de la voix :</string>
+    <string name="action_impossible_vous_devez_remplir_les_champs">Action impossible, vous devez remplir les champs</string>
+
+    <!-- Page charger fichier audio -->
+    <string name="choisir_fichier_audio">Choisir fichier audio :</string>
+    <string name="action_impossible_vous_devez_s_lectionner_un_audio_et_saisir_un_nom">Action impossible, vous devez sélectionner un audio et saisir un nom</string>
+    <string name="action_impossible_vous_devez_s_lectionner_un_audio">Action impossible, vous devez sélectionner un audio</string>
+
+    <!-- Page choisir quel type d'annonce -->
+    <string name="quel_type_d_annonce">Quel type d\'annonce ?</string>
+    <string name="vocale">Vocale</string>
+    <string name="texte">Texte</string>
+    <string name="charger_fichier_audio">Charger fichier audio</string>
 </resources>

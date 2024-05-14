@@ -14,20 +14,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.ouistici.R
 import com.example.ouistici.ui.theme.FontColor
 
 @Composable
 fun AjouterAnnonce(navController: NavController) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = "Quel type d'annonce ?",
+            text = stringResource(R.string.quel_type_d_annonce),
             fontSize = 25.sp,
             color = FontColor
         )
@@ -35,7 +38,7 @@ fun AjouterAnnonce(navController: NavController) {
         Spacer(modifier = Modifier.height(50.dp))
 
         Text(
-            text = "Vocale",
+            text = stringResource(R.string.vocale),
             fontSize = 15.sp,
             color = FontColor
         )
@@ -43,7 +46,8 @@ fun AjouterAnnonce(navController: NavController) {
             onClick = { navController.navigate("annonceVocal") },
             shape = CircleShape,
             containerColor = Color.Black,
-            modifier = Modifier.width(80.dp)
+            modifier = Modifier
+                .width(80.dp)
                 .height(80.dp)
 
         ) {
@@ -58,7 +62,7 @@ fun AjouterAnnonce(navController: NavController) {
 
 
         Text(
-            text = "Texte",
+            text = stringResource(R.string.texte),
             fontSize = 15.sp,
             color = FontColor
         )
@@ -66,7 +70,8 @@ fun AjouterAnnonce(navController: NavController) {
             onClick = { navController.navigate("annonceTexte") },
             shape = CircleShape,
             containerColor = Color.Black,
-            modifier = Modifier.width(80.dp)
+            modifier = Modifier
+                .width(80.dp)
                 .height(80.dp)
 
         ) {
@@ -80,7 +85,7 @@ fun AjouterAnnonce(navController: NavController) {
         Spacer(modifier = Modifier.height(40.dp))
 
         Text(
-            text = "Charger fichier .mp3",
+            text = stringResource(R.string.charger_fichier_audio),
             fontSize = 15.sp,
             color = FontColor
         )
@@ -88,7 +93,8 @@ fun AjouterAnnonce(navController: NavController) {
             onClick = { navController.navigate("annonceMptrois") },
             shape = CircleShape,
             containerColor = Color.Black,
-            modifier = Modifier.width(80.dp)
+            modifier = Modifier
+                .width(80.dp)
                 .height(80.dp)
 
         ) {

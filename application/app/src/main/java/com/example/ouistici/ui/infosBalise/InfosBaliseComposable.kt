@@ -49,11 +49,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import com.example.ouistici.R
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
@@ -84,7 +86,7 @@ fun InfosBalise(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = "Informations balise",
+            text = stringResource(R.string.informations_balise),
             fontSize = 25.sp,
             color = FontColor
         )
@@ -106,30 +108,33 @@ fun InfosBalise(
                 ) {
 
                     Text(
-                        text = "Nom balise : " + balise.nom,
+                        text = stringResource(R.string.nom_balise_info, balise.nom),
                         color = FontColor
                     )
 
                     if ( balise.lieu == null ) {
                         Text(
-                            text = "Lieu : Non défini",
+                            text = stringResource(R.string.lieu_non_d_fini),
                             color = FontColor
                         )
                     } else {
                         Text(
-                            text = "Lieu : " + balise.lieu,
+                            text = stringResource(R.string.lieu_info, balise.lieu!!),
                             color = FontColor
                         )
                     }
 
                     if ( balise.defaultMessage == null ) {
                         Text(
-                            text = "Message défaut : Aucun",
+                            text = stringResource(R.string.message_d_faut_aucun),
                             color = FontColor
                         )
                     } else {
                         Text(
-                            text = "Message défaut : " + balise.defaultMessage?.nom,
+                            text = stringResource(
+                                R.string.message_d_faut_info,
+                                balise.defaultMessage!!
+                            ),
                             color = FontColor
                         )
                     }
@@ -154,7 +159,7 @@ fun InfosBalise(
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
-                    contentDescription = "Changer les informations de la balise",
+                    contentDescription = stringResource(R.string.changer_les_informations_de_la_balise),
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -169,7 +174,7 @@ fun InfosBalise(
 
 
         Text(
-            text = "Liste des annonces",
+            text = stringResource(R.string.liste_des_annonces),
             fontSize = 25.sp,
             color = FontColor
         )
@@ -196,7 +201,7 @@ fun InfosBalise(
             ) {
 
                 Text(
-                    text = "Volume de la balise",
+                    text = stringResource(R.string.volume_de_la_balise),
                     fontSize = 25.sp,
                     color = FontColor
                 )
@@ -217,7 +222,7 @@ fun InfosBalise(
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                 ) {
                     Text(
-                        text = "Enregistrer",
+                        text = stringResource(R.string.enregistrer),
                         color = Color.White
                     )
                 }
@@ -226,7 +231,7 @@ fun InfosBalise(
                     colors = ButtonDefaults.buttonColors(TestButtonColor)
                 ) {
                     Text(
-                        text = "Tester sur la balise",
+                        text = stringResource(R.string.tester_sur_la_balise),
                         color = Color.White
                     )
                 }
@@ -261,10 +266,10 @@ fun ModifyInfosBalisePopup(
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text(text = "Informations balises", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(text = stringResource(R.string.informations_balise), fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Nom balise :",
+                    text = stringResource(R.string.nom_balise_info_popup),
                     fontWeight = FontWeight.SemiBold
                 )
                 TextField(
@@ -276,7 +281,7 @@ fun ModifyInfosBalisePopup(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Lieu :",
+                    text = stringResource(R.string.lieu_info_popup),
                     fontWeight = FontWeight.SemiBold
                 )
                 TextField(
@@ -288,7 +293,7 @@ fun ModifyInfosBalisePopup(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Pour changer le message par défaut, allez dans modifier et cliquez sur le bouton \"Choisir\".",
+                    text = stringResource(R.string.descri_info_popup),
                     fontWeight = FontWeight.SemiBold
                 )
 
@@ -302,7 +307,7 @@ fun ModifyInfosBalisePopup(
                         onClick = onDismiss,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
                     ) {
-                        Text(text = "Annuler", color = Color.White)
+                        Text(text = stringResource(R.string.annuler), color = Color.White)
                     }
                     Button(
                         onClick = {
@@ -315,14 +320,14 @@ fun ModifyInfosBalisePopup(
                                 balise.nom = nomBalise
                                 Toast.makeText(
                                     context,
-                                    "Informations modifiées",
+                                    context.getString(R.string.informations_modifi_es),
                                     Toast.LENGTH_LONG)
                                     .show()
                                 onDismiss()
                             } else {
                                 Toast.makeText(
                                     context,
-                                    "La balise doit avoir un nom !",
+                                    context.getString(R.string.la_balise_doit_avoir_un_nom),
                                     Toast.LENGTH_LONG)
                                     .show()
                             }
@@ -330,7 +335,7 @@ fun ModifyInfosBalisePopup(
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
-                        Text(text = "Modifier", color = Color.White)
+                        Text(text = stringResource(R.string.modifier), color = Color.White)
                     }
                 }
             }
@@ -365,13 +370,13 @@ fun ModifyAnnoncesBaliseTextePopup(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "Informations annonce",
+                    text = stringResource(R.string.informations_annonce),
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Nom annonce :",
+                    text = stringResource(R.string.nom_annonce),
                     fontWeight = FontWeight.SemiBold
                 )
                 TextField(
@@ -385,7 +390,7 @@ fun ModifyAnnoncesBaliseTextePopup(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Contenu :",
+                    text = stringResource(R.string.contenu),
                     fontWeight = FontWeight.SemiBold
                 )
                 TextField(
@@ -397,7 +402,7 @@ fun ModifyAnnoncesBaliseTextePopup(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Langue :",
+                    text = stringResource(R.string.langue),
                     fontWeight = FontWeight.SemiBold
                 )
 
@@ -414,7 +419,7 @@ fun ModifyAnnoncesBaliseTextePopup(
                         onClick = onDismiss,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
                     ) {
-                        Text(text = "Annuler", color = Color.White)
+                        Text(text = stringResource(R.string.annuler), color = Color.White)
                     }
                     Button(
                         onClick = {
@@ -426,7 +431,7 @@ fun ModifyAnnoncesBaliseTextePopup(
                                 annonce.nom = nomAnnonce
                                 Toast.makeText(
                                     context,
-                                    "Informations modifiées",
+                                    context.getString(R.string.informations_modifi_es),
                                     Toast.LENGTH_LONG
                                 )
                                     .show()
@@ -435,7 +440,7 @@ fun ModifyAnnoncesBaliseTextePopup(
                             } else {
                                 Toast.makeText(
                                     context,
-                                    "L'annonce doit avoir un nom !",
+                                    context.getString(R.string.l_annonce_doit_avoir_un_nom),
                                     Toast.LENGTH_LONG
                                 )
                                     .show()
@@ -444,7 +449,7 @@ fun ModifyAnnoncesBaliseTextePopup(
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
-                        Text(text = "Ajouter", color = Color.White)
+                        Text(text = stringResource(R.string.ajouter), color = Color.White)
                     }
                 }
             }
@@ -480,13 +485,13 @@ fun ModifyAnnoncesBaliseAudioPopup(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "Informations annonce",
+                    text = stringResource(R.string.informations_annonce),
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Nom annonce :",
+                    text = stringResource(R.string.nom_annonce),
                     fontWeight = FontWeight.SemiBold
                 )
                 TextField(
@@ -505,7 +510,7 @@ fun ModifyAnnoncesBaliseAudioPopup(
                         onClick = onDismiss,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
                     ) {
-                        Text(text = "Annuler", color = Color.White)
+                        Text(text = stringResource(R.string.annuler), color = Color.White)
                     }
                     Button(
                         onClick = {
@@ -513,7 +518,7 @@ fun ModifyAnnoncesBaliseAudioPopup(
                                 annonce.nom = nomAnnonce
                                 Toast.makeText(
                                     context,
-                                    "Information modifiée",
+                                    context.getString(R.string.informations_modifi_es),
                                     Toast.LENGTH_LONG
                                 )
                                     .show()
@@ -522,7 +527,7 @@ fun ModifyAnnoncesBaliseAudioPopup(
                             } else {
                                 Toast.makeText(
                                     context,
-                                    "L'annonce doit avoir un nom !",
+                                    context.getString(R.string.l_annonce_doit_avoir_un_nom),
                                     Toast.LENGTH_LONG
                                 )
                                     .show()
@@ -531,7 +536,7 @@ fun ModifyAnnoncesBaliseAudioPopup(
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
-                        Text(text = "Modifier", color = Color.White)
+                        Text(text = stringResource(R.string.modifier), color = Color.White)
                     }
                 }
             }
@@ -630,7 +635,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                 .height(190.dp)
         ) {
             Text(
-                text = "Il n'y a pas d'annonces",
+                text = stringResource(R.string.il_n_y_a_pas_d_annonces),
                 color = FontColor
             )
         }
@@ -643,8 +648,8 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
         ) {
             item {
                 Row(Modifier.background(TableHeaderColor)) {
-                    TableCell(text = "Nom", weight = column1Weight, textColor = Color.Black)
-                    TableCell(text = "Contenu", weight = column2Weight, textColor = Color.Black)
+                    TableCell(text = stringResource(R.string.nom), weight = column1Weight, textColor = Color.Black)
+                    TableCell(text = stringResource(R.string.contenu_tableau), weight = column2Weight, textColor = Color.Black)
                     TableCell(text= "", weight = .26f, textColor = Color.Black)
                 }
             }
@@ -684,7 +689,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Edit,
-                                    contentDescription = "Changer le nom de l'annonce",
+                                    contentDescription = stringResource(R.string.changer_le_nom_de_l_annonce),
                                     modifier = Modifier.size(15.dp)
                                 )
                             }
@@ -726,7 +731,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
-                                contentDescription = "Changer le nom de l'annonce",
+                                contentDescription = stringResource(R.string.changer_le_nom_de_l_annonce),
                                 modifier = Modifier.size(15.dp)
                             )
                         }
@@ -747,7 +752,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                                     verif = true
                                     Toast.makeText(
                                         context,
-                                        "Annonce non supprimable, elle est utilisée dans une plage horaire",
+                                        context.getString(R.string.annonce_non_supprimable_elle_est_utilis_e_dans_une_plage_horaire),
                                         Toast.LENGTH_LONG)
                                         .show()
                                 }
@@ -759,7 +764,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                                 balise.annonces.remove(annonce)
                                 Toast.makeText(
                                     context,
-                                    "Annonce supprimée",
+                                    context.getString(R.string.annonce_supprim_e),
                                     Toast.LENGTH_LONG)
                                     .show()
                                 navController.navigate("infosBalise")
@@ -779,7 +784,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = "Supprimer annonce",
+                            contentDescription = stringResource(R.string.supprimer_annonce),
                             modifier = Modifier.size(15.dp)
                         )
                     }

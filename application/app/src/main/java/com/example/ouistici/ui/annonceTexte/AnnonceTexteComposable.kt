@@ -26,11 +26,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.ouistici.R
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.Langue
@@ -53,13 +55,14 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
 
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(40.dp))
         Text(
-            text = "Synthétiseur vocal",
+            text = stringResource(R.string.synth_tiseur_vocal),
             fontSize = 25.sp,
             color = FontColor
         )
@@ -73,7 +76,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                 textValue = it
                 textValueInput = it.text
             },
-            label = { Text("Entrez le nom") },
+            label = { Text(stringResource(R.string.entrez_le_nom)) },
             textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier.fillMaxWidth()
         )
@@ -87,7 +90,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                 textContenu = it
                 textContenuInput = it.text
             },
-            label = { Text("Entrez le contenu qui sera lu par le synthétiseur vocal") },
+            label = { Text(stringResource(R.string.entrez_le_contenu_qui_sera_lu_par_le_synth_tiseur_vocal)) },
             textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier.fillMaxWidth()
         )
@@ -97,7 +100,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
         // FAIRE CHOIX DE LANGUE POUR SYNTHETISEUR
         Row (verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = "Langue de la voix :",
+                text = stringResource(R.string.langue_de_la_voix),
                 color = FontColor
             )
 
@@ -110,7 +113,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
 
                 if ( langueSelectionnee.code == "" && langueSelectionnee.nom == "" ) {
                     Text(
-                        text = "Choisir",
+                        text = stringResource(R.string.choisir),
                         fontSize = 16.sp,
                         color = FontColor
                     )
@@ -150,14 +153,14 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                     balise.annonces.add(Annonce(balise.createId() ,textValueInput, TypeAnnonce.TEXTE, null, textContenuInput, langueSelectionnee))
                     Toast.makeText(
                         context,
-                        "Annonce ajoutée",
+                        context.getString(R.string.annonce_ajout_e),
                         Toast.LENGTH_LONG)
                         .show()
                     navController.navigate("annonceTexte")
                 } else {
                     Toast.makeText(
                         context,
-                        "Action impossible, vous devez remplir les champs",
+                        context.getString(R.string.action_impossible_vous_devez_remplir_les_champs),
                         Toast.LENGTH_LONG)
                         .show()
 
@@ -167,7 +170,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
         ) {
             Text(
-                text = "Enregistrer",
+                text = stringResource(R.string.enregistrer),
                 color = Color.White
             )
         }

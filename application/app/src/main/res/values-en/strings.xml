@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    Please note that some thongs are indicated
+    in one page but can be present in others
+    without necessarily being mentioned
+    -->
+
+    <!-- App name -->
+    <string name="app_name">Ouistici</string>
+
+    <!-- App settings page -->
+    <string name="parametres_de_l_application">Application settings</string>
+    <string name="enregistrer">Save</string>
+    <string name="changer_la_langue_de_l_application">"Change app language : "</string>
+
+    <!-- Navbar -->
+    <string name="ajouter">Add</string>
+    <string name="modifier">Modify</string>
+    <string name="infos">Info</string>
+    <string name="options">Settings</string>
+    <string name="balises">Tag</string>
+
+    <!-- Tag list page -->
+    <string name="liste_des_balises">Tag list</string>
+    <string name="nom_balise">Tag name</string>
+    <string name="lieu">Place</string>
+    <string name="message_d_faut">Default message</string>
+    <string name="non_defini">Not defined</string>
+    <string name="aucun">None</string>
+
+    <!-- Tag info page -->
+    <string name="informations_balise">Tag information</string>
+    <string name="nom_balise_info">Tag name : %1$s</string>
+    <string name="lieu_non_d_fini">Place : Not defined</string>
+    <string name="lieu_info">Place : %1$s</string>
+    <string name="message_d_faut_aucun">Default message : None</string>
+    <string name="message_d_faut_info">Default message : %1$s</string>
+    <string name="changer_les_informations_de_la_balise">Change tag info</string>
+    <string name="liste_des_annonces">Announcement list</string>
+    <string name="volume_de_la_balise">Tag volume</string>
+    <string name="tester_sur_la_balise">Test on tag</string>
+    <string name="nom_balise_info_popup">"Tag name : "</string>
+    <string name="lieu_info_popup">"Place : "</string>
+    <string name="descri_info_popup">To change default message, go into modify and click on the \"Select\" button.</string>
+    <string name="annuler">Cancel</string>
+    <string name="informations_modifi_es">Information modified</string>
+    <string name="la_balise_doit_avoir_un_nom">Tag must have a name !</string>
+    <string name="informations_annonce">Announce informations</string>
+    <string name="nom_annonce">"Announce name : "</string>
+    <string name="contenu">"Content : "</string>
+    <string name="langue">"Language : "</string>
+    <string name="l_annonce_doit_avoir_un_nom">Announce muste have a name !</string>
+    <string name="il_n_y_a_pas_d_annonces">There is no announce</string>
+    <string name="nom">Name</string>
+    <string name="contenu_tableau">Content</string>
+    <string name="changer_le_nom_de_l_annonce">Modify announce name</string>
+    <string name="annonce_non_supprimable_elle_est_utilis_e_dans_une_plage_horaire">Can\'t delete announce, it\'s used in a time slot</string>
+    <string name="annonce_supprim_e">Announce deleted</string>
+    <string name="supprimer_annonce">Delete announce</string>
+
+    <!-- Announce choice page -->
+    <string name="choix_des_annonces">Choice of announces</string>
+    <string name="choisir_annonce_par_d_faut">Select default announce</string>
+    <string name="choisir">Select</string>
+    <string name="syst_me_de_plage_horaires">Time slot system</string>
+    <string name="ajouter_une_plage_horaire">Add a time slot</string>
+    <string name="nouvelle_annonce_par_d_faut">New default announce</string>
+    <string name="action_impossible">Impossible action</string>
+    <string name="cr_er_annonce">Create announce</string>
+    <string name="d_finir">Define</string>
+    <string name="choisir_annonce">"Select announce : "</string>
+    <string name="cr_ez_d_abord_une_annonce">Create an announce first</string>
+    <string name="choisir_les_jours_d_activations">"Select days of activation : "</string>
+    <string name="choisir_les_p_riodes">"Select period : "</string>
+    <string name="heure_d_but_aucune">Start time : None</string>
+    <string name="heure_d_but_objet">Start time : %1$s</string>
+    <string name="choisir_heure_d_but">Select start time</string>
+    <string name="heure_fin_aucune">End time : None</string>
+    <string name="heure_fin_objet">End time : %1$s</string>
+    <string name="choisir_heure_fin">Select end time</string>
+    <string name="l_heure_de_fin_ne_peut_pas_tre_avant_celle_du_d_but">End time can\'t be before start time</string>
+    <string name="plage_horaire_ajout_e">Time slot added</string>
+    <string name="informations_manquantes">Missing informations</string>
+    <string name="modifier_une_plage_horaire">Modify a time slot</string>
+    <string name="tous_les_jours">All days</string>
+    <string name="nom_mess">Mess name</string>
+    <string name="jours">Days</string>
+    <string name="horaires">hours</string>
+    <string name="de_a">from %1$s \\nto %2$s</string>
+    <string name="modifier_plage_horaire">Modify time slot</string>
+    <string name="plage_horaire_supprim_e">Time slot deleted</string>
+    <string name="supprimer_plage_horaire">Delete time slot</string>
+
+    <!-- Vocal announce page -->
+    <string name="enregistrer_annonce">Save announce</string>
+    <string name="commencer_l_enregistrement">Start recording</string>
+    <string name="arr_ter_l_enregistrement">Stop recording</string>
+    <string name="entrez_le_nom">Enter name</string>
+    <string name="annonce_ajout_e">Announce added</string>
+    <string name="action_impossible_vous_devez_enregistrer_un_audio_et_saisir_un_nom">Impossible action, you must record something and enter a name</string>
+    <string name="action_impossible_vous_devez_enregistrer_un_audio">Impossible action, you must record something</string>
+    <string name="action_impossible_vous_devez_saisir_un_nom">Impossible action, you must enter a name</string>
+
+    <!-- Text to speech page -->
+    <string name="synth_tiseur_vocal">Vocal synthesizer</string>
+    <string name="entrez_le_contenu_qui_sera_lu_par_le_synth_tiseur_vocal">Enter content that will be played by the vocal synthesizer</string>
+    <string name="langue_de_la_voix">"Voice language : "</string>
+    <string name="action_impossible_vous_devez_remplir_les_champs">Impossible action, you must fill in the fields</string>
+
+    <!-- Load audio file page -->
+    <string name="choisir_fichier_audio">"Select audio file : "</string>
+    <string name="action_impossible_vous_devez_s_lectionner_un_audio_et_saisir_un_nom">Impossible action, you must select an audio file and enter a name</string>
+    <string name="action_impossible_vous_devez_s_lectionner_un_audio">Impossible action, you must select an audio file</string>
+
+    <!-- Select type of announce page -->
+    <string name="quel_type_d_annonce">What type of announce ?</string>
+    <string name="vocale">Vocal</string>
+    <string name="texte">Text</string>
+    <string name="charger_fichier_audio">Load audio file</string>
+
+</resources>

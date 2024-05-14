@@ -20,9 +20,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.ouistici.R
 import com.example.ouistici.model.Langue
 import com.example.ouistici.model.LangueManager
 import com.example.ouistici.ui.theme.FontColor
@@ -33,16 +35,19 @@ fun ParametresAppli(navController: NavController) {
     var selectedLangue by remember { mutableStateOf(LangueManager.langueActuelle) }
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
 
     ) {
         Text(
-            text = "Paramètres de l'application",
+            text = stringResource(R.string.parametres_de_l_application),
             fontSize = 25.sp,
             color = FontColor
         )
+
+
         ExposedDropdownMenu(
             items = LangueManager.languesDisponibles,
             selectedItem = selectedLangue,
@@ -61,7 +66,7 @@ fun ParametresAppli(navController: NavController) {
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
         ) {
             Text(
-                text = "Enregistrer",
+                text = stringResource(R.string.enregistrer),
                 color = Color.White
             )
         }
@@ -80,7 +85,7 @@ fun ExposedDropdownMenu(
 
 
         Text(
-            text = "Changer la langue de l'application : ",
+            text = stringResource(R.string.changer_la_langue_de_l_application),
             color = FontColor
         )
         Box(
@@ -126,7 +131,4 @@ fun DropdownMenuItemLangue(
             .padding(vertical = 8.dp, horizontal = 16.dp)
     )
 }
-
-
-
 

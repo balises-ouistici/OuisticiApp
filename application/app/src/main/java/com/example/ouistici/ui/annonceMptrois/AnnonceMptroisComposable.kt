@@ -33,11 +33,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.ouistici.R
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
@@ -65,13 +67,14 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
 
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(40.dp))
         Text(
-            text = "Choisir fichier audio :",
+            text = stringResource(R.string.choisir_fichier_audio),
             fontSize = 25.sp,
             color = FontColor
         )
@@ -124,7 +127,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                 textValue = it
                 textValueInput = it.text
             },
-            label = { Text("Entrez le nom") },
+            label = { Text(stringResource(R.string.entrez_le_nom)) },
             textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier.fillMaxWidth()
         )
@@ -134,7 +137,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                     balise.annonces.add(Annonce(balise.createId(), textValueInput, TypeAnnonce.AUDIO, audioFile, null, null))
                     Toast.makeText(
                         context,
-                        "Annonce ajoutée",
+                        context.getString(R.string.annonce_ajout_e),
                         Toast.LENGTH_LONG)
                         .show()
                     navController.navigate("annonceMptrois")
@@ -142,21 +145,21 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                 if ( audioFile == null && textValueInput == "" ) {
                     Toast.makeText(
                         context,
-                        "Action impossible, vous devez sélectionner un audio et saisir un nom",
+                        context.getString(R.string.action_impossible_vous_devez_s_lectionner_un_audio_et_saisir_un_nom),
                         Toast.LENGTH_LONG)
                         .show()
                 }
                 if ( audioFile == null && textValueInput != "" ) {
                     Toast.makeText(
                         context,
-                        "Action impossible, vous devez sélectionner un audio",
+                        context.getString(R.string.action_impossible_vous_devez_s_lectionner_un_audio),
                         Toast.LENGTH_LONG)
                         .show()
                 }
                 if ( audioFile != null && textValueInput == "" ) {
                     Toast.makeText(
                         context,
-                        "Action impossible, vous devez saisir un nom",
+                        context.getString(R.string.action_impossible_vous_devez_saisir_un_nom),
                         Toast.LENGTH_LONG)
                         .show()
                 }
@@ -165,7 +168,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
         ) {
             Text(
-                text = "Enregistrer",
+                text = stringResource(R.string.enregistrer),
                 color = Color.White
             )
         }

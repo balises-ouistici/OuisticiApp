@@ -51,11 +51,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import com.example.ouistici.R
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.JoursSemaine
@@ -81,7 +83,7 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = "Choix des annonces",
+            text = stringResource(R.string.choix_des_annonces),
             fontSize = 25.sp,
             color = FontColor
         )
@@ -101,7 +103,7 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                     .padding(15.dp)
             ) {
                 Text(
-                    text = "Choisir annonce par défaut : ",
+                    text = stringResource(R.string.choisir_annonce_par_d_faut),
                     color = FontColor,
                     modifier = Modifier.padding(vertical = 10.dp)
                 )
@@ -114,14 +116,14 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                     ) {
                        Text(
-                           text = "Choisir",
+                           text = stringResource(R.string.choisir),
                            color = Color.White
                        )
                     }
 
                     if ( balise.defaultMessage == null ) {
                         Text(
-                            text = "Aucun",
+                            text = stringResource(R.string.aucun),
                             color = FontColor
                         )
                     } else {
@@ -147,7 +149,7 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
 
         Row {
             Text(
-                text = "Système de plage horaires : ",
+                text = stringResource(R.string.syst_me_de_plage_horaires),
                 color = Color.Black,
                 modifier = Modifier.padding(vertical = 10.dp)
 
@@ -164,7 +166,7 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
             ) {
                 Text(
-                    text = "Ajouter une plage horaire",
+                    text = stringResource(R.string.ajouter_une_plage_horaire),
                     color = Color.White
                 )
             }
@@ -214,7 +216,7 @@ fun DefaultMessagePopup(
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text(text = "Liste des annonces", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(text = stringResource(R.string.liste_des_annonces), fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 Spacer(modifier = Modifier.height(16.dp))
                 AnnonceDefaultMessageList(
                     annonces = balise.annonces,
@@ -233,13 +235,13 @@ fun DefaultMessagePopup(
                                 balise.defaultMessage = selectedAnnonce
                                 Toast.makeText(
                                     context,
-                                    "Nouvelle annonce par défaut",
+                                    context.getString(R.string.nouvelle_annonce_par_d_faut),
                                     Toast.LENGTH_LONG)
                                     .show()
                             } else {
                                 Toast.makeText(
                                     context,
-                                    "Action impossible",
+                                    context.getString(R.string.action_impossible),
                                     Toast.LENGTH_LONG)
                                     .show()
                             }
@@ -248,13 +250,13 @@ fun DefaultMessagePopup(
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
-                        Text(text = "Ajouter", color = Color.White)
+                        Text(text = stringResource(R.string.ajouter), color = Color.White)
                     }
                     Button(
                         onClick = onDismiss,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
                     ) {
-                        Text(text = "Annuler", color = Color.White)
+                        Text(text = stringResource(R.string.annuler), color = Color.White)
                     }
                 }
             }
@@ -267,7 +269,7 @@ fun DefaultMessagePopup(
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text(text = "Liste des annonces", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(text = stringResource(R.string.liste_des_annonces), fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 Spacer(modifier = Modifier.height(16.dp))
                 AnnonceDefaultMessageList(
                     annonces = balise.annonces,
@@ -288,14 +290,14 @@ fun DefaultMessagePopup(
                             colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                             modifier = Modifier.padding(end = 8.dp)
                         ) {
-                            Text(text = "Créer annonce", color = Color.White)
+                            Text(text = stringResource(R.string.cr_er_annonce), color = Color.White)
                         }
                     } else {
                         Button(
                             onClick = onDismiss,
                             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
                         ) {
-                            Text(text = "Annuler", color = Color.White)
+                            Text(text = stringResource(R.string.annuler), color = Color.White)
                         }
                         Button(
                             onClick = {
@@ -303,13 +305,13 @@ fun DefaultMessagePopup(
                                     balise.defaultMessage = selectedAnnonce
                                     Toast.makeText(
                                         context,
-                                        "Nouvelle annonce par défaut",
+                                        context.getString(R.string.nouvelle_annonce_par_d_faut),
                                         Toast.LENGTH_LONG)
                                         .show()
                                 } else {
                                     Toast.makeText(
                                         context,
-                                        "Action impossible",
+                                        context.getString(R.string.action_impossible),
                                         Toast.LENGTH_LONG)
                                         .show()
                                 }
@@ -318,7 +320,7 @@ fun DefaultMessagePopup(
                             colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                             modifier = Modifier.padding(end = 8.dp)
                         ) {
-                            Text(text = "Définir", color = Color.White)
+                            Text(text = stringResource(R.string.d_finir), color = Color.White)
                         }
                     }
                 }
@@ -393,15 +395,15 @@ fun AddPlageHorairePopup(
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text(text = "Ajouter une plage horaire", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(text = stringResource(R.string.ajouter_une_plage_horaire), fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Choisir annonce :",
+                    text = stringResource(R.string.choisir_annonce),
                     fontWeight = FontWeight.SemiBold
                 )
                 if ( balise.annonces.isEmpty() )  {
                     Text(
-                        text = "Créez d'abord une annonce"
+                        text = stringResource(R.string.cr_ez_d_abord_une_annonce)
                     )
                     Spacer(modifier = Modifier.height(65.dp))
                 } else {
@@ -414,7 +416,7 @@ fun AddPlageHorairePopup(
                 }
 
                 Text(
-                    text = "Choisir les jours d'activations :",
+                    text = stringResource(R.string.choisir_les_jours_d_activations),
                     fontWeight = FontWeight.SemiBold
                 )
                 JoursSemaineSelector(
@@ -427,21 +429,21 @@ fun AddPlageHorairePopup(
 
 
                 Text(
-                    text = "Choisir les périodes :",
+                    text = stringResource(R.string.choisir_les_p_riodes),
                     fontWeight = FontWeight.SemiBold
                 )
 
 
                 if ( heureDebut == null ) {
-                    Text(text = "Heure début : Aucune")
+                    Text(text = stringResource(R.string.heure_d_but_aucune))
                 } else {
-                    Text(text = "Heure début : $heureDebut")
+                    Text(text = stringResource(R.string.heure_d_but_objet, heureDebut!!))
                 }
                 Button(
                     onClick = { mTimePickerDialogHeureDebut.show() },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF0F9D58))
                 ) {
-                    Text(text = "Choisir heure début", color = Color.White)
+                    Text(text = stringResource(R.string.choisir_heure_d_but), color = Color.White)
                 }
 
 
@@ -449,16 +451,16 @@ fun AddPlageHorairePopup(
 
 
                 if ( heureFin == null ) {
-                    Text(text = "Heure fin : Aucune")
+                    Text(text = stringResource(R.string.heure_fin_aucune))
                 } else {
-                    Text(text = "Heure fin : $heureFin")
+                    Text(text = stringResource(R.string.heure_fin_objet, heureFin!!))
                 }
 
                 Button(
                     onClick = { mTimePickerDialogHeureFin.show() },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF0F9D58))
                 ) {
-                    Text(text = "Choisir heure fin", color = Color.White)
+                    Text(text = stringResource(R.string.choisir_heure_fin), color = Color.White)
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -472,7 +474,7 @@ fun AddPlageHorairePopup(
                         onClick = onDismiss,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
                     ) {
-                        Text(text = "Annuler", color = Color.White)
+                        Text(text = stringResource(R.string.annuler), color = Color.White)
                     }
                     Button(
                         onClick = {
@@ -481,14 +483,14 @@ fun AddPlageHorairePopup(
                                 if ( heureDebut!! >= heureFin!! ) {
                                     Toast.makeText(
                                         context,
-                                        "L'heure de fin ne peut pas être avant celle du début !",
+                                        context.getString(R.string.l_heure_de_fin_ne_peut_pas_tre_avant_celle_du_d_but),
                                         Toast.LENGTH_LONG)
                                         .show()
                                 } else {
                                     balise.plages.add(PlageHoraire(selectedAnnonce!!, selectedJours, heureDebut!!, heureFin!!))
                                     Toast.makeText(
                                         context,
-                                        "Plage horaire ajoutée",
+                                        context.getString(R.string.plage_horaire_ajout_e),
                                         Toast.LENGTH_LONG)
                                         .show()
                                     onDismiss()
@@ -497,7 +499,7 @@ fun AddPlageHorairePopup(
                             } else {
                                 Toast.makeText(
                                     context,
-                                    "Informations manquantes",
+                                    context.getString(R.string.informations_manquantes),
                                     Toast.LENGTH_LONG)
                                     .show()
                             }
@@ -505,7 +507,7 @@ fun AddPlageHorairePopup(
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
-                        Text(text = "Ajouter", color = Color.White)
+                        Text(text = stringResource(R.string.ajouter), color = Color.White)
                     }
                 }
             }
@@ -579,10 +581,10 @@ fun ModifyPlageHorairePopup(
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text(text = "Modifier une plage horaire", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(text = stringResource(R.string.modifier_une_plage_horaire), fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Choisir annonce :",
+                    text = stringResource(R.string.choisir_annonce),
                     fontWeight = FontWeight.SemiBold
                 )
 
@@ -595,7 +597,7 @@ fun ModifyPlageHorairePopup(
 
 
                 Text(
-                    text = "Choisir les jours d'activations :",
+                    text = stringResource(R.string.choisir_les_jours_d_activations),
                     fontWeight = FontWeight.SemiBold
                 )
                 JoursSemaineSelector(
@@ -608,15 +610,15 @@ fun ModifyPlageHorairePopup(
 
 
                 Text(
-                    text = "Choisir les périodes :",
+                    text = stringResource(R.string.choisir_les_p_riodes),
                     fontWeight = FontWeight.SemiBold
                 )
 
 
                 if ( heureDebut == null ) {
-                    Text(text = "Heure début : Aucune")
+                    Text(text = stringResource(R.string.heure_d_but_aucune))
                 } else {
-                    Text(text = "Heure début : $heureDebut")
+                    Text(text = stringResource(R.string.heure_d_but_objet))
                 }
                 Button(
                     onClick = {
@@ -624,7 +626,7 @@ fun ModifyPlageHorairePopup(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF0F9D58))
                 ) {
-                    Text(text = "Choisir heure début", color = Color.White)
+                    Text(text = stringResource(R.string.choisir_heure_d_but), color = Color.White)
                 }
 
 
@@ -632,9 +634,9 @@ fun ModifyPlageHorairePopup(
 
 
                 if ( heureFin == null ) {
-                    Text(text = "Heure fin : Aucune")
+                    Text(text = stringResource(R.string.heure_fin_aucune))
                 } else {
-                    Text(text = "Heure fin : $heureFin")
+                    Text(text = stringResource(R.string.heure_fin_objet))
                 }
 
                 Button(
@@ -643,7 +645,7 @@ fun ModifyPlageHorairePopup(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF0F9D58))
                 ) {
-                    Text(text = "Choisir heure fin", color = Color.White)
+                    Text(text = stringResource(R.string.choisir_heure_fin), color = Color.White)
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -657,7 +659,7 @@ fun ModifyPlageHorairePopup(
                         onClick = onDismiss,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
                     ) {
-                        Text(text = "Annuler", color = Color.White)
+                        Text(text = stringResource(R.string.annuler), color = Color.White)
                     }
                     Button(
                         onClick = {
@@ -666,7 +668,7 @@ fun ModifyPlageHorairePopup(
                                 if ( heureDebut!! >= heureFin!! ) {
                                     Toast.makeText(
                                         context,
-                                        "L'heure de fin ne peut pas être avant celle du début !",
+                                        context.getString(R.string.l_heure_de_fin_ne_peut_pas_tre_avant_celle_du_d_but),
                                         Toast.LENGTH_LONG)
                                         .show()
                                 } else {
@@ -677,7 +679,7 @@ fun ModifyPlageHorairePopup(
 
                                     Toast.makeText(
                                         context,
-                                        "Plage horaire modifiée",
+                                        context.getString(R.string.informations_modifi_es),
                                         Toast.LENGTH_LONG)
                                         .show()
                                     onDismiss()
@@ -686,7 +688,7 @@ fun ModifyPlageHorairePopup(
                             } else {
                                 Toast.makeText(
                                     context,
-                                    "Informations manquantes",
+                                    context.getString(R.string.informations_manquantes),
                                     Toast.LENGTH_LONG)
                                     .show()
                             }
@@ -694,7 +696,7 @@ fun ModifyPlageHorairePopup(
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
-                        Text(text = "Modifier", color = Color.White)
+                        Text(text = stringResource(R.string.modifier), color = Color.White)
                     }
                 }
             }
@@ -760,7 +762,7 @@ fun AnnonceDefaultMessageList(
 ) {
     if ( annonces.isEmpty() ) {
         Text(
-            text = "Créez d'abord une annonce"
+            text = stringResource(R.string.cr_ez_d_abord_une_annonce)
         )
     } else {
         LazyColumn(
@@ -876,7 +878,7 @@ fun RowScope.TableJoursCell(
 ) {
     if ( jours.count() == 7 ) {
         Text(
-            text = "Tous les jours",
+            text = stringResource(R.string.tous_les_jours),
             Modifier
                 .border(1.dp, Color.Black)
                 .weight(weight)
@@ -943,9 +945,9 @@ fun TableScreen(balise : Balise, navController: NavController) {
     ) {
         item {
             Row(Modifier.background(TableHeaderColor)) {
-                TableHeaderCell(text = "Nom mess", weight = column1Weight, textColor = Color.Black)
-                TableHeaderCell(text = "Jours", weight = columnJours, textColor = Color.Black)
-                TableHeaderCell(text = "Horaires", weight = column2Weight, textColor = Color.Black)
+                TableHeaderCell(text = stringResource(R.string.nom_mess), weight = column1Weight, textColor = Color.Black)
+                TableHeaderCell(text = stringResource(R.string.jours), weight = columnJours, textColor = Color.Black)
+                TableHeaderCell(text = stringResource(R.string.horaires), weight = column2Weight, textColor = Color.Black)
                 TableHeaderCell(text = "", weight = .26f, textColor = Color.Black)
             }
         }
@@ -966,7 +968,7 @@ fun TableScreen(balise : Balise, navController: NavController) {
                 )
 
                 TableCells(
-                    text = "de " + plage.heureDebut.toString() + "\nà " + plage.heureFin.toString(),
+                    text = context.getString(R.string.de_a, plage.heureDebut, plage.heureFin),
                     weight = column2Weight,
                     textColor = Color.Black
                 )
@@ -991,7 +993,7 @@ fun TableScreen(balise : Balise, navController: NavController) {
                 ) {
                     Icon(
                         imageVector = Icons.Default.Edit,
-                        contentDescription = "Modifier plage horaire",
+                        contentDescription = stringResource(R.string.modifier_plage_horaire),
                         modifier = Modifier.size(10.dp)
                     )
                 }
@@ -1011,7 +1013,7 @@ fun TableScreen(balise : Balise, navController: NavController) {
                         balise.plages.remove(plage)
                         Toast.makeText(
                             context,
-                            "Plage horaire supprimée",
+                            context.getString(R.string.plage_horaire_supprim_e),
                             Toast.LENGTH_LONG)
                             .show()
                         navController.navigate("manageAnnonce")
@@ -1030,7 +1032,7 @@ fun TableScreen(balise : Balise, navController: NavController) {
                 ) {
                     Icon(
                         imageVector = Icons.Default.Close,
-                        contentDescription = "Supprimer plage horaire",
+                        contentDescription = stringResource(R.string.supprimer_plage_horaire),
                         modifier = Modifier.size(10.dp)
                     )
                 }

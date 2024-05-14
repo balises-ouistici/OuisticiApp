@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.text
@@ -115,35 +116,35 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                     ClickableColumn(
                         navController,
                         "addAnnonce",
-                        "Ajouter",
+                        stringResource(R.string.ajouter),
                         Icons.Filled.AddCircle,
                         columnModifier
                     )
                     ClickableColumn(
                         navController,
                         "manageAnnonce",
-                        "Modifier",
+                        stringResource(R.string.modifier),
                         Icons.Filled.Edit,
                         columnModifier
                     )
                     ClickableColumn(
                         navController,
                         "infosBalise",
-                        "Infos",
+                        stringResource(R.string.infos),
                         Icons.Filled.Info,
                         columnModifier
                     )
                     ClickableColumn(
                         navController,
                         "settings",
-                        "Options",
+                        stringResource(R.string.options),
                         Icons.Filled.Settings,
                         columnModifier
                     )
                     ClickableColumn(
                         navController,
                         "listeBalises",
-                        "Balises",
+                        stringResource(R.string.balises),
                         Icons.Filled.ExitToApp,
                         columnModifier
                     )

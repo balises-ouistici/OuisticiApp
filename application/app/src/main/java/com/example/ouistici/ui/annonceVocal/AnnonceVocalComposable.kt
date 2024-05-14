@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -92,13 +93,14 @@ fun AnnonceVocale(
 
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(40.dp))
         Text(
-            text = "Enregistrer annonce",
+            text = stringResource(R.string.enregistrer_annonce),
             fontSize = 25.sp,
             color = FontColor
         )
@@ -128,7 +130,7 @@ fun AnnonceVocale(
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.micro),
-                        contentDescription = "Commencer l'enregistrement",
+                        contentDescription = stringResource(R.string.commencer_l_enregistrement),
                         modifier = Modifier.size(70.dp)
                     )
                 }
@@ -150,7 +152,7 @@ fun AnnonceVocale(
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.croix),
-                        contentDescription = "Arrêter l'enregistrement",
+                        contentDescription = stringResource(R.string.arr_ter_l_enregistrement),
                         modifier = Modifier.size(70.dp)
                     )
                 }
@@ -203,7 +205,7 @@ fun AnnonceVocale(
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.micro),
-                        contentDescription = "Commencer l'enregistrement",
+                        contentDescription = stringResource(R.string.commencer_l_enregistrement),
                         modifier = Modifier.size(70.dp)
                     )
                 }
@@ -248,39 +250,39 @@ fun AnnonceVocale(
                 textValue = it
                 textValueInput = it.text
             },
-            label = { Text("Entrez le nom") },
+            label = { Text(stringResource(R.string.entrez_le_nom)) },
             textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier.fillMaxWidth(),
         )
         Button(
             onClick = {
-                if ( textValueInput != "" && audioFile != null ) {
+                if ( textValueInput != "" && time.toInt() != 0 ) {
                     balise.annonces.add(Annonce(balise.createId(), textValueInput, TypeAnnonce.AUDIO, audioFile, null, null))
                     Toast.makeText(
                         context,
-                        "Annonce ajoutée",
+                        context.getString(R.string.annonce_ajout_e),
                         Toast.LENGTH_LONG)
                         .show()
                     navController.navigate("annonceVocal")
                 }
-                if ( audioFile == null && textValueInput == "" ) {
+                if ( time.toInt() == 0 && textValueInput == "" ) {
                     Toast.makeText(
                         context,
-                        "Action impossible, vous devez sélectionner un audio et saisir un nom",
+                        context.getString(R.string.action_impossible_vous_devez_enregistrer_un_audio_et_saisir_un_nom),
                         Toast.LENGTH_LONG)
                         .show()
                 }
-                if ( audioFile == null && textValueInput != "" ) {
+                if ( time.toInt() == 0 && textValueInput != "" ) {
                     Toast.makeText(
                         context,
-                        "Action impossible, vous devez sélectionner un audio",
+                        context.getString(R.string.action_impossible_vous_devez_enregistrer_un_audio),
                         Toast.LENGTH_LONG)
                         .show()
                 }
-                if ( audioFile != null && textValueInput == "" ) {
+                if ( time.toInt() != 0 && textValueInput == "" ) {
                     Toast.makeText(
                         context,
-                        "Action impossible, vous devez saisir un nom",
+                        context.getString(R.string.action_impossible_vous_devez_saisir_un_nom),
                         Toast.LENGTH_LONG)
                         .show()
                 }
@@ -289,7 +291,7 @@ fun AnnonceVocale(
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
         ) {
             Text(
-                text = "Enregistrer",
+                text = stringResource(R.string.enregistrer),
                 color = Color.White
             )
         }
