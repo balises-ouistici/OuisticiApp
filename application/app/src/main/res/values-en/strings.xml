@@ -112,6 +112,8 @@
     <string name="choisir_fichier_audio">"Select audio file : "</string>
     <string name="action_impossible_vous_devez_s_lectionner_un_audio_et_saisir_un_nom">Impossible action, you must select an audio file and enter a name</string>
     <string name="action_impossible_vous_devez_s_lectionner_un_audio">Impossible action, you must select an audio file</string>
+    <string name="fichier_s_lectionn">Selected file : %1$s</string>
+    <string name="fichier_s_lectionn_aucun">Selected file : None</string>
 
     <!-- Select type of announce page -->
     <string name="quel_type_d_annonce">What type of announce ?</string>
@@ -133,6 +135,4 @@
     <string name="vendredi">Friday</string>
     <string name="samedi">Saturday</string>
     <string name="dimanche">Sunday</string>
-    <string name="fichier_s_lectionn">Selected file : %1$s</string>
-    <string name="fichier_s_lectionn_aucun">Selected file : None</string>
 </resources>

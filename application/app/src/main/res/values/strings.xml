@@ -111,6 +111,8 @@
     <string name="choisir_fichier_audio">Choisir fichier audio :</string>
     <string name="action_impossible_vous_devez_s_lectionner_un_audio_et_saisir_un_nom">Action impossible, vous devez sélectionner un audio et saisir un nom</string>
     <string name="action_impossible_vous_devez_s_lectionner_un_audio">Action impossible, vous devez sélectionner un audio</string>
+    <string name="fichier_s_lectionn">Fichier sélectionné : %1$s</string>
+    <string name="fichier_s_lectionn_aucun">Fichier sélectionné : Aucun</string>
 
     <!-- Page choisir quel type d'annonce -->
     <string name="quel_type_d_annonce">Quel type d\'annonce ?</string>
@@ -132,6 +134,4 @@
     <string name="vendredi">Vendredi</string>
     <string name="samedi">Samedi</string>
     <string name="dimanche">Dimanche</string>
-    <string name="fichier_s_lectionn">Fichier sélectionné : %1$s</string>
-    <string name="fichier_s_lectionn_aucun">Fichier sélectionné : Aucun</string>
 </resources>
