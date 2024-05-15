@@ -621,7 +621,7 @@ fun ModifyPlageHorairePopup(
                 if ( heureDebut == null ) {
                     Text(text = stringResource(R.string.heure_d_but_aucune))
                 } else {
-                    Text(text = stringResource(R.string.heure_d_but_objet))
+                    Text(text = stringResource(R.string.heure_d_but_objet, heureDebut!!))
                 }
                 Button(
                     onClick = {
@@ -639,7 +639,7 @@ fun ModifyPlageHorairePopup(
                 if ( heureFin == null ) {
                     Text(text = stringResource(R.string.heure_fin_aucune))
                 } else {
-                    Text(text = stringResource(R.string.heure_fin_objet))
+                    Text(text = stringResource(R.string.heure_fin_objet, heureFin!!))
                 }
 
                 Button(
