@@ -4,6 +4,9 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.ouistici.model.Balise
 
+/**
+ * @brief Provides stub data for testing purposes.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 object Stub {
 
@@ -17,11 +20,18 @@ object Stub {
     }
     */
 
+    /**
+     * @brief Creates a list of dummy beacons.
+     * @return The list of dummy beacons.
+     */
     val bal by lazy {
         createBalises()
     }
 
-
+    /**
+     * @brief Creates a list of dummy beacons.
+     * @return The list of dummy beacons.
+     */
     private fun createBalises(): List<Balise> {
         return listOf(
             Balise("Balise1","Accueil",  null, ArrayList(), 50, ArrayList(), true),
@@ -53,8 +63,4 @@ object Stub {
             )
     }
     */
-
-
-
-
 }

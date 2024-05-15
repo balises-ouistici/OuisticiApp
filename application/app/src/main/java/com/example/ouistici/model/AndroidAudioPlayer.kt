@@ -5,12 +5,20 @@ import android.media.MediaPlayer
 import androidx.core.net.toUri
 import java.io.File
 
+/**
+ * @brief Implements the AudioPlayer interface to play audio files on Android.
+ * @param context The context of the Android application.
+ */
 class AndroidAudioPlayer(
     private val context: Context
 ) : AudioPlayer {
 
     private var player : MediaPlayer? = null
 
+    /**
+     * @brief Plays the specified audio file.
+     * @param file The audio file to play.
+     */
     override fun playFile(file: File) {
         MediaPlayer.create(context, file.toUri()).apply {
             player = this
@@ -18,6 +26,9 @@ class AndroidAudioPlayer(
         }
     }
 
+    /**
+     * @brief Stops the audio playback.
+     */
     override fun stop() {
         player?.stop()
         player?.release()
