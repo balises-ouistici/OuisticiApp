@@ -117,4 +117,5 @@
     <string name="vocale">Vocale</string>
     <string name="texte">Texte</string>
     <string name="charger_fichier_audio">Charger fichier audio</string>
+    <string name="changer_de_langue">Change language</string>
 </resources>

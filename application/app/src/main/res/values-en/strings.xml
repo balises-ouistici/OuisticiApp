@@ -19,33 +19,33 @@
     <string name="modifier">Modify</string>
     <string name="infos">Info</string>
     <string name="options">Settings</string>
-    <string name="balises">Tag</string>
+    <string name="balises">Beacon</string>
 
     <!-- Tag list page -->
-    <string name="liste_des_balises">Tag list</string>
-    <string name="nom_balise">Tag name</string>
+    <string name="liste_des_balises">Beacon list</string>
+    <string name="nom_balise">Beacon name</string>
     <string name="lieu">Place</string>
     <string name="message_d_faut">Default message</string>
     <string name="non_defini">Not defined</string>
     <string name="aucun">None</string>
 
     <!-- Tag info page -->
-    <string name="informations_balise">Tag information</string>
-    <string name="nom_balise_info">Tag name : %1$s</string>
+    <string name="informations_balise">Beacon information</string>
+    <string name="nom_balise_info">Beacon name : %1$s</string>
     <string name="lieu_non_d_fini">Place : Not defined</string>
     <string name="lieu_info">Place : %1$s</string>
     <string name="message_d_faut_aucun">Default message : None</string>
     <string name="message_d_faut_info">Default message : %1$s</string>
     <string name="changer_les_informations_de_la_balise">Change tag info</string>
     <string name="liste_des_annonces">Announcement list</string>
-    <string name="volume_de_la_balise">Tag volume</string>
-    <string name="tester_sur_la_balise">Test on tag</string>
-    <string name="nom_balise_info_popup">"Tag name : "</string>
+    <string name="volume_de_la_balise">Beacon volume</string>
+    <string name="tester_sur_la_balise">Test on Beacon</string>
+    <string name="nom_balise_info_popup">"Beacon name : "</string>
     <string name="lieu_info_popup">"Place : "</string>
     <string name="descri_info_popup">To change default message, go into modify and click on the \"Select\" button.</string>
     <string name="annuler">Cancel</string>
     <string name="informations_modifi_es">Information modified</string>
-    <string name="la_balise_doit_avoir_un_nom">Tag must have a name !</string>
+    <string name="la_balise_doit_avoir_un_nom">Beacon must have a name !</string>
     <string name="informations_annonce">Announce informations</string>
     <string name="nom_annonce">"Announce name : "</string>
     <string name="contenu">"Content : "</string>
@@ -118,5 +118,6 @@
     <string name="vocale">Vocal</string>
     <string name="texte">Text</string>
     <string name="charger_fichier_audio">Load audio file</string>
+    <string name="changer_de_langue">Changer de langue</string>
 
 </resources>

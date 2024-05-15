@@ -15,9 +15,11 @@ import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.AndroidAudioRecorder
 import com.example.ouistici.ui.navigation.BottomAppBarExample
 import com.example.ouistici.ui.theme.OuisticiTheme
+import androidx.appcompat.app.AppCompatActivity
 
 
-class MainActivity : ComponentActivity() {
+
+class MainActivity : AppCompatActivity() {
 
     private val recorder by lazy {
         AndroidAudioRecorder(applicationContext)
