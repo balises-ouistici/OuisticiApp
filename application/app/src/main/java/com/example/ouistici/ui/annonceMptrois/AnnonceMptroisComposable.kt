@@ -1,7 +1,9 @@
 package com.example.ouistici.ui.annonceMptrois
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
+import android.provider.OpenableColumns
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -116,6 +118,23 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
             }
         }
 
+        Spacer(modifier = Modifier.height(20.dp))
+
+        if (audioFile != null) {
+            audioFile?.let { file ->
+                val fileName = file.name.substringBefore('.')
+                Text(
+                    text = "Fichier sélectionné : $fileName",
+                    color = FontColor
+                )
+            }
+
+        } else {
+            Text(
+                text = "Fichier sélectionné : Aucun",
+                color = FontColor
+            )
+        }
 
 
         Spacer(modifier = Modifier.height(50.dp))
@@ -178,13 +197,24 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
 
 private fun getFileFromUri(uri: Uri, context: Context): File? {
     val inputStream = context.contentResolver.openInputStream(uri)
-    val outputFile = File.createTempFile("temp", null, context.cacheDir)
+    val fileName = getFileName(uri, context)
+    val outputFile = File.createTempFile(fileName, null, context.cacheDir)
     inputStream?.use { input ->
         FileOutputStream(outputFile).use { output ->
             input.copyTo(output)
         }
     }
     return outputFile
+}
+
+@SuppressLint("Range")
+private fun getFileName(uri: Uri, context: Context): String {
+    var fileName = ""
+    context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+        cursor.moveToFirst()
+        fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+    }
+    return fileName
 }
 
 
