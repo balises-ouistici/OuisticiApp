@@ -2,6 +2,7 @@ package com.example.ouistici.ui.annonceMptrois
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.media.MediaPlayer
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.widget.Toast
@@ -59,9 +60,15 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
 
     val context = LocalContext.current
 
+    var duration by remember { mutableStateOf(0) }
+
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let { uriNotNull ->
             val file = getFileFromUri(uriNotNull, context)
+            val durationInSeconds = file?.let { getAudioDuration(it) }
+            if (durationInSeconds != null) {
+                duration = durationInSeconds
+            }
             audioFile = file
         }
     }
@@ -128,6 +135,17 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                     color = FontColor
                 )
             }
+            if (duration > 0) {
+                Text(
+                    text = "Durée : ${duration/60}m${duration%60}s",
+                    color = FontColor
+                )
+            } else {
+                Text(
+                    text = "Durée : Problème",
+                    color = FontColor
+                )
+            }
 
         } else {
             Text(
@@ -153,7 +171,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
         Button(
             onClick = {
                 if ( textValueInput != "" && audioFile != null ) {
-                    balise.annonces.add(Annonce(balise.createId(), textValueInput, TypeAnnonce.AUDIO, audioFile, null, null))
+                    balise.annonces.add(Annonce(balise.createId(), textValueInput, TypeAnnonce.AUDIO, audioFile, null, null, duration))
                     Toast.makeText(
                         context,
                         context.getString(R.string.annonce_ajout_e),
@@ -215,6 +233,15 @@ private fun getFileName(uri: Uri, context: Context): String {
         fileName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
     }
     return fileName
+}
+
+fun getAudioDuration(file: File): Int {
+    val mediaPlayer = MediaPlayer()
+    mediaPlayer.setDataSource(file.absolutePath)
+    mediaPlayer.prepare()
+    val duration = mediaPlayer.duration
+    mediaPlayer.release()
+    return duration / 1000 // Convertit la durée en millisecondes en secondes
 }
 
 

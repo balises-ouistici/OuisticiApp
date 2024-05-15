@@ -257,7 +257,7 @@ fun AnnonceVocale(
         Button(
             onClick = {
                 if ( textValueInput != "" && time.toInt() != 0 ) {
-                    balise.annonces.add(Annonce(balise.createId(), textValueInput, TypeAnnonce.AUDIO, audioFile, null, null))
+                    balise.annonces.add(Annonce(balise.createId(), textValueInput, TypeAnnonce.AUDIO, audioFile, null, null, null))
                     Toast.makeText(
                         context,
                         context.getString(R.string.annonce_ajout_e),

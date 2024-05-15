@@ -149,7 +149,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
         Button(
             onClick = {
                 if ( textValueInput != "" && textContenuInput != "" && langueSelectionnee.code != "" && langueSelectionnee.nom != "" ) {
-                    balise.annonces.add(Annonce(balise.createId() ,textValueInput, TypeAnnonce.TEXTE, null, textContenuInput, langueSelectionnee))
+                    balise.annonces.add(Annonce(balise.createId() ,textValueInput, TypeAnnonce.TEXTE, null, textContenuInput, langueSelectionnee, null))
                     Toast.makeText(
                         context,
                         context.getString(R.string.annonce_ajout_e),

@@ -8,6 +8,7 @@ class Annonce (
     var type : TypeAnnonce,
     var audio : File?,
     var contenu : String?,
-    var langue : Langue?
+    var langue : Langue?,
+    var duree : Int?
 )
 
