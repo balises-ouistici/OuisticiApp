@@ -444,6 +444,19 @@ fun ModifyAnnoncesBaliseTextePopup(
                     }
                 }
 
+                Spacer(modifier = Modifier.height(16.dp))
+
+                if ( annonce.duree != null ) {
+                    Text(
+                        text = "Durée : ${annonce.duree!!/60}m${annonce.duree!!%60}s",
+                        fontWeight = FontWeight.SemiBold
+                    )
+                } else {
+                    Text(
+                        text = "Durée : Problème",
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -508,7 +521,6 @@ fun ModifyAnnoncesBaliseTextePopup(
             }
         }
     }
-
 }
 
 
@@ -552,6 +564,21 @@ fun ModifyAnnoncesBaliseAudioPopup(
                     onValueChange = { nomAnnonce = it },
                     modifier = Modifier.fillMaxWidth()
                 )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                if ( annonce.duree != null ) {
+                    Text(
+                        text = "Durée : ${annonce.duree!!/60}m${annonce.duree!!%60}s",
+                        fontWeight = FontWeight.SemiBold
+                    )
+                } else {
+                    Text(
+                        text = "Durée : Problème",
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+
 
                 Spacer(modifier = Modifier.height(16.dp))
 
