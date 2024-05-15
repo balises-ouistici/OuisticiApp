@@ -1,6 +1,8 @@
 package com.example.ouistici.ui.choixAnnonce
 
+import android.annotation.SuppressLint
 import android.app.TimePickerDialog
+import android.content.Context
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -67,6 +69,7 @@ import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
 import java.time.LocalTime
 import java.util.Calendar
+import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -799,12 +802,16 @@ fun AnnonceDefaultMessageList(
 
 
 
+@SuppressLint("DiscouragedApi")
 @Composable
 fun JoursSemaineSelector(
     selectedJours: List<JoursSemaine>,
     onJoursSelected: (List<JoursSemaine>) -> Unit
 ) {
     val joursSemaine = JoursSemaine.values().toList()
+
+    val context = LocalContext.current
+    val resources = context.resources
 
     Box(
         modifier = Modifier
@@ -827,6 +834,13 @@ fun JoursSemaineSelector(
                     onJoursSelected(updatedList)
                 }
 
+                val stringResourceId = resources.getIdentifier(jour.name.lowercase(Locale.ROOT), "string", context.packageName)
+                val jourName = if (stringResourceId != 0) {
+                    resources.getString(stringResourceId)
+                } else {
+                    jour.name // Utilise le nom de l'enum si la ressource n'est pas trouvée
+                }
+
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -838,12 +852,13 @@ fun JoursSemaineSelector(
                         onCheckedChange = null,
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
-                    Text(text = jour.name, modifier = Modifier.fillMaxWidth())
+                    Text(text = jourName, modifier = Modifier.fillMaxWidth())
                 }
             }
         }
     }
 }
+
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -925,34 +940,48 @@ fun RowScope.TableHeaderCell(
 }
 
 
+@SuppressLint("DiscouragedApi")
 @Composable
 fun RowScope.TableJoursCell(
     jours: List<JoursSemaine>,
     weight: Float,
-    textColor: Color,
+    textColor: Color
 ) {
-    if ( jours.count() == 7 ) {
-        Text(
-            text = stringResource(R.string.tous_les_jours),
-            Modifier
-                .border(1.dp, Color.Black)
-                .weight(weight)
-                .padding(8.dp)
-                .height(50.dp),
-            color = textColor
-        )
-    } else {
-        Text(
-            text = jours.joinToString(", ") { it.name.take(2) },
-            Modifier
-                .border(1.dp, Color.Black)
-                .weight(weight)
-                .padding(8.dp)
-                .height(50.dp),
-            color = textColor
-        )
+    val context = LocalContext.current
+
+    val joursSemaineStringList = jours.map { jour ->
+        val stringResourceId = context.resources.getIdentifier(jour.name.lowercase(Locale.ROOT), "string", context.packageName)
+        if (stringResourceId != 0) {
+            // Utilisation de substring pour obtenir les deux premières lettres
+            context.getString(stringResourceId).substring(0, 2)
+        } else {
+            jour.name.take(2) // Utilise les deux premières lettres du nom de l'enum si la ressource n'est pas trouvée
+        }
     }
+
+    val textToShow = if (jours.size == 7) {
+        // Si tous les jours de la semaine sont sélectionnés, affiche "Tous"
+        context.getString(R.string.tous_les_jours)
+    } else {
+        // Sinon, affiche les deux premières lettres de chaque jour séparées par des virgules
+        joursSemaineStringList.joinToString(", ")
+    }
+
+    Text(
+        text = textToShow,
+        Modifier
+            .border(1.dp, Color.Black)
+            .weight(weight)
+            .padding(8.dp)
+            .height(50.dp),
+        color = textColor
+    )
 }
+
+
+
+
+
 
 @Composable
 fun RowScope.TableCells(

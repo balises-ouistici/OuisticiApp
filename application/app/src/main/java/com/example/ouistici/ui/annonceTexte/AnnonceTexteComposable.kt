@@ -38,7 +38,6 @@ import com.example.ouistici.model.Balise
 import com.example.ouistici.model.Langue
 import com.example.ouistici.model.LangueManager
 import com.example.ouistici.model.TypeAnnonce
-import com.example.ouistici.ui.parametresAppli.DropdownMenuItemLangue
 import com.example.ouistici.ui.theme.FontColor
 
 @Composable
@@ -176,4 +175,18 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
         }
 
     }
+}
+
+@Composable
+fun DropdownMenuItemLangue(
+    langue: Langue,
+    onClick: (Langue) -> Unit
+) {
+    Text(
+        text = langue.getLangueName(),
+        fontSize = 16.sp,
+        modifier = Modifier
+            .clickable(onClick = { onClick(langue) })
+            .padding(vertical = 8.dp, horizontal = 16.dp)
+    )
 }

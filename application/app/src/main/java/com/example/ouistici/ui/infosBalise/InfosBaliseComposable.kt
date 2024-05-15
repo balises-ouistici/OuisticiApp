@@ -64,7 +64,7 @@ import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.LangueManager
 import com.example.ouistici.model.TypeAnnonce
-import com.example.ouistici.ui.parametresAppli.DropdownMenuItemLangue
+import com.example.ouistici.ui.annonceTexte.DropdownMenuItemLangue
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor

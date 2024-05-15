@@ -125,4 +125,12 @@
     <string name="tes_vous_s_r_de_vouloir_supprimer_cette_plage">Are you sure to delete this time slot ?</string>
     <string name="tes_vous_s_r_de_vouloir_supprimer_cette_annonce">Are you sure to delete this announce ?</string>
 
+    <!-- Week days -->
+    <string name="lundi">Monday</string>
+    <string name="mardi">Tuesday</string>
+    <string name="mercredi">Wednesday</string>
+    <string name="jeudi">Thursday</string>
+    <string name="vendredi">Friday</string>
+    <string name="samedi">Saturday</string>
+    <string name="dimanche">Sunday</string>
 </resources>

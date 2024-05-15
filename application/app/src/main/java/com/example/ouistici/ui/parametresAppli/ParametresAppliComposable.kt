@@ -116,70 +116,12 @@ fun DropdownMenuItem(
 }
 
 
-
-
 fun Context.findActivity() : Activity? = when(this){
     is Activity -> this
     is ContextWrapper -> baseContext.findActivity()
     else -> null
 }
 
-@Composable
-fun ExposedDropdownMenu(
-    items: List<Langue>,
-    selectedItem: Langue,
-    onItemSelected: (Langue) -> Unit
-) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Row (verticalAlignment = Alignment.CenterVertically) {
 
 
-        Text(
-            text = stringResource(R.string.changer_la_langue_de_l_application),
-            color = FontColor
-        )
-        Box(
-            modifier = Modifier
-                .padding(16.dp)
-                .clickable(onClick = { expanded = true })
-        ) {
-
-            Text(
-                text = selectedItem.getLangueName(),
-                fontSize = 16.sp,
-                color = FontColor
-            )
-
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                items.forEach { langue ->
-                    DropdownMenuItemLangue(
-                        langue = langue,
-                        onClick = {
-                            onItemSelected(it)
-                            expanded = false
-                        }
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun DropdownMenuItemLangue(
-    langue: Langue,
-    onClick: (Langue) -> Unit
-) {
-    Text(
-        text = langue.getLangueName(),
-        fontSize = 16.sp,
-        modifier = Modifier
-            .clickable(onClick = { onClick(langue) })
-            .padding(vertical = 8.dp, horizontal = 16.dp)
-    )
-}
 
