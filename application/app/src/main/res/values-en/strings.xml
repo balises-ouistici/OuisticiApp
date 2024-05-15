@@ -119,5 +119,7 @@
     <string name="texte">Text</string>
     <string name="charger_fichier_audio">Load audio file</string>
     <string name="changer_de_langue">Changer de langue</string>
+    <string name="l_annonce_doit_avoir_un_contenu">Announce must have content !</string>
+    <string name="l_annonce_doit_avoir_un_nom_et_un_contenu">Announce must have a name and content !</string>
 
 </resources>

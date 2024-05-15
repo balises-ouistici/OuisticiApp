@@ -6,7 +6,9 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -30,6 +32,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Slider
@@ -59,7 +62,10 @@ import com.example.ouistici.R
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
+import com.example.ouistici.model.Langue
+import com.example.ouistici.model.LangueManager
 import com.example.ouistici.model.TypeAnnonce
+import com.example.ouistici.ui.parametresAppli.DropdownMenuItemLangue
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
@@ -357,6 +363,11 @@ fun ModifyAnnoncesBaliseTextePopup(
     var nomAnnonce by remember { mutableStateOf(annonce.nom) }
     var contenuAnnonceTexte by remember { mutableStateOf(annonce.contenu ?: "") }
 
+    var langueSelectionnee by remember { mutableStateOf(annonce.langue) }
+    var expanded by remember { mutableStateOf(false) }
+
+
+
     Dialog(
         onDismissRequest = onDismiss
     ) {
@@ -401,12 +412,38 @@ fun ModifyAnnoncesBaliseTextePopup(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Text(
-                    text = stringResource(R.string.langue),
-                    fontWeight = FontWeight.SemiBold
-                )
+                Row {
+                    Text(
+                        text = stringResource(R.string.langue),
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 10.dp)
+                            .clickable(onClick = { expanded = true })
+                    ) {
 
-                // FAIRE CHANGEMENT DE LANGUE
+                        Text(
+                            text = langueSelectionnee!!.getLangueName(),
+                            fontSize = 16.sp,
+                            color = Color.White
+                        )
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            LangueManager.languesDisponibles.forEach { langue ->
+                                DropdownMenuItemLangue(
+                                    langue = langue,
+                                    onClick = {
+                                        langueSelectionnee = langue
+                                        expanded = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
 
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -423,12 +460,11 @@ fun ModifyAnnoncesBaliseTextePopup(
                     }
                     Button(
                         onClick = {
-                            if (nomAnnonce != "") {
+                            if (nomAnnonce != "" && contenuAnnonceTexte != "") {
 
                                 annonce.contenu = contenuAnnonceTexte
-                                // PAREIL SAUVEGARDER LA LANGUE DE L'ANNONCE
-
                                 annonce.nom = nomAnnonce
+                                annonce.langue = langueSelectionnee
                                 Toast.makeText(
                                     context,
                                     context.getString(R.string.informations_modifi_es),
@@ -438,18 +474,36 @@ fun ModifyAnnoncesBaliseTextePopup(
                                 navController.navigate("infosBalise")
                                 onDismiss()
                             } else {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.l_annonce_doit_avoir_un_nom),
-                                    Toast.LENGTH_LONG
-                                )
-                                    .show()
+                                if ( nomAnnonce == "" && contenuAnnonceTexte != "" ) {
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.l_annonce_doit_avoir_un_nom),
+                                        Toast.LENGTH_LONG
+                                    )
+                                        .show()
+                                }
+                                if ( nomAnnonce != "" && contenuAnnonceTexte == "" ) {
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.l_annonce_doit_avoir_un_contenu),
+                                        Toast.LENGTH_LONG
+                                    )
+                                        .show()
+                                }
+                                if ( nomAnnonce == "" && contenuAnnonceTexte == "" ) {
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.l_annonce_doit_avoir_un_nom_et_un_contenu),
+                                        Toast.LENGTH_LONG
+                                    )
+                                        .show()
+                                }
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
-                        Text(text = stringResource(R.string.ajouter), color = Color.White)
+                        Text(text = stringResource(R.string.modifier), color = Color.White)
                     }
                 }
             }

@@ -118,4 +118,6 @@
     <string name="texte">Texte</string>
     <string name="charger_fichier_audio">Charger fichier audio</string>
     <string name="changer_de_langue">Change language</string>
+    <string name="l_annonce_doit_avoir_un_contenu">L\'annonce doit avoir un contenu !</string>
+    <string name="l_annonce_doit_avoir_un_nom_et_un_contenu">L\'annonce doit avoir un nom et un contenu !</string>
 </resources>
