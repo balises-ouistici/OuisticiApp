@@ -62,7 +62,6 @@ import com.example.ouistici.R
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
-import com.example.ouistici.model.Langue
 import com.example.ouistici.model.LangueManager
 import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.parametresAppli.DropdownMenuItemLangue
@@ -599,6 +598,69 @@ fun ModifyAnnoncesBaliseAudioPopup(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ConfirmDeleteAnnoncePopup(
+    balise: Balise,
+    annonce : Annonce,
+    navController: NavController,
+    onDismiss: () -> Unit
+) {
+    val context = LocalContext.current
+
+    Dialog(
+        onDismissRequest = onDismiss
+    ) {
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .width(300.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    text = "Êtes-vous sûr de vouloir supprimer cette annonce ?",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                    ) {
+                        Text(text = stringResource(R.string.annuler), color = Color.White)
+                    }
+                    Button(
+                        onClick = {
+                            if ( balise.defaultMessage == annonce ) {
+                                balise.defaultMessage = null
+                            }
+                            balise.annonces.remove(annonce)
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.annonce_supprim_e),
+                                Toast.LENGTH_LONG)
+                                .show()
+                            navController.navigate("infosBalise")
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text(text = stringResource(R.string.supprimer), color = Color.White)
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 
 
@@ -679,8 +741,11 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
 
     val showModifyAnnonceTextPopup = remember { mutableStateOf(false) }
     val showModifyAnnonceAudioPopup = remember { mutableStateOf(false) }
+    val showConfirmDeletePopup = remember { mutableStateOf(false) }
+
 
     val idAnnonceEdit = remember { mutableIntStateOf(0) }
+
 
 
     if (balise.annonces.isEmpty()) {
@@ -812,16 +877,8 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                                 }
                             }
                             if (!verif) {
-                                if ( balise.defaultMessage == annonce ) {
-                                    balise.defaultMessage = null
-                                }
-                                balise.annonces.remove(annonce)
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.annonce_supprim_e),
-                                    Toast.LENGTH_LONG)
-                                    .show()
-                                navController.navigate("infosBalise")
+                                idAnnonceEdit.intValue=balise.annonces.indexOf(annonce)
+                                showConfirmDeletePopup.value = true
                             }
                         },
                         shape = RectangleShape,
@@ -841,6 +898,14 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                             contentDescription = stringResource(R.string.supprimer_annonce),
                             modifier = Modifier.size(15.dp)
                         )
+                    }
+
+                    if (showConfirmDeletePopup.value) {
+                        ConfirmDeleteAnnoncePopup(
+                            balise,
+                            annonce = balise.annonces[idAnnonceEdit.intValue],
+                            navController = navController
+                        ) { showConfirmDeletePopup.value = false }
                     }
 
                 }
