@@ -846,10 +846,65 @@ fun JoursSemaineSelector(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ConfirmDeletePlagePopup(
+    balise: Balise,
+    plageHoraire : PlageHoraire,
+    navController: NavController,
+    onDismiss: () -> Unit
+) {
+    val context = LocalContext.current
 
+    Dialog(
+        onDismissRequest = onDismiss
+    ) {
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .width(300.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.tes_vous_s_r_de_vouloir_supprimer_cette_plage),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+                Spacer(modifier = Modifier.height(16.dp))
 
-
-
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                    ) {
+                        Text(text = stringResource(R.string.annuler), color = Color.White)
+                    }
+                    Button(
+                        onClick = {
+                            balise.plages.remove(plageHoraire)
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.plage_horaire_supprim_e),
+                                Toast.LENGTH_LONG)
+                                .show()
+                            navController.navigate("manageAnnonce")
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text(text = stringResource(R.string.supprimer), color = Color.White)
+                    }
+                }
+            }
+        }
+    }
+}
 
 
 @Composable
@@ -937,6 +992,9 @@ fun TableScreen(balise : Balise, navController: NavController) {
 
     val idPlageEdit = remember { mutableIntStateOf(0) }
 
+    val showConfirmDeletePopup = remember { mutableStateOf(false) }
+
+
 
     LazyColumn(
         Modifier
@@ -1010,13 +1068,8 @@ fun TableScreen(balise : Balise, navController: NavController) {
 
                 OutlinedButton(
                     onClick = {
-                        balise.plages.remove(plage)
-                        Toast.makeText(
-                            context,
-                            context.getString(R.string.plage_horaire_supprim_e),
-                            Toast.LENGTH_LONG)
-                            .show()
-                        navController.navigate("manageAnnonce")
+                        idPlageEdit.intValue = balise.plages.indexOf(plage)
+                        showConfirmDeletePopup.value = true
                 },
                     shape = RectangleShape,
                     border = BorderStroke(1.dp, Color.Black),
@@ -1035,6 +1088,14 @@ fun TableScreen(balise : Balise, navController: NavController) {
                         contentDescription = stringResource(R.string.supprimer_plage_horaire),
                         modifier = Modifier.size(10.dp)
                     )
+                }
+
+                if (showConfirmDeletePopup.value) {
+                    ConfirmDeletePlagePopup(
+                        balise = balise,
+                        plageHoraire = balise.plages[idPlageEdit.intValue],
+                        navController = navController
+                    ) { showConfirmDeletePopup.value = false }
                 }
 
             }

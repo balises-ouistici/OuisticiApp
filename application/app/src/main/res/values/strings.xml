@@ -121,4 +121,6 @@
     <string name="l_annonce_doit_avoir_un_contenu">L\'annonce doit avoir un contenu !</string>
     <string name="l_annonce_doit_avoir_un_nom_et_un_contenu">L\'annonce doit avoir un nom et un contenu !</string>
     <string name="supprimer">Supprimer</string>
+    <string name="tes_vous_s_r_de_vouloir_supprimer_cette_plage">Êtes-vous sûr de vouloir supprimer cette plage ?</string>
+    <string name="tes_vous_s_r_de_vouloir_supprimer_cette_annonce">Êtes-vous sûr de vouloir supprimer cette annonce ?</string>
 </resources>

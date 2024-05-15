@@ -621,7 +621,7 @@ fun ConfirmDeleteAnnoncePopup(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "Êtes-vous sûr de vouloir supprimer cette annonce ?",
+                    text = stringResource(R.string.tes_vous_s_r_de_vouloir_supprimer_cette_annonce),
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
                 )

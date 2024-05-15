@@ -87,7 +87,7 @@
     <string name="nom_mess">Mess name</string>
     <string name="jours">Days</string>
     <string name="horaires">hours</string>
-    <string name="de_a">from %1$s \\nto %2$s</string>
+    <string name="de_a">fr %1$s \nto %2$s</string>
     <string name="modifier_plage_horaire">Modify time slot</string>
     <string name="plage_horaire_supprim_e">Time slot deleted</string>
     <string name="supprimer_plage_horaire">Delete time slot</string>
@@ -121,5 +121,8 @@
     <string name="changer_de_langue">Changer de langue</string>
     <string name="l_annonce_doit_avoir_un_contenu">Announce must have content !</string>
     <string name="l_annonce_doit_avoir_un_nom_et_un_contenu">Announce must have a name and content !</string>
+    <string name="supprimer">Delete</string>
+    <string name="tes_vous_s_r_de_vouloir_supprimer_cette_plage">Are you sure to delete this time slot ?</string>
+    <string name="tes_vous_s_r_de_vouloir_supprimer_cette_annonce">Are you sure to delete this announce ?</string>
 
 </resources>
