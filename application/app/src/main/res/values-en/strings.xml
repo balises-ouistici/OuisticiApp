@@ -63,7 +63,7 @@
     <string name="choix_des_annonces">Choice of announces</string>
     <string name="choisir_annonce_par_d_faut">Select default announce</string>
     <string name="choisir">Select</string>
-    <string name="syst_me_de_plage_horaires">Time slot system</string>
+    <string name="syst_me_de_plage_horaires">"Time slot system : "</string>
     <string name="ajouter_une_plage_horaire">Add a time slot</string>
     <string name="nouvelle_annonce_par_d_faut">New default announce</string>
     <string name="action_impossible">Impossible action</string>
