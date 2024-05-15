@@ -133,4 +133,6 @@
     <string name="vendredi">Friday</string>
     <string name="samedi">Saturday</string>
     <string name="dimanche">Sunday</string>
+    <string name="fichier_s_lectionn">Selected file : %1$s</string>
+    <string name="fichier_s_lectionn_aucun">Selected file : None</string>
 </resources>

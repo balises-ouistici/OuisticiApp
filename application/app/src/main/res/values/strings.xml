@@ -132,4 +132,6 @@
     <string name="vendredi">Vendredi</string>
     <string name="samedi">Samedi</string>
     <string name="dimanche">Dimanche</string>
+    <string name="fichier_s_lectionn">Fichier sélectionné : %1$s</string>
+    <string name="fichier_s_lectionn_aucun">Fichier sélectionné : Aucun</string>
 </resources>

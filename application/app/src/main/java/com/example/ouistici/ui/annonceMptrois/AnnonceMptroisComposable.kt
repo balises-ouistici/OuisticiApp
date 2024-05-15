@@ -124,14 +124,14 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
             audioFile?.let { file ->
                 val fileName = file.name.substringBefore('.')
                 Text(
-                    text = "Fichier sélectionné : $fileName",
+                    text = stringResource(R.string.fichier_s_lectionn, fileName),
                     color = FontColor
                 )
             }
 
         } else {
             Text(
-                text = "Fichier sélectionné : Aucun",
+                text = stringResource(R.string.fichier_s_lectionn_aucun),
                 color = FontColor
             )
         }
