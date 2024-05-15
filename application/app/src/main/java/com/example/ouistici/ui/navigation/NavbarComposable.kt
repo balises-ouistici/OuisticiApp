@@ -65,6 +65,14 @@ import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.NavBackground
 import java.io.File
 
+
+/**
+ * @brief Composable function for rendering a bottom app bar a top app bar and navigation between pages.
+ *
+ * @param recorder The AndroidAudioRecorder instance.
+ * @param player The AndroidAudioPlayer instance.
+ * @param cacheDir The cache directory file.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -251,6 +259,15 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
 }
 
 
+/**
+ * @brief Composable function for rendering a clickable column.
+ *
+ * @param navController The navigation controller.
+ * @param destination The destination route.
+ * @param text The text to display.
+ * @param icon The icon to display.
+ * @param modifier The modifier for the column.
+ */
 @Composable
 fun ClickableColumn(navController: NavController, destination: String, text: String, icon: ImageVector, modifier: Modifier) {
     Column(

@@ -71,6 +71,14 @@ import com.example.ouistici.ui.theme.TableHeaderColor
 import com.example.ouistici.ui.theme.TestButtonColor
 import java.io.File
 
+
+/**
+ * @brief Composable function for displaying information about a beacon.
+ *
+ * @param navController The navigation controller for navigating between composables.
+ * @param balise The Balise object representing the beacon.
+ * @param player The AndroidAudioPlayer object for playing audio.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun InfosBalise(
@@ -245,8 +253,13 @@ fun InfosBalise(
     }
 }
 
-// POPUP POUR INFOS BALISES
 
+/**
+ * @brief Composable function for modifying beacon information via a popup.
+ *
+ * @param balise The Balise object representing the beacon.
+ * @param onDismiss Callback function to dismiss the popup.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ModifyInfosBalisePopup(
@@ -349,7 +362,13 @@ fun ModifyInfosBalisePopup(
 }
 
 
-
+/**
+ * @brief Composable function for modifying text announcements via a popup.
+ *
+ * @param annonce The Annonce object representing the text announcement.
+ * @param navController NavController for navigating between composables.
+ * @param onDismiss Callback function to dismiss the popup.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ModifyAnnoncesBaliseTextePopup(
@@ -529,7 +548,13 @@ fun ModifyAnnoncesBaliseTextePopup(
 
 
 
-
+/**
+ * @brief Composable function for modifying audio announcements via a popup.
+ *
+ * @param annonce The Annonce object representing the audio announcement.
+ * @param navController NavController for navigating between composables.
+ * @param onDismiss Callback function to dismiss the popup.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ModifyAnnoncesBaliseAudioPopup(
@@ -633,6 +658,14 @@ fun ModifyAnnoncesBaliseAudioPopup(
 }
 
 
+/**
+ * @brief Composable function for confirming the deletion of an announcement via a popup.
+ *
+ * @param balise The Balise object to which the announcement belongs.
+ * @param annonce The Annonce object representing the announcement to be deleted.
+ * @param navController NavController for navigating between composables.
+ * @param onDismiss Callback function to dismiss the popup.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ConfirmDeleteAnnoncePopup(
@@ -697,10 +730,13 @@ fun ConfirmDeleteAnnoncePopup(
 }
 
 
-
-
-// TABLEAU
-
+/**
+ * @brief Composable function for rendering a table cell within a row.
+ *
+ * @param text The text content to be displayed in the cell.
+ * @param weight The weight of the cell within the row.
+ * @param textColor The color of the text content.
+ */
 @Composable
 fun RowScope.TableCell(
     text: String,
@@ -719,7 +755,13 @@ fun RowScope.TableCell(
 }
 
 
-
+/**
+ * @brief Composable function for rendering a table cell with audio controls within a row.
+ *
+ * @param audioFile The audio file to be played.
+ * @param weight The weight of the cell within the row.
+ * @param player The Android audio player used to play the audio file.
+ */
 @Composable
 fun RowScope.TableAudioCell(
     audioFile: File?,
@@ -765,6 +807,13 @@ fun RowScope.TableAudioCell(
 }
 
 
+/**
+ * @brief Composable function for rendering a table screen with announcements for a beacon.
+ *
+ * @param balise The beacon containing announcements.
+ * @param player The Android audio player used for playing audio announcements.
+ * @param navController The navigation controller for managing navigation within the app.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavController) {

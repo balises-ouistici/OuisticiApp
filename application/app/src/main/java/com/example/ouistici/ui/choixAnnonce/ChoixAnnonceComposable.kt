@@ -71,6 +71,14 @@ import java.time.LocalTime
 import java.util.Calendar
 import java.util.Locale
 
+/**
+ * @brief Composable function for displaying UI to choose announcements for a given balise.
+ * It includes UI elements for selecting default messages, managing the system of time slots,
+ * adding new time slots, and displaying existing time slots.
+ *
+ * @param navController NavController for navigating between composables.
+ * @param balise Balise object representing the device beacon.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChoixAnnonce(navController: NavController, balise: Balise) {
@@ -197,6 +205,14 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
 }
 
 
+/**
+ * @brief Composable function for displaying a popup to choose a default message for a Balise.
+ * It allows selecting an announcement from the list of available announcements.
+ *
+ * @param balise Balise object representing the device beacon.
+ * @param navController NavController for navigating between composables.
+ * @param onDismiss Callback function to be invoked when the popup is dismissed.
+ */
 @Composable
 fun DefaultMessagePopup(
     balise: Balise,
@@ -334,10 +350,15 @@ fun DefaultMessagePopup(
 }
 
 
-
-
-
-
+/**
+ * @brief Composable function for displaying a popup to add a time range for a Balise.
+ * Allows selecting an announcement, days of the week, and start and end times for the time range.
+ *
+ * @param balise Balise object representing the device beacon.
+ * @param onPlageHoraireAdded Callback function invoked when a time range is added.
+ * @param onDismiss Callback function to be invoked when the popup is dismissed.
+ * @param navController NavController for navigating between composables.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AddPlageHorairePopup(
@@ -519,11 +540,14 @@ fun AddPlageHorairePopup(
 }
 
 
-
-
-
-
-
+/**
+ * @brief Composable function for displaying a popup to modify a time range for a Balise.
+ * Allows selecting an announcement, days of the week, and start and end times for the time range.
+ *
+ * @param balise Balise object representing the device beacon.
+ * @param navController NavController for navigating between composables.
+ * @param onDismiss Callback function to be invoked when the popup is dismissed.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ModifyPlageHorairePopup(
@@ -708,16 +732,13 @@ fun ModifyPlageHorairePopup(
 }
 
 
-
-
-
-
-
-
-
-
-
-
+/**
+ * @brief Composable function for displaying a list of announcements.
+ *
+ * @param annonces List of announcements to display.
+ * @param selectedAnnonce Currently selected announcement.
+ * @param onAnnonceSelected Callback function invoked when an announcement is selected.
+ */
 @Composable
 fun AnnonceList(
     annonces: List<Annonce>,
@@ -755,8 +776,13 @@ fun AnnonceList(
 }
 
 
-
-
+/**
+ * @brief Composable function for displaying a list of messages to select a default message in another component.
+ *
+ * @param annonces List of default messages to display.
+ * @param selectedAnnonce Currently selected default message.
+ * @param onAnnonceSelected Callback function invoked when a default message is selected.
+ */
 @Composable
 fun AnnonceDefaultMessageList(
     annonces: List<Annonce>,
@@ -800,8 +826,12 @@ fun AnnonceDefaultMessageList(
 }
 
 
-
-
+/**
+ * @brief Composable function for selecting days of the week.
+ *
+ * @param selectedJours Currently selected days of the week.
+ * @param onJoursSelected Callback function invoked when days of the week are selected.
+ */
 @SuppressLint("DiscouragedApi")
 @Composable
 fun JoursSemaineSelector(
@@ -860,7 +890,14 @@ fun JoursSemaineSelector(
 }
 
 
-
+/**
+ * @brief Composable function for confirming the deletion of a time slot.
+ *
+ * @param balise The Balise associated with the time slot.
+ * @param plageHoraire The time slot to be deleted.
+ * @param navController The NavController for navigation.
+ * @param onDismiss Callback function invoked when the popup is dismissed.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ConfirmDeletePlagePopup(
@@ -922,6 +959,13 @@ fun ConfirmDeletePlagePopup(
 }
 
 
+/**
+ * @brief Composable function for rendering a cell in the table header.
+ *
+ * @param text The text to be displayed in the cell.
+ * @param weight The weight of the cell in the row.
+ * @param textColor The color of the text in the cell.
+ */
 @Composable
 fun RowScope.TableHeaderCell(
     text: String,
@@ -940,6 +984,13 @@ fun RowScope.TableHeaderCell(
 }
 
 
+/**
+ * @brief Composable function for rendering a cell in the table representing days of the week.
+ *
+ * @param jours The list of days of the week.
+ * @param weight The weight of the cell in the row.
+ * @param textColor The color of the text in the cell.
+ */
 @SuppressLint("DiscouragedApi")
 @Composable
 fun RowScope.TableJoursCell(
@@ -979,10 +1030,13 @@ fun RowScope.TableJoursCell(
 }
 
 
-
-
-
-
+/**
+ * @brief Composable function for rendering a cell in the table.
+ *
+ * @param text The text content of the cell.
+ * @param weight The weight of the cell in the row.
+ * @param textColor The color of the text in the cell.
+ */
 @Composable
 fun RowScope.TableCells(
     text: String,
@@ -1006,7 +1060,12 @@ fun RowScope.TableCells(
 }
 
 
-
+/**
+ * @brief Composable function for rendering the table screen displaying time slots.
+ *
+ * @param balise The Balise object containing time slots.
+ * @param navController The navigation controller for navigating between time slots.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TableScreen(balise : Balise, navController: NavController) {
@@ -1134,6 +1193,12 @@ fun TableScreen(balise : Balise, navController: NavController) {
 }
 
 
+/**
+ * @brief Composable function for rendering an on/off button.
+ *
+ * @param balise The Balise object representing the switch state.
+ * @param navController The navigation controller for navigating between composables.
+ */
 @Composable
 fun OnOffButton(balise: Balise, navController: NavController) {
     val checkedState = remember { mutableStateOf(balise.sysOnOff) }

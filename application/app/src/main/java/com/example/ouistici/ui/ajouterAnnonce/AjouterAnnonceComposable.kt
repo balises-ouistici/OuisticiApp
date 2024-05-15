@@ -21,6 +21,10 @@ import androidx.navigation.NavController
 import com.example.ouistici.R
 import com.example.ouistici.ui.theme.FontColor
 
+/**
+ * @brief Composable function to navigate in other pages that are useful for adding announcements.
+ * @param navController The navigation controller to navigate between screens.
+ */
 @Composable
 fun AjouterAnnonce(navController: NavController) {
     Column(
@@ -37,6 +41,7 @@ fun AjouterAnnonce(navController: NavController) {
 
         Spacer(modifier = Modifier.height(50.dp))
 
+        // Vocal announcement option
         Text(
             text = stringResource(R.string.vocale),
             fontSize = 15.sp,
@@ -60,7 +65,7 @@ fun AjouterAnnonce(navController: NavController) {
 
         Spacer(modifier = Modifier.height(40.dp))
 
-
+        // Text announcement option
         Text(
             text = stringResource(R.string.texte),
             fontSize = 15.sp,
@@ -84,6 +89,7 @@ fun AjouterAnnonce(navController: NavController) {
 
         Spacer(modifier = Modifier.height(40.dp))
 
+        // Audio file upload option
         Text(
             text = stringResource(R.string.charger_fichier_audio),
             fontSize = 15.sp,

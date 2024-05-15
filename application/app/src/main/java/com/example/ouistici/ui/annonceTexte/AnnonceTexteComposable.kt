@@ -40,6 +40,12 @@ import com.example.ouistici.model.LangueManager
 import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.theme.FontColor
 
+
+/**
+ * @brief Composable function for text announcements.
+ * @param navController The navigation controller to navigate between screens.
+ * @param balise The beacon associated with the announcements.
+ */
 @Composable
 fun AnnonceTexte(navController: NavController, balise: Balise) {
     var textValue by remember { mutableStateOf(TextFieldValue()) }
@@ -96,7 +102,6 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // FAIRE CHOIX DE LANGUE POUR SYNTHETISEUR
         Row (verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = stringResource(R.string.langue_de_la_voix),
@@ -177,6 +182,12 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
     }
 }
 
+
+/**
+ * @brief Composable function for dropdown menu item representing a language.
+ * @param langue The language object.
+ * @param onClick The callback function when the item is clicked.
+ */
 @Composable
 fun DropdownMenuItemLangue(
     langue: Langue,

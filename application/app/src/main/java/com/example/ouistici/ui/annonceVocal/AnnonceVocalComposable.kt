@@ -56,6 +56,14 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 
+/**
+ * @brief Composable function for audio recorder announcements.
+ * @param navController The navigation controller to navigate between screens.
+ * @param recorder The recorder for the microphone.
+ * @param player The audio player.
+ * @param cacheDir Where the temp file created by the audio recorder temporary save the temp file.
+ * @param balise The beacon associated with the announcements.
+ */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AnnonceVocale(
@@ -301,6 +309,11 @@ fun AnnonceVocale(
 }
 
 
+/**
+ * @brief Formats the time into minutes and seconds.
+ * @param timeMi The time in milliseconds.
+ * @return A formatted string representing the time in "MM:SS" format.
+ */
 @Composable
 fun formatTime(timeMi: Long) : String {
     val min = TimeUnit.MILLISECONDS.toMinutes(timeMi) % 60

@@ -42,6 +42,11 @@ import com.example.ouistici.ui.theme.FontColor
 import java.util.Locale
 
 
+/**
+ * @brief Composable function for rendering application settings.
+ *
+ * @param navController The navigation controller.
+ */
 @Composable
 fun ParametresAppli(navController: NavController) {
 
@@ -100,6 +105,12 @@ fun ParametresAppli(navController: NavController) {
 }
 
 
+/**
+ * @brief Composable function for rendering a dropdown menu item.
+ *
+ * @param onClick The callback function to be invoked when the item is clicked.
+ * @param content The content to be displayed within the item.
+ */
 @Composable
 fun DropdownMenuItem(
     onClick: () -> Unit,
@@ -116,6 +127,11 @@ fun DropdownMenuItem(
 }
 
 
+/**
+ * @brief Extension function to find the activity associated with a context.
+ *
+ * @return The activity associated with the context, or null if no activity is found.
+ */
 fun Context.findActivity() : Activity? = when(this){
     is Activity -> this
     is ContextWrapper -> baseContext.findActivity()

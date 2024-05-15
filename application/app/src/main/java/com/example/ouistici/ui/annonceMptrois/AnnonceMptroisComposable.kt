@@ -51,6 +51,12 @@ import com.example.ouistici.ui.theme.FontColor
 import java.io.File
 import java.io.FileOutputStream
 
+/**
+ * @brief Composable function for adding audio file announcements.
+ * @param navController The navigation controller to navigate between screens.
+ * @param player The audio player used to play audio files.
+ * @param balise The beacon associated with the announcements.
+ */
 @Composable
 fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, balise: Balise) {
     var textValue by remember { mutableStateOf(TextFieldValue()) }
@@ -212,7 +218,12 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
     }
 }
 
-
+/**
+ * @brief Gets the file of an uri.
+ * @param uri The audio file.
+ * @param context The context of the application.
+ * @return The file selected by the user.
+ */
 private fun getFileFromUri(uri: Uri, context: Context): File? {
     val inputStream = context.contentResolver.openInputStream(uri)
     val fileName = getFileName(uri, context)
@@ -225,6 +236,12 @@ private fun getFileFromUri(uri: Uri, context: Context): File? {
     return outputFile
 }
 
+/**
+ * @brief Gets the file of an uri.
+ * @param uri The audio file.
+ * @param context The context of the application.
+ * @return The name file selected by the user.
+ */
 @SuppressLint("Range")
 private fun getFileName(uri: Uri, context: Context): String {
     var fileName = ""
@@ -235,6 +252,12 @@ private fun getFileName(uri: Uri, context: Context): String {
     return fileName
 }
 
+
+/**
+ * @brief Gets the duration of an audio file.
+ * @param file The audio file.
+ * @return The duration of the audio file in seconds.
+ */
 fun getAudioDuration(file: File): Int {
     val mediaPlayer = MediaPlayer()
     mediaPlayer.setDataSource(file.absolutePath)

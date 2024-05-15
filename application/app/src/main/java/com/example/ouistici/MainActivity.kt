@@ -18,17 +18,39 @@ import com.example.ouistici.ui.theme.OuisticiTheme
 import androidx.appcompat.app.AppCompatActivity
 
 
-
+/**
+ * @brief Main activity of the application.
+ *
+ * This activity sets up the user interface using Jetpack Compose and handles
+ * the initialization of audio recorder and player objects.
+ */
 class MainActivity : AppCompatActivity() {
-
+    /**
+     * @brief Lazy-initialized audio recorder instance.
+     *
+     * This recorder is used for recording audio in the application.
+     */
     private val recorder by lazy {
         AndroidAudioRecorder(applicationContext)
     }
 
+    /**
+     * @biref Lazy-initialized audio player instance.
+     *
+     * This player is used for playing audio in the application.
+     */
     private val player by lazy {
         AndroidAudioPlayer(applicationContext)
     }
 
+    /**
+     * @brief Initializes the activity when it is created.
+     *
+     * This method sets up the UI using Jetpack Compose, requests necessary
+     * permissions, and initializes the audio recorder and player.
+     *
+     * @param savedInstanceState The saved instance state bundle.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

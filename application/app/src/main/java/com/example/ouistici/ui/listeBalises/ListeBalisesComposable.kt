@@ -36,6 +36,12 @@ import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
 
 
+/**
+ * @brief Composable function for rendering a list of beacons.
+ *
+ * @param navController The navigation controller for managing navigation within the app.
+ * @param baliseViewModel The view model for managing beacon data.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel) {
@@ -57,6 +63,14 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel)
     }
 }
 
+
+/**
+ * @brief Composable function for rendering a header cell in a table row.
+ *
+ * @param text The text content of the header cell.
+ * @param weight The weight of the header cell in the table layout.
+ * @param textColor The color of the text in the header cell.
+ */
 @Composable
 fun RowScope.TableHeaderCell(
     text: String,
@@ -75,6 +89,14 @@ fun RowScope.TableHeaderCell(
 }
 
 
+/**
+ * @brief Composable function for rendering a cell in a table row.
+ *
+ * @param text The text content of the cell.
+ * @param weight The weight of the cell in the table layout.
+ * @param textColor The color of the text in the cell.
+ * @param onClick Lambda function to handle click events on the cell, if null cell is not clickable.
+ */
 @Composable
 fun RowScope.TableCell(
     text: String,
@@ -104,6 +126,13 @@ fun RowScope.TableCell(
 }
 
 
+/**
+ * @brief Composable function for rendering a table screen displaying a list of balises.
+ *
+ * @param balises The list of balises to display in the table.
+ * @param navController The NavController used for navigation.
+ * @param baliseViewModel The BaliseViewModel for managing balise data.
+ */
 @Composable
 fun TableScreen(balises : List<Balise>, navController: NavController, baliseViewModel: BaliseViewModel) {
     val columnWeight = .3f
