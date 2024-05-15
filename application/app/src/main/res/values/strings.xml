@@ -57,6 +57,7 @@
     <string name="annonce_non_supprimable_elle_est_utilis_e_dans_une_plage_horaire">Annonce non supprimable, elle est utilisée dans une plage horaire</string>
     <string name="annonce_supprim_e">Annonce supprimée</string>
     <string name="supprimer_annonce">Supprimer annonce</string>
+    <string name="dur_e_ms_info">Durée : %1$sm%2$ss</string>
 
     <!-- Page choix des annonces -->
     <string name="choix_des_annonces">Choix des annonces</string>

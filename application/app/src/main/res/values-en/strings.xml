@@ -58,6 +58,7 @@
     <string name="annonce_non_supprimable_elle_est_utilis_e_dans_une_plage_horaire">Can\'t delete announce, it\'s used in a time slot</string>
     <string name="annonce_supprim_e">Announce deleted</string>
     <string name="supprimer_annonce">Delete announce</string>
+    <string name="dur_e_ms_info">Duration : %1$sm%2$ss</string>
 
     <!-- Announce choice page -->
     <string name="choix_des_annonces">Choice of announces</string>

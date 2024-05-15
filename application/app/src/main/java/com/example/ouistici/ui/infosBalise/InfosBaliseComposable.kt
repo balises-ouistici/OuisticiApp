@@ -448,12 +448,16 @@ fun ModifyAnnoncesBaliseTextePopup(
 
                 if ( annonce.duree != null ) {
                     Text(
-                        text = "Durée : ${annonce.duree!!/60}m${annonce.duree!!%60}s",
+                        text = stringResource(
+                            R.string.dur_e_ms_info,
+                            annonce.duree!! / 60,
+                            annonce.duree!! % 60
+                        ),
                         fontWeight = FontWeight.SemiBold
                     )
                 } else {
                     Text(
-                        text = "Durée : Problème",
+                        text = stringResource(R.string.dur_e_probl_me),
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -569,12 +573,16 @@ fun ModifyAnnoncesBaliseAudioPopup(
 
                 if ( annonce.duree != null ) {
                     Text(
-                        text = "Durée : ${annonce.duree!!/60}m${annonce.duree!!%60}s",
+                        text = stringResource(
+                            R.string.dur_e_ms_info,
+                            annonce.duree!! / 60,
+                            annonce.duree!! % 60
+                        ),
                         fontWeight = FontWeight.SemiBold
                     )
                 } else {
                     Text(
-                        text = "Durée : Problème",
+                        text = stringResource(R.string.dur_e_probl_me),
                         fontWeight = FontWeight.SemiBold
                     )
                 }
