@@ -113,6 +113,8 @@
     <string name="action_impossible_vous_devez_s_lectionner_un_audio">Action impossible, vous devez sélectionner un audio</string>
     <string name="fichier_s_lectionn">Fichier sélectionné : %1$s</string>
     <string name="fichier_s_lectionn_aucun">Fichier sélectionné : Aucun</string>
+    <string name="dur_e_ms">Durée : %1$sm%2$ss</string>
+    <string name="dur_e_probl_me">Durée : Problème</string>
 
     <!-- Page choisir quel type d'annonce -->
     <string name="quel_type_d_annonce">Quel type d\'annonce ?</string>

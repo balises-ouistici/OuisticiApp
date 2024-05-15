@@ -114,6 +114,8 @@
     <string name="action_impossible_vous_devez_s_lectionner_un_audio">Impossible action, you must select an audio file</string>
     <string name="fichier_s_lectionn">Selected file : %1$s</string>
     <string name="fichier_s_lectionn_aucun">Selected file : None</string>
+    <string name="dur_e_ms">Duration : %1$sm%2$ss</string>
+    <string name="dur_e_probl_me">Duration : Error</string>
 
     <!-- Select type of announce page -->
     <string name="quel_type_d_annonce">What type of announce ?</string>

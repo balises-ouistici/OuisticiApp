@@ -137,12 +137,12 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
             }
             if (duration > 0) {
                 Text(
-                    text = "Durée : ${duration/60}m${duration%60}s",
+                    text = stringResource(R.string.dur_e_ms, duration / 60, duration % 60),
                     color = FontColor
                 )
             } else {
                 Text(
-                    text = "Durée : Problème",
+                    text = stringResource(R.string.dur_e_probl_me),
                     color = FontColor
                 )
             }

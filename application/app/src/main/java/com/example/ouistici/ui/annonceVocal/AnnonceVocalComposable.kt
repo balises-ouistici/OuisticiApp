@@ -257,7 +257,8 @@ fun AnnonceVocale(
         Button(
             onClick = {
                 if ( textValueInput != "" && time.toInt() != 0 ) {
-                    balise.annonces.add(Annonce(balise.createId(), textValueInput, TypeAnnonce.AUDIO, audioFile, null, null, null))
+                    val durationInSeconds = TimeUnit.MILLISECONDS.toSeconds(time)
+                    balise.annonces.add(Annonce(balise.createId(), textValueInput, TypeAnnonce.AUDIO, audioFile, null, null, durationInSeconds.toInt()))
                     Toast.makeText(
                         context,
                         context.getString(R.string.annonce_ajout_e),
