@@ -15,9 +15,10 @@ class Balise(
     var lieu : String?,
     var defaultMessage : Annonce?,
     var annonces : ArrayList<Annonce>,
-    var volume : Long,
+    var volume : Float,
     var plages : ArrayList<PlageHoraire>,
-    var sysOnOff : Boolean
+    var sysOnOff : Boolean,
+    var ipBal : String
 ) {
     /**
      * @brief Generates a unique identifier for the beacon based on the maximum ID of its announcements.

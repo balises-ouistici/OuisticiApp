@@ -1,6 +1,7 @@
 package com.example.ouistici.ui.infosBalise
 
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
@@ -65,10 +66,15 @@ import com.example.ouistici.model.Balise
 import com.example.ouistici.model.LangueManager
 import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.annonceTexte.DropdownMenuItemLangue
+import com.example.ouistici.ui.baliseViewModel.RetrofitClient
+import com.example.ouistici.ui.baliseViewModel.RetrofitClient.apiService
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
 import com.example.ouistici.ui.theme.TestButtonColor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 
 
@@ -89,8 +95,10 @@ fun InfosBalise(
     val showModifyInfosBalisePopup = remember { mutableStateOf(false) }
 
     var sliderPosition by remember {
-        mutableFloatStateOf(0f)
+        mutableFloatStateOf(balise.volume)
     }
+
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -230,7 +238,46 @@ fun InfosBalise(
                 )
 
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        val apiService = RetrofitClient.apiService
+                        apiService.setVolume(sliderPosition).enqueue(object : Callback<Void> {
+                            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                // Gérer la réponse du serveur si nécessaire
+                                if (response.isSuccessful) {
+                                    // Cas : La requête a réussi (code de statut 2xx)
+                                    // Faire quelque chose en cas de succès, par exemple afficher un message de confirmation
+                                    Log.d("MainActivity", "Enregistrement réussi")
+                                    balise.volume = sliderPosition
+
+                                    Toast.makeText(
+                                        context,
+                                        "Le volume a été modifié",
+                                        Toast.LENGTH_LONG)
+                                        .show()
+                                } else {
+                                    // Cas : La requête a échoué (code de statut différent de 2xx)
+                                    // Gérer l'échec de la requête, par exemple afficher un message d'erreur
+                                    Log.e("MainActivity", "Échec de l'enregistrement: ${response.code()}")
+                                    Toast.makeText(
+                                        context,
+                                        "Erreur enregistrement",
+                                        Toast.LENGTH_LONG)
+                                        .show()
+                                }
+                            }
+
+                            override fun onFailure(call: Call<Void>, t: Throwable) {
+                                // Cas : La requête a échoué avant d'atteindre le serveur (erreur de réseau, etc.)
+                                // Gérer l'échec de la requête, par exemple afficher un message d'erreur
+                                Log.e("MainActivity", "Échec de l'enregistrement: ${t.message}")
+                                Toast.makeText(
+                                    context,
+                                    "Erreur communication à la balise",
+                                    Toast.LENGTH_LONG)
+                                    .show()
+                            }
+                        })
+                    },
                     modifier = Modifier.padding(16.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                 ) {
