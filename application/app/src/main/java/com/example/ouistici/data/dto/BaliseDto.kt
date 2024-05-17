@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 data class BaliseDto(
     @SerializedName("balId") val  balId : Int?,
     @SerializedName("nom") val  nom : String?,
-    @SerializedName("lieu") val  lieu : String?,
+    @SerializedName("lieu") val  lieu : String,
     @SerializedName("defaultMessage") val  defaultMessage: Annonce?,
     @SerializedName("annonces") val  annonces : ArrayList<Annonce>,
     @SerializedName("volume") val  volume : Float,

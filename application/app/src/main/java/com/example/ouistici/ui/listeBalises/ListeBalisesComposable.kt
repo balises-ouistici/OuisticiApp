@@ -164,7 +164,7 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                     }
                 )
 
-                if ( balise.lieu == null ) {
+                if ( balise.lieu == "" ) {
                     TableCell(
                         text = context.getString(R.string.non_defini),
                         weight = columnWeight,

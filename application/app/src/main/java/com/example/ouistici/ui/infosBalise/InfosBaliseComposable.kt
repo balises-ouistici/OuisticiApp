@@ -131,7 +131,7 @@ fun InfosBalise(
                         color = FontColor
                     )
 
-                    if ( balise.lieu == null ) {
+                    if ( balise.lieu == "" ) {
                         Text(
                             text = stringResource(R.string.lieu_non_d_fini),
                             color = FontColor
@@ -371,7 +371,7 @@ fun ModifyInfosBalisePopup(
                                 if ( lieuBalise != "" ) {
                                     balise.lieu = lieuBalise
                                 } else {
-                                    balise.lieu = null
+                                    balise.lieu = ""
                                 }
                                 balise.nom = nomBalise
 
