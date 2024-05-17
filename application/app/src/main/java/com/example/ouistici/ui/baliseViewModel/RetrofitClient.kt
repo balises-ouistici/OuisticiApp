@@ -1,19 +1,21 @@
 package com.example.ouistici.ui.baliseViewModel
 
 import com.example.ouistici.data.api.OuisticiApi
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "http://192.168.30.64:5000/"
+    private val client = OkHttpClient.Builder().build()
     
 
-    val apiService: OuisticiApi by lazy {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+    private val retrofit = Retrofit.Builder()
+        .baseUrl("http://172.20.10.4:5000/") // IP de la balise
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(client)
+        .build()
 
-        retrofit.create(OuisticiApi::class.java)
+    fun<T> buildService(service: Class<T>): T {
+        return retrofit.create(service)
     }
 }

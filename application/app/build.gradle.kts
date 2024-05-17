@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation("com.squareup.retrofit2:retrofit:2.10.0")
     implementation("com.squareup.retrofit2:converter-gson:2.10.0")
+    implementation("com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
