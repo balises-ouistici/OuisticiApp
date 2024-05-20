@@ -243,10 +243,8 @@ fun InfosBalise(
                             balId = null,
                             nom = balise.nom,
                             lieu = balise.lieu,
-                            defaultMessage = balise.defaultMessage,
-                            annonces = balise.annonces,
+                            defaultMessage = balise.defaultMessage?.id,
                             volume = balise.volume,
-                            plages = balise.plages,
                             sysOnOff = balise.sysOnOff,
                             ipBal = balise.ipBal
                         )
@@ -380,15 +378,14 @@ fun ModifyInfosBalisePopup(
                                     balId = null,
                                     nom = balise.nom,
                                     lieu = balise.lieu,
-                                    defaultMessage = balise.defaultMessage,
-                                    annonces = balise.annonces,
+                                    defaultMessage = balise.defaultMessage?.id,
                                     volume = balise.volume,
-                                    plages = balise.plages,
                                     sysOnOff = balise.sysOnOff,
                                     ipBal = balise.ipBal
                                 )
 
                                 apiService.setNameAndPlace(balInfo) {
+                                    Log.e("InfosBalise","Échec nom/lieu : ${it?.balId}")
                                     if ( it?.balId != null ) {
                                         Log.d("InfosBalise","Nouveau nom et lieu !")
                                         Toast.makeText(
