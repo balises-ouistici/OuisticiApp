@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
@@ -60,6 +61,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.ouistici.R
+import com.example.ouistici.data.dto.BaliseDto
+import com.example.ouistici.data.service.RestApiService
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.JoursSemaine
@@ -228,61 +231,6 @@ fun DefaultMessagePopup(
     ) {
         Surface(
             shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .width(300.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Text(text = stringResource(R.string.liste_des_annonces), fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                Spacer(modifier = Modifier.height(16.dp))
-                AnnonceDefaultMessageList(
-                    annonces = balise.annonces,
-                    selectedAnnonce = selectedAnnonce,
-                    onAnnonceSelected = { selectedAnnonce = it }
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    Button(
-                        onClick = {
-                            // Création de la plage horaire
-                            if (selectedAnnonce != null) {
-                                balise.defaultMessage = selectedAnnonce
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.nouvelle_annonce_par_d_faut),
-                                    Toast.LENGTH_LONG)
-                                    .show()
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.action_impossible),
-                                    Toast.LENGTH_LONG)
-                                    .show()
-                            }
-                            onDismiss()
-                        },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
-                        modifier = Modifier.padding(end = 8.dp)
-                    ) {
-                        Text(text = stringResource(R.string.ajouter), color = Color.White)
-                    }
-                    Button(
-                        onClick = onDismiss,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
-                    ) {
-                        Text(text = stringResource(R.string.annuler), color = Color.White)
-                    }
-                }
-            }
-        }
-
-        Surface(
-            shape = RoundedCornerShape(8.dp),
             modifier = Modifier.width(300.dp)
         ) {
             Column(
@@ -322,11 +270,36 @@ fun DefaultMessagePopup(
                             onClick = {
                                 if (selectedAnnonce != null) {
                                     balise.defaultMessage = selectedAnnonce
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.nouvelle_annonce_par_d_faut),
-                                        Toast.LENGTH_LONG)
-                                        .show()
+
+                                    val apiService = RestApiService()
+                                    val balInfo = BaliseDto(
+                                        balId = null,
+                                        nom = balise.nom,
+                                        lieu = balise.lieu,
+                                        defaultMessage = balise.defaultMessage?.id,
+                                        volume = balise.volume,
+                                        sysOnOff = balise.sysOnOff,
+                                        ipBal = balise.ipBal
+                                    )
+
+                                    apiService.setDefaultMessage(balInfo) {
+                                        if (it?.balId != null) {
+                                            Log.d("InfosBalise", "Nouvelle annonce par défaut !")
+                                            Toast.makeText(
+                                                context,
+                                                context.getString(R.string.nouvelle_annonce_par_d_faut),
+                                                Toast.LENGTH_LONG)
+                                                .show()
+                                        } else {
+                                            Log.e("InfosBalise", "Échec nouvelle annonce par défaut")
+                                            Toast.makeText(
+                                                context,
+                                                "Erreur enregistrement de l'annonce par défaut",
+                                                Toast.LENGTH_LONG
+                                            )
+                                                .show()
+                                        }
+                                    }
                                 } else {
                                     Toast.makeText(
                                         context,

@@ -1,5 +1,6 @@
 package com.example.ouistici.data.api
 
+import com.example.ouistici.data.dto.AnnonceDto
 import com.example.ouistici.data.dto.BaliseDto
 import com.example.ouistici.model.Balise
 import com.google.gson.JsonObject
@@ -17,4 +18,8 @@ interface OuisticiApi {
     @Headers("Content-Type: application/json")
     @POST("infos")
     fun setNameAndPlace(@Body nameAndPlace: JsonObject): Call<BaliseDto>
+
+    @Headers("Content-Type: application/json")
+    @POST("defaultmessage")
+    fun setDefaultMessage(@Body defaultMessage: JsonObject): Call<BaliseDto>
 }

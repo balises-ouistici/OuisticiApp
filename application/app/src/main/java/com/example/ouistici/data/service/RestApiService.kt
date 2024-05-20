@@ -1,6 +1,7 @@
 package com.example.ouistici.data.service
 
 import com.example.ouistici.data.api.OuisticiApi
+import com.example.ouistici.data.dto.AnnonceDto
 import com.example.ouistici.data.dto.BaliseDto
 import com.example.ouistici.ui.baliseViewModel.RetrofitClient
 import com.google.gson.JsonObject
@@ -9,6 +10,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class RestApiService {
+    // Page infos balise
     fun setVolume(baliseData: BaliseDto, onResult: (BaliseDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
         val volume = JsonObject().apply {
@@ -47,5 +49,22 @@ class RestApiService {
     }
 
 
-
+    // Page choix des annonces
+    fun setDefaultMessage(baliseData: BaliseDto, onResult: (BaliseDto?) -> Unit) {
+        val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
+        val defaultMessage = JsonObject().apply {
+            addProperty("id_message", baliseData.defaultMessage)
+        }
+        retrofit.setDefaultMessage(defaultMessage).enqueue(
+            object: Callback<BaliseDto> {
+                override fun onFailure(call: Call<BaliseDto>, t: Throwable) {
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<BaliseDto>, response: Response<BaliseDto>) {
+                    val changes = response.body()
+                    onResult(changes)
+                }
+            }
+        )
+    }
 }
