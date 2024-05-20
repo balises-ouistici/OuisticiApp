@@ -222,7 +222,7 @@ fun DefaultMessagePopup(
     navController: NavController,
     onDismiss: () -> Unit
 ) {
-    var selectedAnnonce: Annonce? by remember { mutableStateOf(null) }
+    var selectedAnnonce: Annonce? by remember { mutableStateOf(balise.defaultMessage) }
 
     val context = LocalContext.current
 
