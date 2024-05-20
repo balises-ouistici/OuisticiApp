@@ -12,7 +12,7 @@ import retrofit2.http.Path
 interface OuisticiApi {
     @Headers("Content-Type: application/json")
     @POST("volume")
-    fun setVolume(@Body volume: Float): Call<BaliseDto>
+    fun setVolume(@Body volume: JsonObject): Call<BaliseDto>
 
     @Headers("Content-Type: application/json")
     @POST("infos")
