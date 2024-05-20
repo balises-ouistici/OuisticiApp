@@ -1,5 +1,6 @@
 package com.example.ouistici.ui.annonceVocal
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -45,6 +46,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ouistici.R
+import com.example.ouistici.data.dto.AnnonceDto
+import com.example.ouistici.data.dto.BaliseDto
+import com.example.ouistici.data.dto.FileAnnonceDto
+import com.example.ouistici.data.service.RestApiService
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.AndroidAudioRecorder
 import com.example.ouistici.model.Annonce
@@ -53,6 +58,7 @@ import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.theme.FontColor
 import kotlinx.coroutines.delay
 import java.io.File
+import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
 
 
@@ -142,8 +148,23 @@ fun AnnonceVocale(
                         modifier = Modifier.size(70.dp)
                     )
                 }
-            }
 
+                Spacer(modifier = Modifier.height(50.dp))
+
+
+                TextField(
+                    value = textValue,
+                    onValueChange = {
+                        textValue = it
+                        textValueInput = it.text
+                    },
+                    label = { Text(stringResource(R.string.entrez_le_nom)) },
+                    textStyle = TextStyle(fontSize = 18.sp),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+
+
+            }
             2 -> {
                 LargeFloatingActionButton(
                     onClick = {
@@ -186,6 +207,19 @@ fun AnnonceVocale(
                     }
                 }
 
+                Spacer(modifier = Modifier.height(50.dp))
+
+
+                TextField(
+                    value = textValue,
+                    onValueChange = {
+                        textValue = it
+                        textValueInput = it.text
+                    },
+                    label = { Text(stringResource(R.string.entrez_le_nom)) },
+                    textStyle = TextStyle(fontSize = 18.sp),
+                    modifier = Modifier.fillMaxWidth(),
+                )
 
 
             }
@@ -246,65 +280,103 @@ fun AnnonceVocale(
                     color = FontColor,
                     modifier = Modifier.padding(9.dp)
                 )
+
+                Spacer(modifier = Modifier.height(50.dp))
+
+
+                TextField(
+                    value = textValue,
+                    onValueChange = {
+                        textValue = it
+                        textValueInput = it.text
+                    },
+                    label = { Text(stringResource(R.string.entrez_le_nom)) },
+                    textStyle = TextStyle(fontSize = 18.sp),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+
+                Button(
+                    onClick = {
+                        if ( textValueInput != "") {
+                            val durationInSeconds = TimeUnit.MILLISECONDS.toSeconds(time)
+
+                            val apiService = RestApiService()
+                            val annInfo = AnnonceDto(
+                                upload_sound_url = null,
+                                id_annonce = balise.createId(),
+                                nom = textValueInput,
+                                type = TypeAnnonce.AUDIO.toString(),
+                                contenu = "",
+                                langue = "",
+                                duree = durationInSeconds.toInt()
+                            )
+
+                            apiService.createAnnonce(annInfo) {
+                                if ( it?.upload_sound_url != null ) {
+
+                                    val audioInfo = FileAnnonceDto(
+                                        code = null,
+                                        value = it.upload_sound_url,
+                                        audiofile = audioFile
+                                    )
+                                    apiService.createAudio(audioInfo) {
+                                        Log.e("CreateAnnonce","Échec création d'annonce : $it")
+
+                                        if ( it?.code != null ) {
+                                            balise.annonces.add(
+                                                Annonce(balise.createId(),
+                                                    textValueInput,
+                                                    TypeAnnonce.AUDIO,
+                                                    audioFile,
+                                                    null,
+                                                    null,
+                                                    durationInSeconds.toInt())
+                                            )
+
+                                            Toast.makeText(
+                                                context,
+                                                context.getString(R.string.annonce_ajout_e),
+                                                Toast.LENGTH_LONG)
+                                                .show()
+                                        } else {
+                                            Log.e("CreateAnnonce","Échec création d'annonce")
+                                            Toast.makeText(
+                                                context,
+                                                "Échec lors de l'envoie du fichier au serveur",
+                                                Toast.LENGTH_LONG)
+                                                .show()
+                                        }
+                                    }
+                                } else {
+                                    Log.e("CreateAnnonce","Échec création d'annonce")
+                                    Toast.makeText(
+                                        context,
+                                        "Échec lors de la création de l'annonce",
+                                        Toast.LENGTH_LONG)
+                                        .show()
+                                }
+                            }
+                            navController.navigate("annonceVocal")
+                        } else {
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.action_impossible_vous_devez_saisir_un_nom),
+                                Toast.LENGTH_LONG)
+                                .show()
+                        }
+                    },
+                    modifier = Modifier.padding(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
+                ) {
+                    Text(
+                        text = stringResource(R.string.enregistrer),
+                        color = Color.White
+                    )
+                }
+
+
             }
         }
-
-        Spacer(modifier = Modifier.height(50.dp))
-
-
-        TextField(
-            value = textValue,
-            onValueChange = {
-                textValue = it
-                textValueInput = it.text
-            },
-            label = { Text(stringResource(R.string.entrez_le_nom)) },
-            textStyle = TextStyle(fontSize = 18.sp),
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Button(
-            onClick = {
-                if ( textValueInput != "" && time.toInt() != 0 ) {
-                    val durationInSeconds = TimeUnit.MILLISECONDS.toSeconds(time)
-                    balise.annonces.add(Annonce(balise.createId(), textValueInput, TypeAnnonce.AUDIO, audioFile, null, null, durationInSeconds.toInt()))
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.annonce_ajout_e),
-                        Toast.LENGTH_LONG)
-                        .show()
-                    navController.navigate("annonceVocal")
-                }
-                if ( time.toInt() == 0 && textValueInput == "" ) {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.action_impossible_vous_devez_enregistrer_un_audio_et_saisir_un_nom),
-                        Toast.LENGTH_LONG)
-                        .show()
-                }
-                if ( time.toInt() == 0 && textValueInput != "" ) {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.action_impossible_vous_devez_enregistrer_un_audio),
-                        Toast.LENGTH_LONG)
-                        .show()
-                }
-                if ( time.toInt() != 0 && textValueInput == "" ) {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.action_impossible_vous_devez_saisir_un_nom),
-                        Toast.LENGTH_LONG)
-                        .show()
-                }
-            },
-            modifier = Modifier.padding(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
-        ) {
-            Text(
-                text = stringResource(R.string.enregistrer),
-                color = Color.White
-            )
-        }
-
     }
 }
 

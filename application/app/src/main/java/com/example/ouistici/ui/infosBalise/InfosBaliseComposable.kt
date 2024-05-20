@@ -237,20 +237,20 @@ fun InfosBalise(
 
                 Button(
                     onClick = {
-                        balise.volume = sliderPosition
                         val apiService = RestApiService()
                         val balInfo = BaliseDto(
                             balId = null,
                             nom = balise.nom,
                             lieu = balise.lieu,
                             defaultMessage = balise.defaultMessage?.id,
-                            volume = balise.volume,
+                            volume = sliderPosition,
                             sysOnOff = balise.sysOnOff,
                             ipBal = balise.ipBal
                         )
 
                         apiService.setVolume(balInfo) {
                             if ( it?.balId != null ) {
+                                balise.volume = sliderPosition
                                 Log.d("InfosBalise","Nouveau volume !")
                                 Toast.makeText(
                                     context,
@@ -261,7 +261,7 @@ fun InfosBalise(
                                 Log.e("InfosBalise","Échec nouveau volume")
                                 Toast.makeText(
                                     context,
-                                    "Erreur enregistrement du volume",
+                                    "Échec lors de l'enregistrement du volume",
                                     Toast.LENGTH_LONG)
                                     .show()
                             }
@@ -366,18 +366,11 @@ fun ModifyInfosBalisePopup(
                     Button(
                         onClick = {
                             if ( nomBalise != "" ) {
-                                if ( lieuBalise != "" ) {
-                                    balise.lieu = lieuBalise
-                                } else {
-                                    balise.lieu = ""
-                                }
-                                balise.nom = nomBalise
-
                                 val apiService = RestApiService()
                                 val balInfo = BaliseDto(
                                     balId = null,
-                                    nom = balise.nom,
-                                    lieu = balise.lieu,
+                                    nom = nomBalise,
+                                    lieu = lieuBalise,
                                     defaultMessage = balise.defaultMessage?.id,
                                     volume = balise.volume,
                                     sysOnOff = balise.sysOnOff,
@@ -387,6 +380,8 @@ fun ModifyInfosBalisePopup(
                                 apiService.setNameAndPlace(balInfo) {
                                     Log.e("InfosBalise","Échec nom/lieu : ${it?.balId}")
                                     if ( it?.balId != null ) {
+                                        balise.lieu = lieuBalise
+                                        balise.nom = nomBalise
                                         Log.d("InfosBalise","Nouveau nom et lieu !")
                                         Toast.makeText(
                                             context,
@@ -397,7 +392,7 @@ fun ModifyInfosBalisePopup(
                                         Log.e("InfosBalise","Échec nom/lieu")
                                         Toast.makeText(
                                             context,
-                                            "Erreur enregistrement nom et lieu",
+                                            "Échec lors de l'enregistrement du nom et du lieu",
                                             Toast.LENGTH_LONG)
                                             .show()
                                     }

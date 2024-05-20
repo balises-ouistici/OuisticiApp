@@ -269,14 +269,12 @@ fun DefaultMessagePopup(
                         Button(
                             onClick = {
                                 if (selectedAnnonce != null) {
-                                    balise.defaultMessage = selectedAnnonce
-
                                     val apiService = RestApiService()
                                     val balInfo = BaliseDto(
                                         balId = null,
                                         nom = balise.nom,
                                         lieu = balise.lieu,
-                                        defaultMessage = balise.defaultMessage?.id,
+                                        defaultMessage = selectedAnnonce!!.id,
                                         volume = balise.volume,
                                         sysOnOff = balise.sysOnOff,
                                         ipBal = balise.ipBal
@@ -284,6 +282,7 @@ fun DefaultMessagePopup(
 
                                     apiService.setDefaultMessage(balInfo) {
                                         if (it?.balId != null) {
+                                            balise.defaultMessage = selectedAnnonce
                                             Log.d("InfosBalise", "Nouvelle annonce par défaut !")
                                             Toast.makeText(
                                                 context,
@@ -294,7 +293,7 @@ fun DefaultMessagePopup(
                                             Log.e("InfosBalise", "Échec nouvelle annonce par défaut")
                                             Toast.makeText(
                                                 context,
-                                                "Erreur enregistrement de l'annonce par défaut",
+                                                "Échec lors de l'enregistrement de l'annonce par défaut",
                                                 Toast.LENGTH_LONG
                                             )
                                                 .show()

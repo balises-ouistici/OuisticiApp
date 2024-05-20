@@ -3,8 +3,13 @@ package com.example.ouistici.data.service
 import com.example.ouistici.data.api.OuisticiApi
 import com.example.ouistici.data.dto.AnnonceDto
 import com.example.ouistici.data.dto.BaliseDto
+import com.example.ouistici.data.dto.FileAnnonceDto
 import com.example.ouistici.ui.baliseViewModel.RetrofitClient
 import com.google.gson.JsonObject
+import com.google.gson.annotations.SerializedName
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -67,4 +72,58 @@ class RestApiService {
             }
         )
     }
+
+
+    // Création d'annonce
+    fun createAnnonce(annonceData: AnnonceDto, onResult: (AnnonceDto?) -> Unit) {
+        val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
+        val annonce = JsonObject().apply {
+            addProperty("id_annonce", annonceData.id_annonce)
+            addProperty("nom", annonceData.nom)
+            addProperty("type", annonceData.type)
+            addProperty("contenu", annonceData.contenu)
+            addProperty("lang", annonceData.langue)
+            addProperty("duree", annonceData.duree)
+        }
+        retrofit.createAnnonce(annonce).enqueue(
+            object: Callback<AnnonceDto> {
+                override fun onFailure(call: Call<AnnonceDto>, t: Throwable) {
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<AnnonceDto>, response: Response<AnnonceDto>) {
+                    val changes = response.body()
+                    onResult(changes)
+                }
+            }
+        )
+    }
+
+
+    fun createAudio(fileAnnonceData: FileAnnonceDto, onResult: (FileAnnonceDto?) -> Unit) {
+        val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
+
+        // Create RequestBody instance from file
+        val audioFile = fileAnnonceData.audiofile
+        val requestFile = RequestBody.create(MediaType.parse("audio/*"), audioFile)
+        val body = MultipartBody.Part.createFormData("audiofile", audioFile.name, requestFile)
+
+        // Create description part
+        val description = RequestBody.create(MultipartBody.FORM, fileAnnonceData.value)
+
+        retrofit.createAudio(description, body).enqueue(
+            object: Callback<FileAnnonceDto> {
+                override fun onFailure(call: Call<FileAnnonceDto>, t: Throwable) {
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<FileAnnonceDto>, response: Response<FileAnnonceDto>) {
+                    val changes = response.body()
+                    onResult(changes)
+                }
+            }
+        )
+    }
+
+
+
+
 }
