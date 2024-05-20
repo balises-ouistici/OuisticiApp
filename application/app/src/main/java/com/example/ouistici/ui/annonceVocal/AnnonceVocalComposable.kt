@@ -85,7 +85,7 @@ fun AnnonceVocale(
     val compteur : Int = balise.annonces.count()
 
 
-    val audioFile = File(cacheDir, balise.nom+"-"+compteur+".mp3")
+    val audioFile = File(cacheDir, balise.nom+"-"+compteur+".wav")
 
     var currentStep by remember { mutableStateOf(1) }
 
