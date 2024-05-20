@@ -152,7 +152,7 @@ fun InfosBalise(
                         Text(
                             text = stringResource(
                                 R.string.message_d_faut_info,
-                                balise.defaultMessage!!
+                                balise.defaultMessage!!.nom
                             ),
                             color = FontColor
                         )
