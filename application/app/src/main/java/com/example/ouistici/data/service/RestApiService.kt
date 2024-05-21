@@ -1,12 +1,12 @@
 package com.example.ouistici.data.service
 
+import android.widget.Toast
 import com.example.ouistici.data.api.OuisticiApi
 import com.example.ouistici.data.dto.AnnonceDto
 import com.example.ouistici.data.dto.BaliseDto
 import com.example.ouistici.data.dto.FileAnnonceDto
 import com.example.ouistici.ui.baliseViewModel.RetrofitClient
 import com.google.gson.JsonObject
-import com.google.gson.annotations.SerializedName
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -54,6 +54,24 @@ class RestApiService {
     }
 
 
+    fun testSound(callback : (Int) -> Unit) {
+        val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
+        retrofit.testSound().enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                callback(response.code())
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                println("La requête a échoué: ${t.message}")
+                callback(-1)
+            }
+        })
+    }
+
+
+
+
+
     // Page choix des annonces
     fun setDefaultMessage(baliseData: BaliseDto, onResult: (BaliseDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
@@ -84,6 +102,8 @@ class RestApiService {
             addProperty("contenu", annonceData.contenu)
             addProperty("lang", annonceData.langue)
             addProperty("duree", annonceData.duree)
+            addProperty("filename", annonceData.filename)
+
         }
         retrofit.createAnnonce(annonce).enqueue(
             object: Callback<AnnonceDto> {

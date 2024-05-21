@@ -276,7 +276,32 @@ fun InfosBalise(
                     )
                 }
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        if ( balise.defaultMessage == null ) {
+                            Toast.makeText(
+                                context,
+                                "Impossible, il n'y a pas d'annonce par défaut",
+                                Toast.LENGTH_LONG)
+                                .show()
+                        } else {
+                            val apiService = RestApiService()
+                            apiService.testSound() { statusCode ->
+                                if (statusCode == 200 ) {
+                                    Toast.makeText(
+                                        context,
+                                        "Test du son",
+                                        Toast.LENGTH_LONG)
+                                        .show()
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Échec du test son",
+                                        Toast.LENGTH_LONG)
+                                        .show()
+                                }
+                            }
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(TestButtonColor)
                 ) {
                     Text(

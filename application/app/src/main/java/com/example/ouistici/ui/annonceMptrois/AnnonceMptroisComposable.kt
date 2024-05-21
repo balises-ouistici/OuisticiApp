@@ -5,6 +5,7 @@ import android.content.Context
 import android.media.MediaPlayer
 import android.net.Uri
 import android.provider.OpenableColumns
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -43,6 +44,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ouistici.R
+import com.example.ouistici.data.dto.AnnonceDto
+import com.example.ouistici.data.dto.FileAnnonceDto
+import com.example.ouistici.data.service.RestApiService
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
@@ -177,12 +181,65 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
         Button(
             onClick = {
                 if ( textValueInput != "" && audioFile != null ) {
-                    balise.annonces.add(Annonce(balise.createId(), textValueInput, TypeAnnonce.AUDIO, audioFile, null, null, duration))
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.annonce_ajout_e),
-                        Toast.LENGTH_LONG)
-                        .show()
+                    val apiService = RestApiService()
+                    val annInfo = AnnonceDto(
+                        upload_sound_url = null,
+                        id_annonce = balise.createId(),
+                        nom = textValueInput,
+                        type = TypeAnnonce.AUDIO.toString(),
+                        contenu = "",
+                        langue = "",
+                        duree = duration,
+                        filename = audioFile!!.name
+                    )
+
+                    apiService.createAnnonce(annInfo) {
+                        if ( it?.upload_sound_url != null ) {
+                            val audioInfo = FileAnnonceDto(
+                                code = null,
+                                value = it.upload_sound_url,
+                                audiofile = audioFile!!
+                            )
+                            apiService.createAudio(audioInfo) {
+                                Log.e("CreateAnnonce","Échec création d'annonce : $it")
+
+                                if ( it?.code != null ) {
+                                    balise.annonces.add(
+                                        Annonce(
+                                            balise.createId(),
+                                            textValueInput,
+                                            TypeAnnonce.AUDIO,
+                                            audioFile,
+                                            null,
+                                            null,
+                                            duration
+                                        )
+                                    )
+
+
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.annonce_ajout_e),
+                                        Toast.LENGTH_LONG)
+                                        .show()
+                                } else {
+                                    Log.e("CreateAnnonce","Échec création d'annonce")
+                                    Toast.makeText(
+                                        context,
+                                        "Échec lors de l'envoie du fichier au serveur",
+                                        Toast.LENGTH_LONG)
+                                        .show()
+                                }
+                            }
+                        } else {
+                            Log.e("CreateAnnonce","Échec création d'annonce")
+                            Toast.makeText(
+                                context,
+                                "Échec lors de la création de l'annonce",
+                                Toast.LENGTH_LONG)
+                                .show()
+                        }
+                    }
                     navController.navigate("annonceMptrois")
                 }
                 if ( audioFile == null && textValueInput == "" ) {

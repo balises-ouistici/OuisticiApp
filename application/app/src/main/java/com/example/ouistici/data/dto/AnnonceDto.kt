@@ -13,5 +13,6 @@ class AnnonceDto(
     @SerializedName("type") val  type : String,
     @SerializedName("contenu") val  contenu : String?,
     @SerializedName("langue") val  langue : String?,
-    @SerializedName("duree") val  duree : Int?
+    @SerializedName("duree") val  duree : Int?,
+    @SerializedName("filename") val  filename : String?
 )

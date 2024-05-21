@@ -308,7 +308,8 @@ fun AnnonceVocale(
                                 type = TypeAnnonce.AUDIO.toString(),
                                 contenu = "",
                                 langue = "",
-                                duree = durationInSeconds.toInt()
+                                duree = durationInSeconds.toInt(),
+                                filename = audioFile.name
                             )
 
                             apiService.createAnnonce(annInfo) {
