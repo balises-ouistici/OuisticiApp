@@ -34,4 +34,20 @@ class AndroidAudioPlayer(
         player?.release()
         player = null
     }
+
+    companion object {
+        fun getAudioDuration(file: File): Int {
+            val mediaPlayer = MediaPlayer()
+            return try {
+                mediaPlayer.setDataSource(file.path)
+                mediaPlayer.prepare()
+                val duration = mediaPlayer.duration
+                mediaPlayer.release()
+                duration
+            } catch (e: Exception) {
+                e.printStackTrace()
+                0
+            }
+        }
+    }
 }
