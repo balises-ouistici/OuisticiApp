@@ -286,10 +286,11 @@ fun InfosBalise(
                         } else {
                             val apiService = RestApiService()
                             apiService.testSound() { statusCode ->
+                                Log.e("InfosBalise","test son : ${statusCode}")
                                 if (statusCode == 200 ) {
                                     Toast.makeText(
                                         context,
-                                        "Test du son",
+                                        "Test du son réussi",
                                         Toast.LENGTH_LONG)
                                         .show()
                                 } else {
