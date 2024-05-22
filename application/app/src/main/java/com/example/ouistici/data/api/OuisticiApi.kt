@@ -9,6 +9,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Multipart
@@ -45,6 +46,10 @@ interface OuisticiApi {
     @Headers("Content-Type: application/json")
     @POST("annonce")
     fun modifyAnnonce(@Body annonce: JsonObject): Call<AnnonceDto>
+
+    @Headers("Content-Type: application/json")
+    @DELETE("annonce")
+    fun deleteAnnonce(@Body annonce: JsonObject): Call<AnnonceDto>
 
     @Multipart
     @POST("annonce/upload_sound")

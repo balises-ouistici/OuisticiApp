@@ -895,6 +895,7 @@ fun ConfirmDeleteAnnoncePopup(
                                 context.getString(R.string.annonce_supprim_e),
                                 Toast.LENGTH_LONG)
                                 .show()
+                            onDismiss()
                             navController.navigate("infosBalise")
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
