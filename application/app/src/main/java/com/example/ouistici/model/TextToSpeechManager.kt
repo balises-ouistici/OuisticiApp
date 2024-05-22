@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import java.io.File
 import java.util.Locale
@@ -29,7 +30,7 @@ class TextToSpeechManager(context: Context) : TextToSpeech.OnInitListener {
         }
     }
 
-    fun saveToFile(text: String, file: File, name: String) {
+    fun saveToFile(text: String, file: File) {
         if (isInitialized) {
             val utteranceId = "AuthorizationManager.createCodeVerifier()"
             val params: HashMap<String, String> = HashMap()
@@ -45,3 +46,4 @@ class TextToSpeechManager(context: Context) : TextToSpeech.OnInitListener {
         }
     }
 }
+

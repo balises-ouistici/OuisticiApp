@@ -39,7 +39,6 @@ import com.example.ouistici.data.dto.FileAnnonceDto
 import com.example.ouistici.data.service.RestApiService
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.Annonce
-import com.example.ouistici.model.AudioPlayer
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.Langue
 import com.example.ouistici.model.LangueManager
@@ -174,9 +173,9 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                     val fileName = balise.nom+"-"+balise.annonces.count()+".wav"
                     val file = File(context.cacheDir, fileName)
 
-                    ttsManager.saveToFile(textContenuInput, file, fileName)
+                    ttsManager.saveToFile(textContenuInput, file)
 
-                    // val duration = AndroidAudioPlayer.getAudioDuration(file) / 1000
+                    val duration = AndroidAudioPlayer.getAudioDuration(file)
 
                     // Log.d("CreateAnnonce","Durée : $duration")
 
@@ -186,10 +185,10 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                         upload_sound_url = null,
                         id_annonce = balise.createId(),
                         nom = textValueInput,
-                        type = TypeAnnonce.AUDIO.toString(),
+                        type = TypeAnnonce.TEXTE.toString(),
                         contenu = textContenuInput,
                         langue = langueSelectionnee.code,
-                        duree = 0,
+                        duree = duration,
                         filename = fileName
                     )
 
@@ -208,11 +207,11 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                                     balise.annonces.add(
                                         Annonce(balise.createId(),
                                             textValueInput,
-                                            TypeAnnonce.AUDIO,
+                                            TypeAnnonce.TEXTE,
                                             file,
                                             textContenuInput,
                                             langueSelectionnee,
-                                            0
+                                            duration
                                         )
                                     )
 
