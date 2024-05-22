@@ -82,10 +82,9 @@ fun AnnonceVocale(
     var textValue by remember { mutableStateOf(TextFieldValue()) }
     var textValueInput by remember { mutableStateOf("") }
 
-    val compteur : Int = balise.annonces.count()
 
 
-    val audioFile = File(cacheDir, balise.nom+"-"+compteur+".wav")
+    val audioFile = File(cacheDir, balise.createId().toString()+".wav")
 
     var currentStep by remember { mutableStateOf(1) }
 
@@ -331,7 +330,9 @@ fun AnnonceVocale(
                                                     audioFile,
                                                     null,
                                                     null,
-                                                    durationInSeconds.toInt())
+                                                    durationInSeconds.toInt(),
+                                                    audioFile.name
+                                                )
                                             )
 
                                             Toast.makeText(

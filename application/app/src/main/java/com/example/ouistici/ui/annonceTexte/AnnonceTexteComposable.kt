@@ -171,7 +171,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                     }
                     ttsManager.setLanguage(locale)
 
-                    val fileName = balise.nom+"-"+balise.annonces.count()+".wav"
+                    val fileName = balise.createId().toString()+".wav"
                     val file = File(context.cacheDir, fileName)
 
                     ttsManager.saveToFile(textContenuInput, file)
@@ -212,7 +212,8 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                                             file,
                                             textContenuInput,
                                             langueSelectionnee,
-                                            duration
+                                            duration,
+                                            balise.createId().toString()+".wav"
                                         )
                                     )
 

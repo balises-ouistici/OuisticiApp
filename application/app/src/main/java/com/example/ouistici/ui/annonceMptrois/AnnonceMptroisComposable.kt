@@ -190,7 +190,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                         contenu = "",
                         langue = "",
                         duree = duration,
-                        filename = audioFile!!.name
+                        filename = balise.createId().toString()+".wav"
                     )
 
                     apiService.createAnnonce(annInfo) {
@@ -212,7 +212,8 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                                             audioFile,
                                             null,
                                             null,
-                                            duration
+                                            duration,
+                                            balise.createId().toString()+".wav"
                                         )
                                     )
 
