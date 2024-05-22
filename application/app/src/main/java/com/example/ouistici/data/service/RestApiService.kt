@@ -119,6 +119,32 @@ class RestApiService {
     }
 
 
+    fun modifyAnnonce(annonceData: AnnonceDto, onResult: (AnnonceDto?) -> Unit) {
+        val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
+        val annonce = JsonObject().apply {
+            addProperty("id_annonce", annonceData.id_annonce)
+            addProperty("nom", annonceData.nom)
+            addProperty("type", annonceData.type)
+            addProperty("contenu", annonceData.contenu)
+            addProperty("lang", annonceData.langue)
+            addProperty("duree", annonceData.duree)
+            addProperty("filename", annonceData.filename)
+
+        }
+        retrofit.modifyAnnonce(annonce).enqueue(
+            object: Callback<AnnonceDto> {
+                override fun onFailure(call: Call<AnnonceDto>, t: Throwable) {
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<AnnonceDto>, response: Response<AnnonceDto>) {
+                    val changes = response.body()
+                    onResult(changes)
+                }
+            }
+        )
+    }
+
+
     fun createAudio(fileAnnonceData: FileAnnonceDto, onResult: (FileAnnonceDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
 

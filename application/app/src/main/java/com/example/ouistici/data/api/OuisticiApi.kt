@@ -28,6 +28,9 @@ interface OuisticiApi {
     @POST("infos")
     fun setNameAndPlace(@Body nameAndPlace: JsonObject): Call<BaliseDto>
 
+    @GET("test_sound")
+    fun testSound(): Call<Void>
+
 
     // Page choix annonce
     @Headers("Content-Type: application/json")
@@ -39,6 +42,10 @@ interface OuisticiApi {
     @PUT("annonce")
     fun createAnnonce(@Body annonce: JsonObject): Call<AnnonceDto>
 
+    @Headers("Content-Type: application/json")
+    @POST("annonce")
+    fun modifyAnnonce(@Body annonce: JsonObject): Call<AnnonceDto>
+
     @Multipart
     @POST("annonce/upload_sound")
     fun createAudio(
@@ -46,7 +53,6 @@ interface OuisticiApi {
         @Part audiofile: MultipartBody.Part
     ): Call<FileAnnonceDto>
 
-    @GET("test_sound")
-    fun testSound(): Call<Void>
+
 
 }

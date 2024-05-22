@@ -64,12 +64,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.ouistici.R
+import com.example.ouistici.data.dto.AnnonceDto
 import com.example.ouistici.data.dto.BaliseDto
+import com.example.ouistici.data.dto.FileAnnonceDto
 import com.example.ouistici.data.service.RestApiService
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.LangueManager
+import com.example.ouistici.model.TextToSpeechManager
 import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.annonceTexte.DropdownMenuItemLangue
 import com.example.ouistici.ui.theme.BodyBackground
@@ -77,6 +80,7 @@ import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
 import com.example.ouistici.ui.theme.TestButtonColor
 import java.io.File
+import java.util.Locale
 
 
 /**
@@ -458,6 +462,7 @@ fun ModifyInfosBalisePopup(
 @Composable
 fun ModifyAnnoncesBaliseTextePopup(
     annonce: Annonce,
+    balise: Balise,
     navController: NavController,
     onDismiss: () -> Unit
 ) {
@@ -469,6 +474,7 @@ fun ModifyAnnoncesBaliseTextePopup(
     var langueSelectionnee by remember { mutableStateOf(annonce.langue) }
     var expanded by remember { mutableStateOf(false) }
 
+    val ttsManager = remember { TextToSpeechManager(context) }
 
 
     Dialog(
@@ -581,18 +587,79 @@ fun ModifyAnnoncesBaliseTextePopup(
                     Button(
                         onClick = {
                             if (nomAnnonce != "" && contenuAnnonceTexte != "") {
+                                val locale = when (langueSelectionnee?.code) {
+                                    "fr" -> Locale.FRENCH
+                                    "en" -> Locale.ENGLISH
+                                    else -> Locale.FRENCH
+                                }
+                                ttsManager.setLanguage(locale)
 
-                                annonce.contenu = contenuAnnonceTexte
-                                annonce.nom = nomAnnonce
-                                annonce.langue = langueSelectionnee
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.informations_modifi_es),
-                                    Toast.LENGTH_LONG
+                                val fileName = balise.nom+"-"+annonce.id+".wav"
+                                val file = File(context.cacheDir, fileName)
+
+                                ttsManager.saveToFile(contenuAnnonceTexte, file)
+
+                                val duration = AndroidAudioPlayer.getAudioDuration(file) / 1000
+
+                                // Log.d("CreateAnnonce","Durée : $duration")
+
+
+                                val apiService = RestApiService()
+                                val annInfo = AnnonceDto(
+                                    upload_sound_url = null,
+                                    id_annonce = annonce.id,
+                                    nom = nomAnnonce,
+                                    type = TypeAnnonce.TEXTE.toString(),
+                                    contenu = contenuAnnonceTexte,
+                                    langue = langueSelectionnee?.code,
+                                    duree = duration,
+                                    filename = fileName
                                 )
-                                    .show()
+
+                                apiService.modifyAnnonce(annInfo) {
+                                    if ( it?.nom != null ) {
+
+                                        val audioInfo = FileAnnonceDto(
+                                            code = null,
+                                            value = it.nom,
+                                            audiofile = file
+                                        )
+                                        apiService.createAudio(audioInfo) {
+                                            Log.e("CreateAnnonce","Échec création d'annonce : $it")
+
+                                            if ( it?.code != null ) {
+                                                annonce.contenu = contenuAnnonceTexte
+                                                annonce.nom = nomAnnonce
+                                                annonce.langue = langueSelectionnee
+                                                annonce.duree = duration
+                                                annonce.audio = file
+
+                                                Toast.makeText(
+                                                    context,
+                                                    context.getString(R.string.informations_modifi_es),
+                                                    Toast.LENGTH_LONG
+                                                )
+                                                    .show()
+                                                onDismiss()
+                                            } else {
+                                                Log.e("CreateAnnonce","Échec création d'annonce")
+                                                Toast.makeText(
+                                                    context,
+                                                    "Échec lors de l'envoie du fichier au serveur",
+                                                    Toast.LENGTH_LONG)
+                                                    .show()
+                                            }
+                                        }
+                                    } else {
+                                        Log.e("CreateAnnonce","Échec création d'annonce")
+                                        Toast.makeText(
+                                            context,
+                                            "Échec lors de la création de l'annonce",
+                                            Toast.LENGTH_LONG)
+                                            .show()
+                                    }
+                                }
                                 navController.navigate("infosBalise")
-                                onDismiss()
                             } else {
                                 if ( nomAnnonce == "" && contenuAnnonceTexte != "" ) {
                                     Toast.makeText(
@@ -1007,7 +1074,8 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                             if (showModifyAnnonceTextPopup.value) {
                                 ModifyAnnoncesBaliseTextePopup(
                                     annonce = balise.annonces[idAnnonceEdit.intValue],
-                                    navController = navController
+                                    navController = navController,
+                                    balise = balise
                                 ) { showModifyAnnonceTextPopup.value = false }
                             }
 
