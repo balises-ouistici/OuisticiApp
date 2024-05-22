@@ -35,7 +35,7 @@ class TextToSpeechManager(context: Context) : TextToSpeech.OnInitListener {
             val utteranceId = "AuthorizationManager.createCodeVerifier()"
             val params: HashMap<String, String> = HashMap()
             params[TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID] = utteranceId
-            tts.synthesizeToFile(text, params, file.path);
+            tts.synthesizeToFile(text, params, file.path)
         }
     }
 

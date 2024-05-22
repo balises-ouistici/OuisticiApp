@@ -176,7 +176,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
 
                     ttsManager.saveToFile(textContenuInput, file)
 
-                    val duration = AndroidAudioPlayer.getAudioDuration(file)
+                    val duration = AndroidAudioPlayer.getAudioDuration(file) / 1000
 
                     // Log.d("CreateAnnonce","Durée : $duration")
 
