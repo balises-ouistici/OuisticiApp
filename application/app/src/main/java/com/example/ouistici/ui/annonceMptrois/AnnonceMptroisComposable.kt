@@ -194,10 +194,10 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                     )
 
                     apiService.createAnnonce(annInfo) {
-                        if ( it?.upload_sound_url != null ) {
+                        if ( it?.nom != null ) {
                             val audioInfo = FileAnnonceDto(
                                 code = null,
-                                value = it.upload_sound_url,
+                                value = it.nom,
                                 audiofile = audioFile!!
                             )
                             apiService.createAudio(audioInfo) {

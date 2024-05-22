@@ -307,6 +307,7 @@ fun DefaultMessagePopup(
                                         .show()
                                 }
                                 onDismiss()
+                                navController.navigate("manageAnnonce")
                             },
                             colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                             modifier = Modifier.padding(end = 8.dp)

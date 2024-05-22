@@ -1,5 +1,6 @@
 package com.example.ouistici.ui.annonceTexte
 
+import android.media.MediaPlayer
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -193,11 +194,11 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                     )
 
                     apiService.createAnnonce(annInfo) {
-                        if ( it?.upload_sound_url != null ) {
+                        if ( it?.nom != null ) {
 
                             val audioInfo = FileAnnonceDto(
                                 code = null,
-                                value = it.upload_sound_url,
+                                value = it.nom,
                                 audiofile = file
                             )
                             apiService.createAudio(audioInfo) {
@@ -278,4 +279,13 @@ fun DropdownMenuItemLangue(
             .clickable(onClick = { onClick(langue) })
             .padding(vertical = 8.dp, horizontal = 16.dp)
     )
+}
+
+fun getAudioDurationText(file: File): Int {
+    val mediaPlayer = MediaPlayer()
+    mediaPlayer.setDataSource(file.absolutePath)
+    mediaPlayer.prepare()
+    val duration = mediaPlayer.duration
+    mediaPlayer.release()
+    return duration / 1000 // Convertit la durée en millisecondes en secondes
 }
