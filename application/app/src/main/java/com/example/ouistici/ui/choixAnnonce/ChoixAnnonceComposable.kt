@@ -50,11 +50,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -957,6 +960,30 @@ fun RowScope.TableHeaderCell(
 }
 
 
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun RowScope.TableHeaderCellButtons(
+    text: String,
+    weight: Float,
+    textColor: Color,
+) {
+    Text(
+        text = text,
+        Modifier
+            .border(1.dp, Color.Black)
+            .weight(weight)
+            .padding(8.dp)
+            .height(30.dp)
+            .semantics {
+                this.invisibleToUser()
+            },
+        color = textColor
+    )
+}
+
+
+
 /**
  * @brief Composable function for rendering a cell in the table representing days of the week.
  *
@@ -1067,7 +1094,7 @@ fun TableScreen(balise : Balise, navController: NavController) {
                 TableHeaderCell(text = stringResource(R.string.nom_mess), weight = column1Weight, textColor = Color.Black)
                 TableHeaderCell(text = stringResource(R.string.jours), weight = columnJours, textColor = Color.Black)
                 TableHeaderCell(text = stringResource(R.string.horaires), weight = column2Weight, textColor = Color.Black)
-                TableHeaderCell(text = "", weight = .26f, textColor = Color.Black)
+                TableHeaderCellButtons(text = "", weight = .26f, textColor = Color.Black)
             }
         }
 

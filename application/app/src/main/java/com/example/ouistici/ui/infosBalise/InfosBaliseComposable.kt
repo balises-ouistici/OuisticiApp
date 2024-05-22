@@ -50,11 +50,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -836,6 +839,27 @@ fun RowScope.TableCell(
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun RowScope.TableCellButtons(
+    text: String,
+    weight: Float,
+    textColor: Color,
+) {
+    Text(
+        text = text,
+        Modifier
+            .border(1.dp, Color.Black)
+            .weight(weight)
+            .padding(8.dp)
+            .height(30.dp)
+            .semantics {
+                this.invisibleToUser()
+            },
+        color = textColor
+    )
+}
+
 
 /**
  * @brief Composable function for rendering a table cell with audio controls within a row.
@@ -935,7 +959,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                 Row(Modifier.background(TableHeaderColor)) {
                     TableCell(text = stringResource(R.string.nom), weight = column1Weight, textColor = Color.Black)
                     TableCell(text = stringResource(R.string.contenu_tableau), weight = column2Weight, textColor = Color.Black)
-                    TableCell(text= "", weight = .26f, textColor = Color.Black)
+                    TableCellButtons(text= "", weight = .26f, textColor = Color.Black)
                 }
             }
 
