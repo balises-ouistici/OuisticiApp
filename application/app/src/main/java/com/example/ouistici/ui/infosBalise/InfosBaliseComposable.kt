@@ -193,6 +193,7 @@ fun InfosBalise(
             if ( showModifyInfosBalisePopup.value ) {
                 ModifyInfosBalisePopup(
                     balise = balise,
+                    navController = navController
                 ) { showModifyInfosBalisePopup.value = false }
             }
         }
@@ -333,6 +334,7 @@ fun InfosBalise(
 @Composable
 fun ModifyInfosBalisePopup(
     balise : Balise,
+    navController: NavController,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
@@ -431,6 +433,7 @@ fun ModifyInfosBalisePopup(
                                     }
                                 }
                                 onDismiss()
+                                navController.navigate("infosBalise")
                             } else {
                                 Toast.makeText(
                                     context,
@@ -594,7 +597,7 @@ fun ModifyAnnoncesBaliseTextePopup(
                                 }
                                 ttsManager.setLanguage(locale)
 
-                                val fileName = balise.nom+"-"+annonce.id+".wav"
+                                val fileName = annonce.id.toString()+".wav"
                                 val file = File(context.cacheDir, fileName)
 
                                 ttsManager.saveToFile(contenuAnnonceTexte, file)
@@ -711,6 +714,7 @@ fun ModifyAnnoncesBaliseTextePopup(
 @Composable
 fun ModifyAnnoncesBaliseAudioPopup(
     annonce: Annonce,
+    balise: Balise,
     navController: NavController,
     onDismiss: () -> Unit
 ) {
@@ -780,13 +784,36 @@ fun ModifyAnnoncesBaliseAudioPopup(
                     Button(
                         onClick = {
                             if (nomAnnonce != "") {
-                                annonce.nom = nomAnnonce
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.informations_modifi_es),
-                                    Toast.LENGTH_LONG
+                                val apiService = RestApiService()
+                                val annInfo = AnnonceDto(
+                                    upload_sound_url = null,
+                                    id_annonce = annonce.id,
+                                    nom = nomAnnonce,
+                                    type = TypeAnnonce.AUDIO.toString(),
+                                    contenu = "",
+                                    langue = "",
+                                    duree = annonce.duree,
+                                    filename = annonce.id.toString()+".wav"
                                 )
-                                    .show()
+
+                                apiService.modifyAnnonce(annInfo) {
+                                    if ( it?.nom != null ) {
+                                        annonce.nom = nomAnnonce
+                                        Toast.makeText(
+                                            context,
+                                            context.getString(R.string.informations_modifi_es),
+                                            Toast.LENGTH_LONG
+                                        )
+                                            .show()
+                                    } else {
+                                        Log.e("CreateAnnonce","Échec création d'annonce")
+                                        Toast.makeText(
+                                            context,
+                                            "Échec lors de la création de l'annonce",
+                                            Toast.LENGTH_LONG)
+                                            .show()
+                                    }
+                                }
                                 navController.navigate("infosBalise")
                                 onDismiss()
                             } else {
@@ -1115,7 +1142,9 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
 
                         if (showModifyAnnonceAudioPopup.value) {
                             ModifyAnnoncesBaliseAudioPopup(
-                                annonce = balise.annonces[idAnnonceEdit.intValue],                                navController = navController
+                                annonce = balise.annonces[idAnnonceEdit.intValue],
+                                balise = balise,
+                                navController = navController
                             ) { showModifyAnnonceAudioPopup.value = false }
                         }
 
