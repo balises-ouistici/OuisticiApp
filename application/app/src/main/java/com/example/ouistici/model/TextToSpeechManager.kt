@@ -31,16 +31,10 @@ class TextToSpeechManager(context: Context) : TextToSpeech.OnInitListener {
 
     fun saveToFile(text: String, file: File, name: String) {
         if (isInitialized) {
-            val params = Bundle()
-            
-            params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, text)
-            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                tts.synthesizeToFile(text, null, file, utteranceId)
-            } else {
-                @Suppress("deprecation")
-                tts.synthesizeToFile(text.toString(), params, file.absolutePath)
-            }
+            val utteranceId = "AuthorizationManager.createCodeVerifier()"
+            val params: HashMap<String, String> = HashMap()
+            params[TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID] = utteranceId
+            tts.synthesizeToFile(text, params, file.path);
         }
     }
 
