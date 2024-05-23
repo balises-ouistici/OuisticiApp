@@ -886,15 +886,38 @@ fun ConfirmDeleteAnnoncePopup(
                     }
                     Button(
                         onClick = {
-                            if ( balise.defaultMessage == annonce ) {
-                                balise.defaultMessage = null
+                            val apiService = RestApiService()
+                            val annInfo = AnnonceDto(
+                                upload_sound_url = null,
+                                id_annonce = annonce.id,
+                                nom = annonce.nom,
+                                type = annonce.type.toString(),
+                                contenu = annonce.contenu,
+                                langue = annonce.langue.toString(),
+                                duree = annonce.duree,
+                                filename = annonce.filename
+                            )
+
+                            apiService.createAnnonce(annInfo) {
+                                if ( it?.nom != null ) {
+                                    if ( balise.defaultMessage == annonce ) {
+                                        balise.defaultMessage = null
+                                    }
+                                    balise.annonces.remove(annonce)
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.annonce_supprim_e),
+                                        Toast.LENGTH_LONG)
+                                        .show()
+                                } else {
+                                    Log.e("DeleteAnnonce","Échec suppression d'annonce")
+                                    Toast.makeText(
+                                        context,
+                                        "Échec lors de la suppression de l'annonce",
+                                        Toast.LENGTH_LONG)
+                                        .show()
+                                }
                             }
-                            balise.annonces.remove(annonce)
-                            Toast.makeText(
-                                context,
-                                context.getString(R.string.annonce_supprim_e),
-                                Toast.LENGTH_LONG)
-                                .show()
                             onDismiss()
                             navController.navigate("infosBalise")
                         },

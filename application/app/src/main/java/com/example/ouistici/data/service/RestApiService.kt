@@ -149,13 +149,6 @@ class RestApiService {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
         val annonce = JsonObject().apply {
             addProperty("id_annonce", annonceData.id_annonce)
-            addProperty("nom", annonceData.nom)
-            addProperty("type", annonceData.type)
-            addProperty("contenu", annonceData.contenu)
-            addProperty("lang", annonceData.langue)
-            addProperty("duree", annonceData.duree)
-            addProperty("filename", annonceData.filename)
-
         }
         retrofit.deleteAnnonce(annonce).enqueue(
             object: Callback<AnnonceDto> {
