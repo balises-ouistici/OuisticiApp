@@ -48,7 +48,7 @@ interface OuisticiApi {
     fun modifyAnnonce(@Body annonce: JsonObject): Call<AnnonceDto>
 
     @Headers("Content-Type: application/json")
-    @DELETE("annonce")
+    @POST("delannonce")
     fun deleteAnnonce(@Body annonce: JsonObject): Call<AnnonceDto>
 
     @Multipart

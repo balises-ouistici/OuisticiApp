@@ -897,9 +897,8 @@ fun ConfirmDeleteAnnoncePopup(
                                 duree = annonce.duree,
                                 filename = annonce.filename
                             )
-
-                            apiService.createAnnonce(annInfo) {
-                                if ( it?.nom != null ) {
+                            apiService.deleteAnnonce(annInfo) {
+                                if ( it?.id_annonce != null ) {
                                     if ( balise.defaultMessage == annonce ) {
                                         balise.defaultMessage = null
                                     }
