@@ -509,7 +509,7 @@ fun AddPlageHorairePopup(
                                             Log.d("InfosBalise", "Nouvelle plage horaire !")
                                             Toast.makeText(
                                                 context,
-                                                context.getString(R.string.nouvelle_annonce_par_d_faut),
+                                                "Nouvelle plage horaire créée !",
                                                 Toast.LENGTH_LONG)
                                                 .show()
                                         } else {
@@ -522,6 +522,8 @@ fun AddPlageHorairePopup(
                                                 .show()
                                         }
                                     }
+                                    onDismiss()
+                                    navController.navigate("manageAnnonce")
                                 }
                             } else {
                                 Toast.makeText(
@@ -702,16 +704,43 @@ fun ModifyPlageHorairePopup(
                                         Toast.LENGTH_LONG)
                                         .show()
                                 } else {
-                                    plageHoraire?.nomMessage = selectedAnnonce as Annonce
-                                    plageHoraire?.jours = selectedJours
-                                    plageHoraire?.heureDebut = heureDebut as LocalTime
-                                    plageHoraire?.heureFin = heureFin as LocalTime
+                                    val apiService = RestApiService()
+                                    val timeslotInfo = TimeslotDto(
+                                        id_timeslot = plageHoraire!!.id_timeslot,
+                                        id_annonce = selectedAnnonce!!.id,
+                                        monday = JoursSemaine.Lundi in selectedJours,
+                                        tuesday = JoursSemaine.Mardi in selectedJours,
+                                        wednesday = JoursSemaine.Mercredi in selectedJours,
+                                        thursday = JoursSemaine.Jeudi in selectedJours,
+                                        friday = JoursSemaine.Vendredi in selectedJours,
+                                        saturday = JoursSemaine.Samedi in selectedJours,
+                                        sunday = JoursSemaine.Dimanche in selectedJours,
+                                        time_start = heureDebut.toString(),
+                                        time_end = heureFin.toString(),
+                                    )
 
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.informations_modifi_es),
-                                        Toast.LENGTH_LONG)
-                                        .show()
+                                    apiService.modifyTimeslot(timeslotInfo) {
+                                        if (it?.id_timeslot != null) {
+                                            plageHoraire.nomMessage = selectedAnnonce as Annonce
+                                            plageHoraire.jours = selectedJours
+                                            plageHoraire.heureDebut = heureDebut as LocalTime
+                                            plageHoraire.heureFin = heureFin as LocalTime
+                                            Log.d("InfosBalise", "Plage horaire modifiée !")
+                                            Toast.makeText(
+                                                context,
+                                                "La plage horaire a bien été modifiée !",
+                                                Toast.LENGTH_LONG)
+                                                .show()
+                                        } else {
+                                            Log.e("InfosBalise", "Échec modification plage horaire")
+                                            Toast.makeText(
+                                                context,
+                                                "Échec lors de la modification de la plage horaire",
+                                                Toast.LENGTH_LONG
+                                            )
+                                                .show()
+                                        }
+                                    }
                                     onDismiss()
                                     navController.navigate("manageAnnonce")
                                 }
