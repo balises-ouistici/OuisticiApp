@@ -30,4 +30,11 @@ class Balise(
         }
        return annonces.maxOf { it.id } + 1
     }
+
+    fun createIdTimeslot(): Int {
+        if ( plages.isEmpty() ) {
+            return 0
+        }
+        return plages.maxOf { it.id_timeslot } + 1
+    }
 }

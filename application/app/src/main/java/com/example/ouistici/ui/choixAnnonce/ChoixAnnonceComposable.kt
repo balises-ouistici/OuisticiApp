@@ -65,6 +65,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.ouistici.R
 import com.example.ouistici.data.dto.BaliseDto
+import com.example.ouistici.data.dto.TimeslotDto
 import com.example.ouistici.data.service.RestApiService
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
@@ -487,14 +488,40 @@ fun AddPlageHorairePopup(
                                         Toast.LENGTH_LONG)
                                         .show()
                                 } else {
-                                    balise.plages.add(PlageHoraire(selectedAnnonce!!, selectedJours, heureDebut!!, heureFin!!))
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.plage_horaire_ajout_e),
-                                        Toast.LENGTH_LONG)
-                                        .show()
-                                    onDismiss()
-                                    navController.navigate("manageAnnonce")
+                                    val apiService = RestApiService()
+                                    val timeslotInfo = TimeslotDto(
+                                        id_timeslot = balise.createIdTimeslot(),
+                                        id_annonce = selectedAnnonce!!.id,
+                                        monday = JoursSemaine.Lundi in selectedJours,
+                                        tuesday = JoursSemaine.Mardi in selectedJours,
+                                        wednesday = JoursSemaine.Mercredi in selectedJours,
+                                        thursday = JoursSemaine.Jeudi in selectedJours,
+                                        friday = JoursSemaine.Vendredi in selectedJours,
+                                        saturday = JoursSemaine.Samedi in selectedJours,
+                                        sunday = JoursSemaine.Dimanche in selectedJours,
+                                        time_start = heureDebut.toString(),
+                                        time_end = heureFin.toString(),
+                                    )
+
+                                    apiService.createTimeslot(timeslotInfo) {
+                                        if (it?.id_timeslot != null) {
+                                            balise.plages.add(PlageHoraire(balise.createIdTimeslot(), selectedAnnonce!!, selectedJours, heureDebut!!, heureFin!!))
+                                            Log.d("InfosBalise", "Nouvelle plage horaire !")
+                                            Toast.makeText(
+                                                context,
+                                                context.getString(R.string.nouvelle_annonce_par_d_faut),
+                                                Toast.LENGTH_LONG)
+                                                .show()
+                                        } else {
+                                            Log.e("InfosBalise", "Échec nouvelle plage horaire")
+                                            Toast.makeText(
+                                                context,
+                                                "Échec lors de l'enregistrement de la nouvelle plage horaire",
+                                                Toast.LENGTH_LONG
+                                            )
+                                                .show()
+                                        }
+                                    }
                                 }
                             } else {
                                 Toast.makeText(

@@ -10,6 +10,7 @@ import java.time.LocalTime
  * @param heureFin The end time of the time slot.
  */
 class PlageHoraire(
+    var id_timeslot: Int,
     var nomMessage : Annonce,
     var jours : List<JoursSemaine>,
     var heureDebut : LocalTime,

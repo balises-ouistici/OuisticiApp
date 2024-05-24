@@ -5,6 +5,7 @@ import com.example.ouistici.data.api.OuisticiApi
 import com.example.ouistici.data.dto.AnnonceDto
 import com.example.ouistici.data.dto.BaliseDto
 import com.example.ouistici.data.dto.FileAnnonceDto
+import com.example.ouistici.data.dto.TimeslotDto
 import com.example.ouistici.ui.baliseViewModel.RetrofitClient
 import com.google.gson.JsonObject
 import okhttp3.MediaType
@@ -188,6 +189,36 @@ class RestApiService {
         )
     }
 
+
+    // Plages horaires
+    fun createTimeslot(timeslotData: TimeslotDto, onResult: (TimeslotDto?) -> Unit) {
+        val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
+        val timeslot = JsonObject().apply {
+            addProperty("id_timeslot", timeslotData.id_timeslot)
+            addProperty("id_annonce", timeslotData.id_annonce)
+            addProperty("monday", timeslotData.monday)
+            addProperty("tuesday", timeslotData.tuesday)
+            addProperty("wednesday", timeslotData.wednesday)
+            addProperty("thursday", timeslotData.thursday)
+            addProperty("friday", timeslotData.friday)
+            addProperty("saturday", timeslotData.saturday)
+            addProperty("sunday", timeslotData.sunday)
+            addProperty("time_start", timeslotData.time_start)
+            addProperty("time_end", timeslotData.time_end)
+
+        }
+        retrofit.createTimeslot(timeslot).enqueue(
+            object: Callback<TimeslotDto> {
+                override fun onFailure(call: Call<TimeslotDto>, t: Throwable) {
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<TimeslotDto>, response: Response<TimeslotDto>) {
+                    val changes = response.body()
+                    onResult(changes)
+                }
+            }
+        )
+    }
 
 
 

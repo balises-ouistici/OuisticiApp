@@ -3,6 +3,7 @@ package com.example.ouistici.data.api
 import com.example.ouistici.data.dto.AnnonceDto
 import com.example.ouistici.data.dto.BaliseDto
 import com.example.ouistici.data.dto.FileAnnonceDto
+import com.example.ouistici.data.dto.TimeslotDto
 import com.example.ouistici.model.Balise
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
@@ -58,6 +59,11 @@ interface OuisticiApi {
         @Part audiofile: MultipartBody.Part
     ): Call<FileAnnonceDto>
 
+
+    // Plages horaires
+    @Headers("Content-Type: application/json")
+    @PUT("timeslots")
+    fun createTimeslot(@Body timeslot: JsonObject): Call<TimeslotDto>
 
 
 }
