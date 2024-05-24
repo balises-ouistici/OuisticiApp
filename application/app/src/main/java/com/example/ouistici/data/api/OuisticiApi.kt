@@ -69,5 +69,9 @@ interface OuisticiApi {
     @POST("timeslots")
     fun modifyTimeslot(@Body timeslot: JsonObject): Call<TimeslotDto>
 
+    @Headers("Content-Type: application/json")
+    @POST("deltimeslot")
+    fun deleteTimeslot(@Body timeslot: JsonObject): Call<TimeslotDto>
+
 
 }

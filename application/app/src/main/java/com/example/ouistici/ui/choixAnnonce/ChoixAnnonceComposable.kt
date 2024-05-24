@@ -971,12 +971,41 @@ fun ConfirmDeletePlagePopup(
                     }
                     Button(
                         onClick = {
-                            balise.plages.remove(plageHoraire)
-                            Toast.makeText(
-                                context,
-                                context.getString(R.string.plage_horaire_supprim_e),
-                                Toast.LENGTH_LONG)
-                                .show()
+                            val apiService = RestApiService()
+                            val timeslotInfo = TimeslotDto(
+                                id_timeslot = plageHoraire.id_timeslot,
+                                id_annonce = plageHoraire.nomMessage.id,
+                                monday = JoursSemaine.Lundi in plageHoraire.jours,
+                                tuesday = JoursSemaine.Mardi in plageHoraire.jours,
+                                wednesday = JoursSemaine.Mercredi in plageHoraire.jours,
+                                thursday = JoursSemaine.Jeudi in plageHoraire.jours,
+                                friday = JoursSemaine.Vendredi in plageHoraire.jours,
+                                saturday = JoursSemaine.Samedi in plageHoraire.jours,
+                                sunday = JoursSemaine.Dimanche in plageHoraire.jours,
+                                time_start = plageHoraire.heureDebut.toString(),
+                                time_end = plageHoraire.heureFin.toString(),
+                            )
+
+                            apiService.deleteTimeslot(timeslotInfo) {
+                                if (it?.id_timeslot != null) {
+                                    balise.plages.remove(plageHoraire)
+                                    Log.d("InfosBalise", "Plage horaire supprimée !")
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.plage_horaire_supprim_e),
+                                        Toast.LENGTH_LONG)
+                                        .show()
+                                } else {
+                                    Log.e("InfosBalise", "Échec suppression plage horaire")
+                                    Toast.makeText(
+                                        context,
+                                        "Échec lors de la suppression de la plage horaire",
+                                        Toast.LENGTH_LONG
+                                    )
+                                        .show()
+                                }
+                            }
+                            onDismiss()
                             navController.navigate("manageAnnonce")
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Black),

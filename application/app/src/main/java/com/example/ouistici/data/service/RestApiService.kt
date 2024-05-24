@@ -251,5 +251,24 @@ class RestApiService {
     }
 
 
+    fun deleteTimeslot(timeslotData: TimeslotDto, onResult: (TimeslotDto?) -> Unit) {
+        val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
+        val timeslot = JsonObject().apply {
+            addProperty("id_timeslot", timeslotData.id_timeslot)
+        }
+        retrofit.deleteTimeslot(timeslot).enqueue(
+            object: Callback<TimeslotDto> {
+                override fun onFailure(call: Call<TimeslotDto>, t: Throwable) {
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<TimeslotDto>, response: Response<TimeslotDto>) {
+                    val changes = response.body()
+                    onResult(changes)
+                }
+            }
+        )
+    }
+
+
 
 }
