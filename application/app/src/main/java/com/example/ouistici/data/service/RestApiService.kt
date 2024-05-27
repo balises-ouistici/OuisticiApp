@@ -93,6 +93,26 @@ class RestApiService {
     }
 
 
+    fun setButtonState(baliseData: BaliseDto, onResult: (BaliseDto?) -> Unit) {
+        val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
+        val buttonState = JsonObject().apply {
+            addProperty("plages_horaire", baliseData.sysOnOff)
+        }
+        retrofit.setButtonState(buttonState).enqueue(
+            object: Callback<BaliseDto> {
+                override fun onFailure(call: Call<BaliseDto>, t: Throwable) {
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<BaliseDto>, response: Response<BaliseDto>) {
+                    val changes = response.body()
+                    onResult(changes)
+                }
+            }
+        )
+    }
+
+
+
     // Création d'annonce
     fun createAnnonce(annonceData: AnnonceDto, onResult: (AnnonceDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)

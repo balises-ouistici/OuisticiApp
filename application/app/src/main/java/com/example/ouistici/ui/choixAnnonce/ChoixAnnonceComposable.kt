@@ -64,6 +64,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.ouistici.R
+import com.example.ouistici.data.dto.AnnonceDto
 import com.example.ouistici.data.dto.BaliseDto
 import com.example.ouistici.data.dto.TimeslotDto
 import com.example.ouistici.data.service.RestApiService
@@ -1288,15 +1289,39 @@ fun TableScreen(balise : Balise, navController: NavController) {
 fun OnOffButton(balise: Balise, navController: NavController) {
     val checkedState = remember { mutableStateOf(balise.sysOnOff) }
 
+    val context = LocalContext.current
+
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Switch(
             checked = checkedState.value,
             onCheckedChange = { isChecked ->
-                checkedState.value = isChecked
-                balise.sysOnOff = checkedState.value
-                navController.navigate("manageAnnonce")
+
+                val apiService = RestApiService()
+                val balInfo = BaliseDto(
+                    balId = null,
+                    nom = balise.nom,
+                    lieu = balise.lieu,
+                    defaultMessage = balise.defaultMessage?.id,
+                    volume = balise.volume,
+                    sysOnOff = isChecked,
+                    ipBal = balise.ipBal
+                )
+                apiService.setButtonState(balInfo) {
+                    if ( it?.balId != null ) {
+                        checkedState.value = isChecked
+                        balise.sysOnOff = checkedState.value
+                        navController.navigate("manageAnnonce")
+                    } else {
+                        Log.e("BoutonOfOff","Échec modification état")
+                        Toast.makeText(
+                            context,
+                            "Échec lors de la modification de l'état du bouton",
+                            Toast.LENGTH_LONG)
+                            .show()
+                    }
+                }
             },
             colors = SwitchDefaults.colors(
                 checkedThumbColor = Color.White,

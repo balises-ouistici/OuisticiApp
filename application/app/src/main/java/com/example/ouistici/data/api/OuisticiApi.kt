@@ -39,6 +39,11 @@ interface OuisticiApi {
     @POST("defaultmessage")
     fun setDefaultMessage(@Body defaultMessage: JsonObject): Call<BaliseDto>
 
+    @Headers("Content-Type: application/json")
+    @POST("plages_horaire")
+    fun setButtonState(@Body buttonState: JsonObject): Call<BaliseDto>
+
+
     // Création d'annonce
     @Headers("Content-Type: application/json")
     @PUT("annonce")
