@@ -48,6 +48,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -79,6 +80,9 @@ import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
 import com.example.ouistici.ui.theme.TestButtonColor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.Locale
 
@@ -587,6 +591,9 @@ fun ModifyAnnoncesBaliseTextePopup(
                     ) {
                         Text(text = stringResource(R.string.annuler), color = Color.White)
                     }
+
+                    val coroutineScope = rememberCoroutineScope()
+
                     Button(
                         onClick = {
                             if (nomAnnonce != "" && contenuAnnonceTexte != "") {
@@ -597,72 +604,82 @@ fun ModifyAnnoncesBaliseTextePopup(
                                 }
                                 ttsManager.setLanguage(locale)
 
-                                val fileName = annonce.id.toString()+".wav"
+                                val fileName = balise.createId().toString() + ".wav"
                                 val file = File(context.cacheDir, fileName)
+                                coroutineScope.launch {
 
-                                ttsManager.saveToFile(contenuAnnonceTexte, file)
-
-                                val duration = AndroidAudioPlayer.getAudioDuration(file) / 1000
-
-                                // Log.d("CreateAnnonce","Durée : $duration")
-
-
-                                val apiService = RestApiService()
-                                val annInfo = AnnonceDto(
-                                    upload_sound_url = null,
-                                    id_annonce = annonce.id,
-                                    nom = nomAnnonce,
-                                    type = TypeAnnonce.TEXTE.toString(),
-                                    contenu = contenuAnnonceTexte,
-                                    langue = langueSelectionnee?.code,
-                                    duree = duration,
-                                    filename = fileName
-                                )
-
-                                apiService.modifyAnnonce(annInfo) {
-                                    if ( it?.nom != null ) {
-
-                                        val audioInfo = FileAnnonceDto(
-                                            code = null,
-                                            value = it.nom,
-                                            audiofile = file
-                                        )
-                                        apiService.createAudio(audioInfo) {
-                                            Log.e("CreateAnnonce","Échec création d'annonce : $it")
-
-                                            if ( it?.code != null ) {
-                                                annonce.contenu = contenuAnnonceTexte
-                                                annonce.nom = nomAnnonce
-                                                annonce.langue = langueSelectionnee
-                                                annonce.duree = duration
-                                                annonce.audio = file
-
-                                                Toast.makeText(
-                                                    context,
-                                                    context.getString(R.string.informations_modifi_es),
-                                                    Toast.LENGTH_LONG
-                                                )
-                                                    .show()
-                                                onDismiss()
-                                            } else {
-                                                Log.e("CreateAnnonce","Échec création d'annonce")
-                                                Toast.makeText(
-                                                    context,
-                                                    "Échec lors de l'envoie du fichier au serveur",
-                                                    Toast.LENGTH_LONG)
-                                                    .show()
-                                            }
-                                        }
-                                    } else {
-                                        Log.e("CreateAnnonce","Échec création d'annonce")
-                                        Toast.makeText(
-                                            context,
-                                            "Échec lors de la création de l'annonce",
-                                            Toast.LENGTH_LONG)
-                                            .show()
+                                    withContext(Dispatchers.Default) {
+                                        ttsManager.saveToFile(contenuAnnonceTexte, file)
                                     }
+
+
+                                    val duration = AndroidAudioPlayer.getAudioDuration(file) / 1000
+
+                                    val apiService = RestApiService()
+                                    val annInfo = AnnonceDto(
+                                        upload_sound_url = null,
+                                        id_annonce = annonce.id,
+                                        nom = nomAnnonce,
+                                        type = TypeAnnonce.TEXTE.toString(),
+                                        contenu = contenuAnnonceTexte,
+                                        langue = langueSelectionnee?.code,
+                                        duree = duration,
+                                        filename = fileName
+                                    )
+
+                                    apiService.modifyAnnonce(annInfo) {
+                                        if (it?.nom != null) {
+
+                                            val audioInfo = FileAnnonceDto(
+                                                code = null,
+                                                value = it.nom,
+                                                audiofile = file
+                                            )
+                                            apiService.createAudio(audioInfo) {
+                                                Log.e(
+                                                    "CreateAnnonce",
+                                                    "Échec création d'annonce : $it"
+                                                )
+
+                                                if (it?.code != null) {
+                                                    annonce.contenu = contenuAnnonceTexte
+                                                    annonce.nom = nomAnnonce
+                                                    annonce.langue = langueSelectionnee
+                                                    annonce.duree = duration
+                                                    annonce.audio = file
+
+                                                    Toast.makeText(
+                                                        context,
+                                                        context.getString(R.string.informations_modifi_es),
+                                                        Toast.LENGTH_LONG
+                                                    )
+                                                        .show()
+                                                    onDismiss()
+                                                } else {
+                                                    Log.e(
+                                                        "CreateAnnonce",
+                                                        "Échec création d'annonce"
+                                                    )
+                                                    Toast.makeText(
+                                                        context,
+                                                        "Échec lors de l'envoie du fichier au serveur",
+                                                        Toast.LENGTH_LONG
+                                                    )
+                                                        .show()
+                                                }
+                                            }
+                                        } else {
+                                            Log.e("CreateAnnonce", "Échec création d'annonce")
+                                            Toast.makeText(
+                                                context,
+                                                "Échec lors de la création de l'annonce",
+                                                Toast.LENGTH_LONG
+                                            )
+                                                .show()
+                                        }
+                                    }
+                                    navController.navigate("infosBalise")
                                 }
-                                navController.navigate("infosBalise")
                             } else {
                                 if ( nomAnnonce == "" && contenuAnnonceTexte != "" ) {
                                     Toast.makeText(
