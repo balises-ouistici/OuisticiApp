@@ -96,7 +96,7 @@ class RestApiService {
     fun setButtonState(baliseData: BaliseDto, onResult: (BaliseDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
         val buttonState = JsonObject().apply {
-            addProperty("plages_horaire", baliseData.sysOnOff)
+            addProperty("timeslots", baliseData.sysOnOff)
         }
         retrofit.setButtonState(buttonState).enqueue(
             object: Callback<BaliseDto> {
