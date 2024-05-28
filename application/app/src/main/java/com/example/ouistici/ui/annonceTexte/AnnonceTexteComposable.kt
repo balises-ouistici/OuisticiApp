@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,8 +47,14 @@ import com.example.ouistici.model.LangueManager
 import com.example.ouistici.model.TextToSpeechManager
 import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.theme.FontColor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.Locale
+import kotlin.coroutines.coroutineContext
 
 
 /**
@@ -159,11 +166,11 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
 
         Spacer(modifier = Modifier.height(50.dp))
 
-        
+        val coroutineScope = rememberCoroutineScope()
+
         Button(
             onClick = {
-                if ( textValueInput != "" && textContenuInput != "" && langueSelectionnee.code != "" && langueSelectionnee.nom != "" ) {
-
+                if (textValueInput != "" && textContenuInput != "" && langueSelectionnee.code != "" && langueSelectionnee.nom != "") {
                     val locale = when (langueSelectionnee.code) {
                         "fr" -> Locale.FRENCH
                         "en" -> Locale.ENGLISH
@@ -171,83 +178,86 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                     }
                     ttsManager.setLanguage(locale)
 
-                    val fileName = balise.createId().toString()+".wav"
+                    val fileName = balise.createId().toString() + ".wav"
                     val file = File(context.cacheDir, fileName)
+                    coroutineScope.launch {
 
-                    ttsManager.saveToFile(textContenuInput, file)
-
-                    val duration = AndroidAudioPlayer.getAudioDuration(file) / 1000
-
-                    // Log.d("CreateAnnonce","Durée : $duration")
-
-
-                    val apiService = RestApiService()
-                    val annInfo = AnnonceDto(
-                        upload_sound_url = null,
-                        id_annonce = balise.createId(),
-                        nom = textValueInput,
-                        type = TypeAnnonce.TEXTE.toString(),
-                        contenu = textContenuInput,
-                        langue = langueSelectionnee.code,
-                        duree = duration,
-                        filename = fileName
-                    )
-
-                    apiService.createAnnonce(annInfo) {
-                        if ( it?.nom != null ) {
-
-                            val audioInfo = FileAnnonceDto(
-                                code = null,
-                                value = it.nom,
-                                audiofile = file
-                            )
-                            apiService.createAudio(audioInfo) {
-                                Log.e("CreateAnnonce","Échec création d'annonce : $it")
-
-                                if ( it?.code != null ) {
-                                    balise.annonces.add(
-                                        Annonce(balise.createId(),
-                                            textValueInput,
-                                            TypeAnnonce.TEXTE,
-                                            file,
-                                            textContenuInput,
-                                            langueSelectionnee,
-                                            duration,
-                                            balise.createId().toString()+".wav"
-                                        )
-                                    )
-
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.annonce_ajout_e),
-                                        Toast.LENGTH_LONG)
-                                        .show()
-                                } else {
-                                    Log.e("CreateAnnonce","Échec création d'annonce")
-                                    Toast.makeText(
-                                        context,
-                                        "Échec lors de l'envoie du fichier au serveur",
-                                        Toast.LENGTH_LONG)
-                                        .show()
-                                }
-                            }
-                        } else {
-                            Log.e("CreateAnnonce","Échec création d'annonce")
-                            Toast.makeText(
-                                context,
-                                "Échec lors de la création de l'annonce",
-                                Toast.LENGTH_LONG)
-                                .show()
+                        withContext(Dispatchers.Default) {
+                            ttsManager.saveToFile(textContenuInput, file)
                         }
+
+                    // Utiliser une coroutine pour ajouter un délai de 2 secondes
+
+                        val duration = AndroidAudioPlayer.getAudioDuration(file) / 1000
+
+                        val apiService = RestApiService()
+                        val annInfo = AnnonceDto(
+                            upload_sound_url = null,
+                            id_annonce = balise.createId(),
+                            nom = textValueInput,
+                            type = TypeAnnonce.TEXTE.toString(),
+                            contenu = textContenuInput,
+                            langue = langueSelectionnee.code,
+                            duree = duration,
+                            filename = fileName
+                        )
+
+                        apiService.createAnnonce(annInfo) {
+                            if (it?.nom != null) {
+
+                                val audioInfo = FileAnnonceDto(
+                                    code = null,
+                                    value = it.nom,
+                                    audiofile = file
+                                )
+                                apiService.createAudio(audioInfo) {
+                                    Log.e("CreateAnnonce", "Échec création d'annonce : $it")
+
+                                    if (it?.code != null) {
+                                        balise.annonces.add(
+                                            Annonce(
+                                                balise.createId(),
+                                                textValueInput,
+                                                TypeAnnonce.TEXTE,
+                                                file,
+                                                textContenuInput,
+                                                langueSelectionnee,
+                                                duration,
+                                                balise.createId().toString() + ".wav"
+                                            )
+                                        )
+
+                                        Toast.makeText(
+                                            context,
+                                            context.getString(R.string.annonce_ajout_e),
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    } else {
+                                        Log.e("CreateAnnonce", "Échec création d'annonce")
+                                        Toast.makeText(
+                                            context,
+                                            "Échec lors de l'envoie du fichier au serveur",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                }
+                            } else {
+                                Log.e("CreateAnnonce", "Échec création d'annonce")
+                                Toast.makeText(
+                                    context,
+                                    "Échec lors de la création de l'annonce",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                        navController.navigate("annonceTexte")
                     }
-                    navController.navigate("annonceTexte")
                 } else {
                     Toast.makeText(
                         context,
                         context.getString(R.string.action_impossible_vous_devez_remplir_les_champs),
-                        Toast.LENGTH_LONG)
-                        .show()
-
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             },
             modifier = Modifier.padding(16.dp),
