@@ -12,6 +12,7 @@ import com.example.ouistici.data.dto.TimeslotDto
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.JoursSemaine
+import com.example.ouistici.model.Langue
 import com.example.ouistici.model.LangueManager
 import com.example.ouistici.model.PlageHoraire
 import com.example.ouistici.model.TypeAnnonce
@@ -47,7 +48,12 @@ class RestApiService {
                                 type = TypeAnnonce.valueOf(dto.type),
                                 audio = null, // Assuming audio files are not provided
                                 contenu = dto.contenu,
-                                langue = LangueManager.languesDisponibles.find { it.code == dto.langue },
+                                langue = if ( dto.langue == "fr" ) {
+                                   Langue("fr","Français")
+                                               }
+                                else {
+                                    Langue("en","English")
+                                },
                                 duree = dto.duree,
                                 filename = dto.filename ?: ""
                             )

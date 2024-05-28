@@ -25,6 +25,7 @@ interface OuisticiApi {
     // Get toute la balise
     @GET("balise")
     fun getBaliseInfo(): Call<BaliseInfoDto>
+    
 
     // Page infos balise
     @Headers("Content-Type: application/json")
