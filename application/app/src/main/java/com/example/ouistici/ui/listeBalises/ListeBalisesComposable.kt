@@ -1,6 +1,7 @@
 package com.example.ouistici.ui.listeBalises
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -159,8 +160,14 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                     weight = columnWeight,
                     textColor = Color.Black,
                     onClick = {
-                        baliseViewModel.selectedBalise = balise
-                        navController.navigate("infosBalise")
+                        baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
+                            if (loadedBalise != null) {
+                                baliseViewModel.selectedBalise = loadedBalise
+                                navController.navigate("infosBalise")
+                            } else {
+                                Log.d("Oui","Problème ahahahahahahahahaahahahah")
+                            }
+                        }
                     }
                 )
 
@@ -170,8 +177,14 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                         weight = columnWeight,
                         textColor = Color.Black,
                         onClick = {
-                            baliseViewModel.selectedBalise = balise
-                            navController.navigate("infosBalise")
+                            baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
+                                if (loadedBalise != null) {
+                                    baliseViewModel.selectedBalise = loadedBalise
+                                    navController.navigate("infosBalise")
+                                } else {
+                                    Log.d("Oui","Problème ahahahahahahahahaahahahah")
+                                }
+                            }
                         }
                     )
                 } else {
@@ -180,8 +193,14 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                         weight = columnWeight,
                         textColor = Color.Black,
                         onClick = {
-                            baliseViewModel.selectedBalise = balise
-                            navController.navigate("infosBalise")
+                            baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
+                                if (loadedBalise != null) {
+                                    baliseViewModel.selectedBalise = loadedBalise
+                                    navController.navigate("infosBalise")
+                                } else {
+                                    Log.d("Oui","Problème ahahahahahahahahaahahahah")
+                                }
+                            }
                         }
                     )
                 }
@@ -193,8 +212,14 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                         weight = columnWeight,
                         textColor = Color.Black,
                         onClick = {
-                            baliseViewModel.selectedBalise = balise
-                            navController.navigate("infosBalise")
+                            baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
+                                if (loadedBalise != null) {
+                                    baliseViewModel.selectedBalise = loadedBalise
+                                    navController.navigate("infosBalise")
+                                } else {
+                                    Log.d("Oui","Problème ahahahahahahahahaahahahah")
+                                }
+                            }
                         }
                     )
                 } else {
@@ -203,8 +228,14 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                         weight = columnWeight,
                         textColor = Color.Black,
                         onClick = {
-                            baliseViewModel.selectedBalise = balise
-                            navController.navigate("infosBalise")
+                            baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
+                                if (loadedBalise != null) {
+                                    baliseViewModel.selectedBalise = loadedBalise
+                                    navController.navigate("infosBalise")
+                                } else {
+                                    // Handle error case if needed
+                                }
+                            }
                         }
                     )
                 }

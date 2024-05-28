@@ -34,8 +34,8 @@ object Stub {
      */
     private fun createBalises(): List<Balise> {
         return listOf(
-            Balise("Balise1","Accueil",  null, ArrayList(), 50f, ArrayList(), true, "http://192.168.30.64:5000/"),
-            Balise("Balise2", "", null, ArrayList(), 30f, ArrayList(), false, "http://192.168.30.64:5000/")
+            Balise(1862,"Balise1","Accueil",  null, ArrayList(), 50f, ArrayList(), true, "http://192.168.30.64:5000/"),
+            Balise(1862,"Balise2", "", null, ArrayList(), 30f, ArrayList(), false, "http://192.168.30.64:5000/")
         )
     }
 

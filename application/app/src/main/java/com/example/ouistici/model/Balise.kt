@@ -11,6 +11,7 @@ package com.example.ouistici.model
  * @param sysOnOff The system status of the beacon (on/off).
  */
 class Balise(
+    val id: Int,
     var nom : String,
     var lieu : String,
     var defaultMessage : Annonce?,

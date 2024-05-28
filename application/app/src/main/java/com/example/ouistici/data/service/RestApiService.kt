@@ -1,11 +1,20 @@
 package com.example.ouistici.data.service
 
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.example.ouistici.data.api.OuisticiApi
 import com.example.ouistici.data.dto.AnnonceDto
 import com.example.ouistici.data.dto.BaliseDto
+import com.example.ouistici.data.dto.BaliseInfoDto
 import com.example.ouistici.data.dto.FileAnnonceDto
 import com.example.ouistici.data.dto.TimeslotDto
+import com.example.ouistici.model.Annonce
+import com.example.ouistici.model.Balise
+import com.example.ouistici.model.JoursSemaine
+import com.example.ouistici.model.LangueManager
+import com.example.ouistici.model.PlageHoraire
+import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.baliseViewModel.RetrofitClient
 import com.google.gson.JsonObject
 import okhttp3.MediaType
@@ -14,8 +23,79 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalTime
 
 class RestApiService {
+    // Get toutes les infos de la balise
+    fun fetchBaliseInfo(onResult: (Balise?) -> Unit) {
+        val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
+        retrofit.getBaliseInfo().enqueue(object: Callback<BaliseInfoDto> {
+            override fun onFailure(call: Call<BaliseInfoDto>, t: Throwable) {
+                onResult(null)
+            }
+
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onResponse(call: Call<BaliseInfoDto>, response: Response<BaliseInfoDto>) {
+                if (response.isSuccessful) {
+                    val baliseInfoDto = response.body()
+                    if (baliseInfoDto != null) {
+                        // Map DTO to Model
+                        val annonces = baliseInfoDto.annonces.map { dto ->
+                            Annonce(
+                                id = dto.id_annonce,
+                                nom = dto.nom,
+                                type = TypeAnnonce.valueOf(dto.type),
+                                audio = null, // Assuming audio files are not provided
+                                contenu = dto.contenu,
+                                langue = LangueManager.languesDisponibles.find { it.code == dto.langue },
+                                duree = dto.duree,
+                                filename = dto.filename ?: ""
+                            )
+                        }
+
+                        val plages = baliseInfoDto.timeslots.map { dto ->
+                            PlageHoraire(
+                                id_timeslot = dto.id_timeslot ?: 0,
+                                nomMessage = annonces.find { it.id == dto.id_annonce }!!,
+                                jours = listOfNotNull(
+                                    if (dto.monday) JoursSemaine.Lundi else null,
+                                    if (dto.tuesday) JoursSemaine.Mardi else null,
+                                    if (dto.wednesday) JoursSemaine.Mercredi else null,
+                                    if (dto.thursday) JoursSemaine.Jeudi else null,
+                                    if (dto.friday) JoursSemaine.Vendredi else null,
+                                    if (dto.saturday) JoursSemaine.Samedi else null,
+                                    if (dto.sunday) JoursSemaine.Dimanche else null
+                                ),
+                                heureDebut = LocalTime.parse(dto.time_start),
+                                heureFin = LocalTime.parse(dto.time_end)
+                            )
+                        }
+
+                        val baliseDto = baliseInfoDto.balise
+                        val balise = Balise(
+                            id = baliseDto.balId!!,
+                            nom = baliseDto.nom ?: "",
+                            lieu = baliseDto.lieu,
+                            defaultMessage = annonces.find { it.id == baliseDto.defaultMessage },
+                            annonces = ArrayList(annonces),
+                            volume = baliseDto.volume,
+                            plages = ArrayList(plages),
+                            sysOnOff = baliseDto.sysOnOff,
+                            ipBal = ""
+                        )
+
+                        onResult(balise)
+                    } else {
+                        onResult(null)
+                    }
+                } else {
+                    onResult(null)
+                }
+            }
+        })
+    }
+
+
     // Page infos balise
     fun setVolume(baliseData: BaliseDto, onResult: (BaliseDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)

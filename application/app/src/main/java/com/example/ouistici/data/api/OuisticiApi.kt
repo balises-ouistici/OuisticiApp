@@ -2,6 +2,7 @@ package com.example.ouistici.data.api
 
 import com.example.ouistici.data.dto.AnnonceDto
 import com.example.ouistici.data.dto.BaliseDto
+import com.example.ouistici.data.dto.BaliseInfoDto
 import com.example.ouistici.data.dto.FileAnnonceDto
 import com.example.ouistici.data.dto.TimeslotDto
 import com.example.ouistici.model.Balise
@@ -21,6 +22,10 @@ import retrofit2.http.Path
 import java.io.File
 
 interface OuisticiApi {
+    // Get toute la balise
+    @GET("balise")
+    fun getBaliseInfo(): Call<BaliseInfoDto>
+
     // Page infos balise
     @Headers("Content-Type: application/json")
     @POST("volume")
