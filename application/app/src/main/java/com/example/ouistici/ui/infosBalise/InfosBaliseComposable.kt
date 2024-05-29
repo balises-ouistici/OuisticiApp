@@ -57,6 +57,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -186,10 +187,11 @@ fun InfosBalise(
                     .width(50.dp)
                     .height(75.dp)
                     .padding(vertical = 15.dp)
+                    .semantics { contentDescription = "Modification des informations de la balise" }
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
-                    contentDescription = stringResource(R.string.changer_les_informations_de_la_balise),
+                    contentDescription = "",
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -244,7 +246,9 @@ fun InfosBalise(
                         activeTrackColor = Color.Black,
                         inactiveTrackColor = Color.White
                     ),
-                    valueRange = 0f..100f
+                    valueRange = 0f..100f,
+                    modifier = Modifier
+                        .semantics { contentDescription = "Régler le volume de la balise" }
                 )
 
                 Button(
@@ -283,8 +287,9 @@ fun InfosBalise(
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                 ) {
                     Text(
-                        text = stringResource(R.string.enregistrer),
-                        color = Color.White
+                        text = "Enregistrer volume balise",
+                        color = Color.White,
+                        modifier = Modifier.semantics { contentDescription = "Enregistrer le volume sur la balise" }
                     )
                 }
                 Button(
@@ -318,8 +323,10 @@ fun InfosBalise(
                     colors = ButtonDefaults.buttonColors(TestButtonColor)
                 ) {
                     Text(
-                        text = stringResource(R.string.tester_sur_la_balise),
-                        color = Color.White
+                        text = "Tester sur la balise",
+                        color = Color.White,
+                        modifier = Modifier
+                            .semantics { contentDescription = "Tester le son sur la balise" }
                     )
                 }
             }
@@ -961,6 +968,7 @@ fun RowScope.TableCell(
     text: String,
     weight: Float,
     textColor: Color,
+    textSemantics: String
 ) {
     Text(
         text = text,
@@ -968,7 +976,28 @@ fun RowScope.TableCell(
             .border(1.dp, Color.Black)
             .weight(weight)
             .padding(8.dp)
-            .height(30.dp),
+            .height(30.dp)
+            .semantics { contentDescription = "$textSemantics $text" },
+        color = textColor
+    )
+}
+
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun RowScope.TableCellHeader(
+    text: String,
+    weight: Float,
+    textColor: Color,
+) {
+    Text(
+        text = text,
+        Modifier
+            .border(1.dp, Color.Black)
+            .weight(weight)
+            .padding(8.dp)
+            .height(30.dp)
+            .semantics { this.invisibleToUser() },
         color = textColor
     )
 }
@@ -1023,10 +1052,11 @@ fun RowScope.TableAudioCell(
             modifier = Modifier
                 .height(40.dp)
                 .align(Alignment.CenterVertically)
+                .semantics { contentDescription = "Écouter l'audio de l'annonce" }
         ) {
             Icon(
                 imageVector = Icons.Default.PlayArrow,
-                contentDescription = "Play arrow"
+                contentDescription = ""
             )
         }
         Button(
@@ -1037,6 +1067,9 @@ fun RowScope.TableAudioCell(
             modifier = Modifier
                 .height(40.dp)
                 .align(Alignment.CenterVertically)
+                .semantics {
+                    contentDescription = "Arrêter la lecture audio"
+                }
         ) {
             Text(
                 text = "||"
@@ -1091,8 +1124,8 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
         ) {
             item {
                 Row(Modifier.background(TableHeaderColor)) {
-                    TableCell(text = stringResource(R.string.nom), weight = column1Weight, textColor = Color.Black)
-                    TableCell(text = stringResource(R.string.contenu_tableau), weight = column2Weight, textColor = Color.Black)
+                    TableCellHeader(text = stringResource(R.string.nom), weight = column1Weight, textColor = Color.Black)
+                    TableCellHeader(text = stringResource(R.string.contenu_tableau), weight = column2Weight, textColor = Color.Black)
                     TableCellButtons(text= "", weight = .26f, textColor = Color.Black)
                 }
             }
@@ -1102,7 +1135,8 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                     TableCell(
                         text = annonce.nom,
                         weight = column1Weight,
-                        textColor = Color.Black
+                        textColor = Color.Black,
+                        textSemantics = "Nom de l'annonce"
                     )
 
                     if (annonce.type == TypeAnnonce.TEXTE) {
@@ -1110,7 +1144,8 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                             TableCell(
                                 text = it,
                                 weight = column2Weight,
-                                textColor = Color.Black
+                                textColor = Color.Black,
+                                textSemantics = "Contenu de l'annonce"
                             )
 
                             OutlinedButton(
@@ -1129,10 +1164,11 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                                     .height(45.dp)
                                     .weight(column3Weight)
                                     .border(1.dp, Color.Black)
+                                    .semantics { contentDescription = "Modifier le nom et le contenu de l'annonce ${annonce.nom}" }
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Edit,
-                                    contentDescription = stringResource(R.string.changer_le_nom_de_l_annonce),
+                                    contentDescription = "",
                                     modifier = Modifier.size(15.dp)
                                 )
                             }
@@ -1172,10 +1208,11 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                                 .height(45.dp)
                                 .weight(column3Weight)
                                 .border(1.dp, Color.Black)
+                                .semantics { contentDescription = "Modifier le nom de l'annonce ${annonce.nom}" }
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
-                                contentDescription = stringResource(R.string.changer_le_nom_de_l_annonce),
+                                contentDescription = "",
                                 modifier = Modifier.size(15.dp)
                             )
                         }
@@ -1219,10 +1256,11 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                             .height(45.dp)
                             .weight(column3Weight)
                             .border(1.dp, Color.Black)
+                            .semantics { contentDescription = "Supprimer l'annonce ${annonce.nom}" }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = stringResource(R.string.supprimer_annonce),
+                            contentDescription = "",
                             modifier = Modifier.size(15.dp)
                         )
                     }
