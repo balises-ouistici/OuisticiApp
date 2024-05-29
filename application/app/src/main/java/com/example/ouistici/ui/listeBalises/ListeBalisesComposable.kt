@@ -22,10 +22,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -72,6 +76,7 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel)
  * @param weight The weight of the header cell in the table layout.
  * @param textColor The color of the text in the header cell.
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun RowScope.TableHeaderCell(
     text: String,
@@ -84,7 +89,8 @@ fun RowScope.TableHeaderCell(
             .border(1.dp, Color.Black)
             .weight(weight)
             .padding(8.dp)
-            .height(50.dp),
+            .height(50.dp)
+            .semantics { this.invisibleToUser() },
         color = textColor
         )
 }
@@ -103,6 +109,7 @@ fun RowScope.TableCell(
     text: String,
     weight: Float,
     textColor: Color,
+    textSemantics: String,
     onClick: (() -> Unit)?
 ) {
     onClick?.let {
@@ -119,7 +126,8 @@ fun RowScope.TableCell(
             Text(
                 text = text,
                 Modifier
-                .align(Alignment.Center),
+                    .align(Alignment.Center)
+                    .semantics { contentDescription = "$textSemantics : $text" },
             color = textColor
             )
         }
@@ -159,6 +167,7 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                     text = balise.nom,
                     weight = columnWeight,
                     textColor = Color.Black,
+                    textSemantics = "Nom de la balise",
                     onClick = {
                         baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
                             if (loadedBalise != null) {
@@ -176,6 +185,7 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                         text = context.getString(R.string.non_defini),
                         weight = columnWeight,
                         textColor = Color.Black,
+                        textSemantics = "Lieu de la balise",
                         onClick = {
                             baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
                                 if (loadedBalise != null) {
@@ -189,9 +199,10 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                     )
                 } else {
                     TableCell(
-                        text = balise.lieu!!,
+                        text = balise.lieu,
                         weight = columnWeight,
                         textColor = Color.Black,
+                        textSemantics = "Lieu de la balise",
                         onClick = {
                             baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
                                 if (loadedBalise != null) {
@@ -211,6 +222,7 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                         text = context.getString(R.string.aucun),
                         weight = columnWeight,
                         textColor = Color.Black,
+                        textSemantics = "Message par défaut de la balise",
                         onClick = {
                             baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
                                 if (loadedBalise != null) {
@@ -227,6 +239,7 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                         text = balise.defaultMessage!!.nom,
                         weight = columnWeight,
                         textColor = Color.Black,
+                        textSemantics = "Message par défaut de la balise",
                         onClick = {
                             baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
                                 if (loadedBalise != null) {
