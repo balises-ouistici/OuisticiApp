@@ -341,6 +341,7 @@ fun InfosBalise(
  * @param balise The Balise object representing the beacon.
  * @param onDismiss Callback function to dismiss the popup.
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ModifyInfosBalisePopup(
@@ -366,23 +367,28 @@ fun ModifyInfosBalisePopup(
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text(text = stringResource(R.string.informations_balise), fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(
+                    text = stringResource(R.string.informations_balise),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = stringResource(R.string.nom_balise_info_popup),
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics { contentDescription = "Nom de la balise. Défiler vers la droite pour accéder à la zone de modification de texte." }
                 )
                 TextField(
                     value = nomBalise,
-                    onValueChange = { nomBalise = it },
-                    modifier = Modifier.fillMaxWidth()
+                    onValueChange = { nomBalise = it }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
                     text = stringResource(R.string.lieu_info_popup),
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics { contentDescription = "Lieu de la balise. Défiler vers la droite pour accéder à la zone de modification de texte." }
                 )
                 TextField(
                     value = lieuBalise,
@@ -405,7 +411,7 @@ fun ModifyInfosBalisePopup(
                 ) {
                     Button(
                         onClick = onDismiss,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                     ) {
                         Text(text = stringResource(R.string.annuler), color = Color.White)
                     }
@@ -453,7 +459,7 @@ fun ModifyInfosBalisePopup(
                                     .show()
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
                         Text(text = stringResource(R.string.modifier), color = Color.White)
