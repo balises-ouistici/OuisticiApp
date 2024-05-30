@@ -31,6 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.LocaleListCompat
@@ -83,7 +85,8 @@ fun ParametresAppli(navController: NavController) {
             ) { // Changement ici
                 Text(
                     text = stringResource(R.string.changer_de_langue),
-                    color = Color.White
+                    color = Color.White,
+                    modifier = Modifier.semantics { contentDescription = "Changer la langue de l'application." }
                 )
             }
             DropdownMenu(
