@@ -530,12 +530,16 @@ fun ModifyAnnoncesBaliseTextePopup(
                 Text(
                     text = stringResource(R.string.informations_annonce),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
+                    modifier = Modifier.semantics {
+                        contentDescription = "Informations de l'annonce texte"
+                    }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = stringResource(R.string.nom_annonce),
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics { contentDescription = "Nom de l'annonce, défiler à droite pour accéder à la zone de modification de texte." }
                 )
                 TextField(
                     value = nomAnnonce,
@@ -549,7 +553,9 @@ fun ModifyAnnoncesBaliseTextePopup(
 
                 Text(
                     text = stringResource(R.string.contenu),
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics { contentDescription = "Contenu de l'annonce, défiler à droite pour accéder à la zone de modification de texte." }
+
                 )
                 TextField(
                     value = contenuAnnonceTexte,
@@ -563,6 +569,8 @@ fun ModifyAnnoncesBaliseTextePopup(
                     Text(
                         text = stringResource(R.string.langue),
                         fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.semantics { contentDescription = "Langue de l'annonce, défiler à droite pour définir la langue du synthétiseur vocal." }
+
                     )
                     Box(
                         modifier = Modifier
@@ -573,7 +581,8 @@ fun ModifyAnnoncesBaliseTextePopup(
                         Text(
                             text = langueSelectionnee!!.getLangueName(),
                             fontSize = 16.sp,
-                            color = Color.White
+                            color = Color.White,
+                            modifier = Modifier.semantics { contentDescription = "La langue sélectionné est : ${langueSelectionnee!!.getLangueName()}" }
                         )
                         DropdownMenu(
                             expanded = expanded,
@@ -601,12 +610,16 @@ fun ModifyAnnoncesBaliseTextePopup(
                             annonce.duree!! / 60,
                             annonce.duree!! % 60
                         ),
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.semantics { contentDescription = "La durée de l'annonce est de ${annonce.duree!! / 60} minutes et ${annonce.duree!! % 60} secondes." }
                     )
                 } else {
                     Text(
                         text = stringResource(R.string.dur_e_probl_me),
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.semantics {
+                            contentDescription = "Problème rencontré lors de l'affichage de la durée."
+                        }
                     )
                 }
 
@@ -618,9 +631,15 @@ fun ModifyAnnoncesBaliseTextePopup(
                 ) {
                     Button(
                         onClick = onDismiss,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                     ) {
-                        Text(text = stringResource(R.string.annuler), color = Color.White)
+                        Text(
+                            text = stringResource(R.string.annuler),
+                            color = Color.White,
+                            modifier = Modifier.semantics {
+                                contentDescription = "Annuler les modifications en cours"
+                            }
+                        )
                     }
 
                     val coroutineScope = rememberCoroutineScope()
@@ -738,10 +757,16 @@ fun ModifyAnnoncesBaliseTextePopup(
                                 }
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
-                        Text(text = stringResource(R.string.modifier), color = Color.White)
+                        Text(
+                            text = "Valider",
+                            color = Color.White,
+                            modifier = Modifier.semantics {
+                                contentDescription = "Enregistrer les modifications apportées."
+                            }
+                        )
                     }
                 }
             }
