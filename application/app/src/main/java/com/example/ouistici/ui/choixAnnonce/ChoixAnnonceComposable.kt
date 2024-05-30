@@ -299,7 +299,7 @@ fun DefaultMessagePopup(
                     } else {
                         Button(
                             onClick = onDismiss,
-                            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                         ) {
                             Text(
                                 text = stringResource(R.string.annuler),
@@ -352,11 +352,11 @@ fun DefaultMessagePopup(
                                 onDismiss()
                                 navController.navigate("manageAnnonce")
                             },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                             modifier = Modifier.padding(end = 8.dp)
                         ) {
                             Text(
-                                text = stringResource(R.string.d_finir),
+                                text = "Valider",
                                 color = Color.White,
                                 modifier = Modifier.semantics {
                                     contentDescription = "Définir ${selectedAnnonce?.nom} comme annonce par défaut de la balise"
@@ -721,11 +721,21 @@ fun ModifyPlageHorairePopup(
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text(text = stringResource(R.string.modifier_une_plage_horaire), fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(
+                    text = stringResource(R.string.modifier_une_plage_horaire),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    modifier = Modifier.semantics {
+                        contentDescription = "Modifier une plage horaire."
+                    }
+                )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = stringResource(R.string.choisir_annonce),
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics {
+                        contentDescription = "Choisir annonce, défilez vers la droite pour choisir l'annonce qui sera utilisé pour la plage horaire."
+                    }
                 )
 
                 AnnonceList(
@@ -738,7 +748,10 @@ fun ModifyPlageHorairePopup(
 
                 Text(
                     text = stringResource(R.string.choisir_les_jours_d_activations),
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics {
+                        contentDescription = "Choisir les jours d'activation, défiler à droite pour choisir les jours d'activation de la plage horaire."
+                    }
                 )
                 JoursSemaineSelector(
                     selectedJours = selectedJours,
@@ -751,14 +764,27 @@ fun ModifyPlageHorairePopup(
 
                 Text(
                     text = stringResource(R.string.choisir_les_p_riodes),
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics {
+                        contentDescription = "Choisir les périodes, défilez à droite pour choisir une heure de début et une heure de fin pour la plage horaire."
+                    }
                 )
 
 
                 if ( heureDebut == null ) {
-                    Text(text = stringResource(R.string.heure_d_but_aucune))
+                    Text(
+                        text = stringResource(R.string.heure_d_but_aucune),
+                        modifier = Modifier.semantics {
+                            contentDescription = "Heure de début, aucune. Vous pouvez sélectionner une heure de début en défilant en droite sur le bouton."
+                        }
+                    )
                 } else {
-                    Text(text = stringResource(R.string.heure_d_but_objet, heureDebut!!))
+                    Text(
+                        text = stringResource(R.string.heure_d_but_objet, heureDebut!!),
+                        modifier = Modifier.semantics {
+                            contentDescription = "Heure de début, ${heureDebut!!.hour} heures et ${heureDebut!!.minute} minutes."
+                        }
+                    )
                 }
                 Button(
                     onClick = {
@@ -766,7 +792,13 @@ fun ModifyPlageHorairePopup(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF0F9D58))
                 ) {
-                    Text(text = stringResource(R.string.choisir_heure_d_but), color = Color.White)
+                    Text(
+                        text = stringResource(R.string.choisir_heure_d_but),
+                        color = Color.White,
+                        modifier = Modifier.semantics {
+                            contentDescription = "Choisir une heure de début pour la plage horaire."
+                        }
+                    )
                 }
 
 
@@ -774,9 +806,19 @@ fun ModifyPlageHorairePopup(
 
 
                 if ( heureFin == null ) {
-                    Text(text = stringResource(R.string.heure_fin_aucune))
+                    Text(
+                        text = stringResource(R.string.heure_fin_aucune),
+                        modifier = Modifier.semantics {
+                            contentDescription = "Heure de fin, aucune. Vous pouvez sélectionner une heure de fin en défilant en droite sur le bouton."
+                        }
+                    )
                 } else {
-                    Text(text = stringResource(R.string.heure_fin_objet, heureFin!!))
+                    Text(
+                        text = stringResource(R.string.heure_fin_objet, heureFin!!),
+                        modifier = Modifier.semantics {
+                            contentDescription = "Heure de fin, ${heureFin!!.hour} heures et ${heureFin!!.minute} minutes."
+                        }
+                    )
                 }
 
                 Button(
@@ -785,7 +827,12 @@ fun ModifyPlageHorairePopup(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF0F9D58))
                 ) {
-                    Text(text = stringResource(R.string.choisir_heure_fin), color = Color.White)
+                    Text(
+                        text = stringResource(R.string.choisir_heure_fin), color = Color.White,
+                        modifier = Modifier.semantics {
+                            contentDescription = "Choisir une heure de fin pour la plage horaire."
+                        }
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -797,9 +844,15 @@ fun ModifyPlageHorairePopup(
                 ) {
                     Button(
                         onClick = onDismiss,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                     ) {
-                        Text(text = stringResource(R.string.annuler), color = Color.White)
+                        Text(
+                            text = stringResource(R.string.annuler),
+                            color = Color.White,
+                            modifier = Modifier.semantics {
+                                contentDescription = "Annuler la modification de la plage horaire."
+                            }
+                        )
                     }
                     Button(
                         onClick = {
@@ -860,10 +913,16 @@ fun ModifyPlageHorairePopup(
                                     .show()
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
-                        Text(text = stringResource(R.string.modifier), color = Color.White)
+                        Text(
+                            text = "Valider",
+                            color = Color.White,
+                            modifier = Modifier.semantics {
+                                contentDescription = "Valider la modification de la plage horaire."
+                            }
+                        )
                     }
                 }
             }
@@ -1082,9 +1141,15 @@ fun ConfirmDeletePlagePopup(
                 ) {
                     Button(
                         onClick = onDismiss,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                     ) {
-                        Text(text = stringResource(R.string.annuler), color = Color.White)
+                        Text(
+                            text = stringResource(R.string.annuler),
+                            color = Color.White,
+                            modifier = Modifier.semantics {
+                                contentDescription = "Annuler la suppression de la plage horaire."
+                            }
+                        )
                     }
                     Button(
                         onClick = {
@@ -1125,10 +1190,16 @@ fun ConfirmDeletePlagePopup(
                             onDismiss()
                             navController.navigate("manageAnnonce")
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
-                        Text(text = stringResource(R.string.supprimer), color = Color.White)
+                        Text(
+                            text = stringResource(R.string.supprimer),
+                            color = Color.White,
+                            modifier = Modifier.semantics {
+                                contentDescription = "Valider la suppression de la plage horaire."
+                            }
+                        )
                     }
                 }
             }
@@ -1156,7 +1227,10 @@ fun RowScope.TableHeaderCell(
             .border(1.dp, Color.Black)
             .weight(weight)
             .padding(8.dp)
-            .height(30.dp),
+            .height(30.dp)
+            .semantics {
+                       contentDescription = "Case du tableau, ${text}."
+            },
         color = textColor
     )
 }
@@ -1198,7 +1272,8 @@ fun RowScope.TableHeaderCellButtons(
 fun RowScope.TableJoursCell(
     jours: List<JoursSemaine>,
     weight: Float,
-    textColor: Color
+    textColor: Color,
+    textSemantics: String
 ) {
     val context = LocalContext.current
 
@@ -1226,7 +1301,10 @@ fun RowScope.TableJoursCell(
             .border(1.dp, Color.Black)
             .weight(weight)
             .padding(8.dp)
-            .height(50.dp),
+            .height(50.dp)
+            .semantics {
+                       contentDescription = "${textSemantics}, ${ if (jours.count() == 7) "Tous les jours" else  jours }"
+            },
         color = textColor
     )
 }
@@ -1244,6 +1322,7 @@ fun RowScope.TableCells(
     text: String,
     weight: Float,
     textColor: Color,
+    textSemantics: String
 ) {
     Box(
         modifier = Modifier
@@ -1251,11 +1330,15 @@ fun RowScope.TableCells(
             .weight(weight)
             .padding(8.dp)
             .height(50.dp)
+
     ) {
         Text(
             text = text,
             Modifier
-                .align(Alignment.Center),
+                .align(Alignment.Center)
+                .semantics {
+                    contentDescription = "${textSemantics}, ${text}."
+                },
             color = textColor
         )
     }
@@ -1306,19 +1389,22 @@ fun TableScreen(balise : Balise, navController: NavController) {
                 TableCells(
                     text = plage.nomMessage.nom,
                     weight = column1Weight,
-                    textColor = Color.Black
+                    textColor = Color.Black,
+                    textSemantics = "Nom de l'annonce sélectionnée"
                 )
 
                 TableJoursCell(
                     jours = plage.jours,
                     weight = columnJours,
-                    textColor = Color.Black
+                    textColor = Color.Black,
+                    textSemantics = "Jours d'activation de la plage horaire"
                 )
 
                 TableCells(
                     text = context.getString(R.string.de_a, plage.heureDebut, plage.heureFin),
                     weight = column2Weight,
-                    textColor = Color.Black
+                    textColor = Color.Black,
+                    textSemantics = "Plage horaire active"
                 )
 
 
@@ -1338,10 +1424,13 @@ fun TableScreen(balise : Balise, navController: NavController) {
                         .weight(column3Weight)
                         .height(66.dp)
                         .border(1.dp, Color.Black)
+                        .semantics {
+                            contentDescription = "Modification de la plage horaire."
+                        }
                 ) {
                     Icon(
                         imageVector = Icons.Default.Edit,
-                        contentDescription = stringResource(R.string.modifier_plage_horaire),
+                        contentDescription = "",
                         modifier = Modifier.size(10.dp)
                     )
                 }
@@ -1372,10 +1461,13 @@ fun TableScreen(balise : Balise, navController: NavController) {
                         .weight(column3Weight)
                         .height(66.dp)
                         .border(1.dp, Color.Black)
+                        .semantics {
+                            contentDescription = "Suppression de la plage horaire."
+                        }
                 ) {
                     Icon(
                         imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(R.string.supprimer_plage_horaire),
+                        contentDescription = "",
                         modifier = Modifier.size(10.dp)
                     )
                 }
