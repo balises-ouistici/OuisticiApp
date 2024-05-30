@@ -203,7 +203,10 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
             ) {
                 Text(
                     text = stringResource(R.string.ajouter_une_plage_horaire),
-                    color = Color.White
+                    color = Color.White,
+                    modifier = Modifier.semantics {
+                        contentDescription = "Définir une nouvelle annonce par défaut."
+                    }
                 )
             }
 
@@ -279,14 +282,27 @@ fun DefaultMessagePopup(
                             colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                             modifier = Modifier.padding(end = 8.dp)
                         ) {
-                            Text(text = stringResource(R.string.cr_er_annonce), color = Color.White)
+                            Text(
+                                text = stringResource(R.string.cr_er_annonce),
+                                color = Color.White,
+                                modifier = Modifier
+                                    .semantics {
+                                        contentDescription = "Créer une annonce"
+                                    }
+                            )
                         }
                     } else {
                         Button(
                             onClick = onDismiss,
                             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
                         ) {
-                            Text(text = stringResource(R.string.annuler), color = Color.White)
+                            Text(
+                                text = stringResource(R.string.annuler),
+                                color = Color.White,
+                                modifier = Modifier.semantics {
+                                    contentDescription = "Annuler l'ajout d'une annonce par défaut."
+                                }
+                            )
                         }
                         Button(
                             onClick = {
@@ -334,7 +350,13 @@ fun DefaultMessagePopup(
                             colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                             modifier = Modifier.padding(end = 8.dp)
                         ) {
-                            Text(text = stringResource(R.string.d_finir), color = Color.White)
+                            Text(
+                                text = stringResource(R.string.d_finir),
+                                color = Color.White,
+                                modifier = Modifier.semantics {
+                                    contentDescription = "Définir ${selectedAnnonce?.nom} comme annonce par défaut de la balise"
+                                }
+                            )
                         }
                     }
                 }
