@@ -105,7 +105,8 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
         Text(
             text = stringResource(R.string.choix_des_annonces),
             fontSize = 25.sp,
-            color = FontColor
+            color = FontColor,
+            modifier = Modifier.semantics { contentDescription = "Page de choix des annonces" }
         )
 
 
@@ -126,6 +127,9 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                     text = stringResource(R.string.choisir_annonce_par_d_faut),
                     color = FontColor,
                     modifier = Modifier.padding(vertical = 10.dp)
+                        .semantics {
+                            contentDescription = "Choisir l'annonce par défaut de la balise, défiler à droite pour accéder au bouton."
+                        }
                 )
 
                 Column(
@@ -137,19 +141,28 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                     ) {
                        Text(
                            text = stringResource(R.string.choisir),
-                           color = Color.White
+                           color = Color.White,
+                           modifier = Modifier.semantics {
+                               contentDescription = "Choisir l'annonce par défaut de la balise"
+                           }
                        )
                     }
 
                     if ( balise.defaultMessage == null ) {
                         Text(
                             text = stringResource(R.string.aucun),
-                            color = FontColor
+                            color = FontColor,
+                            modifier = Modifier.semantics {
+                                contentDescription = "Aucune annonce par défaut sélectionnée, si vous voulez en sélectionner une, défiler vers la gauche pour accéder au bouton."
+                            }
                         )
                     } else {
                         Text(
                             text = balise.defaultMessage!!.nom, // Afficher le message par défaut de la balise
-                            color = FontColor
+                            color = FontColor,
+                            modifier = Modifier.semantics {
+                                contentDescription = "L'annonce par défaut de la balise est ${balise.defaultMessage!!.nom}"
+                            }
                         )
                     }
 
@@ -172,6 +185,9 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                 text = stringResource(R.string.syst_me_de_plage_horaires),
                 color = Color.Black,
                 modifier = Modifier.padding(vertical = 10.dp)
+                    .semantics {
+                        contentDescription = "Système de plage horaire, glisser vers la droite pour accéder au bouton on/off"
+                    }
 
             )
 
@@ -1342,7 +1358,10 @@ fun OnOffButton(balise: Balise, navController: NavController) {
 
         Text(
             text = if (checkedState.value) "On" else "Off",
-            color = Color.Black
+            color = Color.Black,
+            modifier = Modifier.semantics {
+                contentDescription = "Le système de plage horaire est ${if (checkedState.value) " activé " else " désactivé."}"
+            }
         )
     }
 }
