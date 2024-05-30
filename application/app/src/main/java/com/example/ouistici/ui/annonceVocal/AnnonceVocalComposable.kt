@@ -40,6 +40,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -60,6 +62,9 @@ import kotlinx.coroutines.delay
 import java.io.File
 import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 
 /**
@@ -196,6 +201,9 @@ fun AnnonceVocale(
                         style = MaterialTheme.typography.headlineLarge,
                         color = FontColor,
                         modifier = Modifier.padding(9.dp)
+                            .semantics {
+                                contentDescription = "Durée de l'enregistrement, ${TimeUnit.MILLISECONDS.toMinutes(time) % 60} minutes et ${TimeUnit.MILLISECONDS.toSeconds(time) % 60} secondes."
+                            }
                     )
                     LaunchedEffect(isRunning) {
                         while (isRunning) {
@@ -246,7 +254,7 @@ fun AnnonceVocale(
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.micro),
-                        contentDescription = stringResource(R.string.commencer_l_enregistrement),
+                        contentDescription = "Recommencez l'enregistrement audio",
                         modifier = Modifier.size(70.dp)
                     )
                 }
@@ -255,17 +263,22 @@ fun AnnonceVocale(
                         onClick = {
                             player.playFile(audioFile)
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                        modifier = Modifier.semantics { contentDescription = "Écouter l'audio enregistré" }
                     ) {
                         Icon(
                             imageVector = Icons.Default.PlayArrow,
-                            contentDescription = "Play arrow")
+                            contentDescription = ""
+                        )
                     }
                     Button(
                         onClick = {
                             player.stop()
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                        modifier = Modifier.semantics {
+                            contentDescription = "Arrêter la lecture audio"
+                        }
                     ) {
                         Text(
                             text = "||"
@@ -278,6 +291,9 @@ fun AnnonceVocale(
                     style = MaterialTheme.typography.headlineLarge,
                     color = FontColor,
                     modifier = Modifier.padding(9.dp)
+                        .semantics {
+                            contentDescription = "Durée de l'enregistrement, ${TimeUnit.MILLISECONDS.toMinutes(time) % 60} minutes et ${TimeUnit.MILLISECONDS.toSeconds(time) % 60} secondes."
+                        }
                 )
 
                 Spacer(modifier = Modifier.height(50.dp))
@@ -372,7 +388,10 @@ fun AnnonceVocale(
                 ) {
                     Text(
                         text = stringResource(R.string.enregistrer),
-                        color = Color.White
+                        color = Color.White,
+                        modifier = Modifier.semantics {
+                            contentDescription = "Enregistrer l'annonce conçue."
+                        }
                     )
                 }
 
