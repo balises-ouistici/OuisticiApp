@@ -77,6 +77,7 @@ import com.example.ouistici.model.LangueManager
 import com.example.ouistici.model.TextToSpeechManager
 import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.annonceTexte.DropdownMenuItemLangue
+import com.example.ouistici.ui.choixAnnonce.AnnonceDefaultMessageList
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
@@ -351,6 +352,8 @@ fun ModifyInfosBalisePopup(
 ) {
     val context = LocalContext.current
 
+    var selectedAnnonce: Annonce? by remember { mutableStateOf(balise.defaultMessage) }
+
     var nomBalise by remember { mutableStateOf(balise.nom) }
     var lieuBalise by remember { mutableStateOf(balise.lieu ?: "") }
 
@@ -399,10 +402,16 @@ fun ModifyInfosBalisePopup(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = stringResource(R.string.descri_info_popup),
-                    fontWeight = FontWeight.SemiBold
+                    text = "Choisir annonce par défaut :",
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics { contentDescription = "Liste des annonces en défilant sur la droite. Vous pouvez en sélectionner une pour qu'elle soit par défaut sur la balise." }
                 )
-
+                Spacer(modifier = Modifier.height(16.dp))
+                AnnonceDefaultMessageList(
+                    annonces = balise.annonces,
+                    selectedAnnonce = selectedAnnonce,
+                    onAnnonceSelected = { selectedAnnonce = it }
+                )
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Row(
@@ -413,7 +422,11 @@ fun ModifyInfosBalisePopup(
                         onClick = onDismiss,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                     ) {
-                        Text(text = stringResource(R.string.annuler), color = Color.White)
+                        Text(
+                            text = stringResource(R.string.annuler),
+                            color = Color.White,
+                            modifier = Modifier.semantics { contentDescription = "Annuler les modifications." }
+                        )
                     }
                     Button(
                         onClick = {
@@ -423,7 +436,7 @@ fun ModifyInfosBalisePopup(
                                     balId = null,
                                     nom = nomBalise,
                                     lieu = lieuBalise,
-                                    defaultMessage = balise.defaultMessage?.id,
+                                    defaultMessage = selectedAnnonce?.id,
                                     volume = balise.volume,
                                     sysOnOff = balise.sysOnOff,
                                     ipBal = balise.ipBal
@@ -434,6 +447,7 @@ fun ModifyInfosBalisePopup(
                                     if ( it?.balId != null ) {
                                         balise.lieu = lieuBalise
                                         balise.nom = nomBalise
+                                        balise.defaultMessage = selectedAnnonce
                                         Log.d("InfosBalise","Nouveau nom et lieu !")
                                         Toast.makeText(
                                             context,
@@ -444,7 +458,7 @@ fun ModifyInfosBalisePopup(
                                         Log.e("InfosBalise","Échec nom/lieu")
                                         Toast.makeText(
                                             context,
-                                            "Échec lors de l'enregistrement du nom et du lieu",
+                                            "Échec lors de l'enregistrement",
                                             Toast.LENGTH_LONG)
                                             .show()
                                     }
@@ -462,7 +476,11 @@ fun ModifyInfosBalisePopup(
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
-                        Text(text = stringResource(R.string.modifier), color = Color.White)
+                        Text(
+                            text = "Valider",
+                            color = Color.White,
+                            modifier = Modifier.semantics { contentDescription = "Valider les modifications faites." }
+                        )
                     }
                 }
             }

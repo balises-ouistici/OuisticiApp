@@ -56,6 +56,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -824,7 +825,8 @@ fun AnnonceDefaultMessageList(
 ) {
     if ( annonces.isEmpty() ) {
         Text(
-            text = stringResource(R.string.cr_ez_d_abord_une_annonce)
+            text = stringResource(R.string.cr_ez_d_abord_une_annonce),
+            modifier = Modifier.semantics { contentDescription = "Vous n'avez pas encore créé d'annonce, veuillez en créer une dans un premier temps." }
         )
     } else {
         LazyColumn(
@@ -842,7 +844,10 @@ fun AnnonceDefaultMessageList(
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(text = annonce.nom)
+                        Text(
+                            text = annonce.nom,
+                            modifier = Modifier.semantics { contentDescription = "Nom de l'annonce : ${annonce.nom}" }
+                        )
                         Spacer(modifier = Modifier.width(8.dp))
                         if (isSelected) {
                             Icon(
