@@ -43,6 +43,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -126,9 +127,11 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                 Text(
                     text = stringResource(R.string.choisir_annonce_par_d_faut),
                     color = FontColor,
-                    modifier = Modifier.padding(vertical = 10.dp)
+                    modifier = Modifier
+                        .padding(vertical = 10.dp)
                         .semantics {
-                            contentDescription = "Choisir l'annonce par défaut de la balise, défiler à droite pour accéder au bouton."
+                            contentDescription =
+                                "Choisir l'annonce par défaut de la balise, défiler à droite pour accéder au bouton."
                         }
                 )
 
@@ -184,9 +187,11 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
             Text(
                 text = stringResource(R.string.syst_me_de_plage_horaires),
                 color = Color.Black,
-                modifier = Modifier.padding(vertical = 10.dp)
+                modifier = Modifier
+                    .padding(vertical = 10.dp)
                     .semantics {
-                        contentDescription = "Système de plage horaire, glisser vers la droite pour accéder au bouton on/off"
+                        contentDescription =
+                            "Système de plage horaire, glisser vers la droite pour accéder au bouton on/off"
                     }
 
             )
@@ -205,7 +210,7 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                     text = stringResource(R.string.ajouter_une_plage_horaire),
                     color = Color.White,
                     modifier = Modifier.semantics {
-                        contentDescription = "Définir une nouvelle annonce par défaut."
+                        contentDescription = "Ajouter une nouvelle plage horaire."
                     }
                 )
             }
@@ -436,15 +441,28 @@ fun AddPlageHorairePopup(
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text(text = stringResource(R.string.ajouter_une_plage_horaire), fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(
+                    text = stringResource(R.string.ajouter_une_plage_horaire),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    modifier = Modifier.semantics {
+                        contentDescription = "Ajouter une plage horaire."
+                    }
+                )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = stringResource(R.string.choisir_annonce),
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics {
+                        contentDescription = "Choisir annonce, défilez vers la droite pour choisir l'annonce qui sera utilisé pour la plage horaire."
+                    }
                 )
                 if ( balise.annonces.isEmpty() )  {
                     Text(
-                        text = stringResource(R.string.cr_ez_d_abord_une_annonce)
+                        text = stringResource(R.string.cr_ez_d_abord_une_annonce),
+                        modifier = Modifier.semantics {
+                            contentDescription = "Créez d'abord une annonce, vous n'avez pas d'annonce créée, vous ne pouvez donc pas définir de plage horaire."
+                        }
                     )
                     Spacer(modifier = Modifier.height(65.dp))
                 } else {
@@ -458,7 +476,10 @@ fun AddPlageHorairePopup(
 
                 Text(
                     text = stringResource(R.string.choisir_les_jours_d_activations),
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics {
+                        contentDescription = "Choisir les jours d'activation, défiler à droite pour choisir les jours d'activation de la plage horaire."
+                    }
                 )
                 JoursSemaineSelector(
                     selectedJours = selectedJours,
@@ -471,20 +492,39 @@ fun AddPlageHorairePopup(
 
                 Text(
                     text = stringResource(R.string.choisir_les_p_riodes),
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics {
+                        contentDescription = "Choisir les périodes, défilez à droite pour choisir une heure de début et une heure de fin pour la plage horaire."
+                    }
                 )
 
 
                 if ( heureDebut == null ) {
-                    Text(text = stringResource(R.string.heure_d_but_aucune))
+                    Text(
+                        text = stringResource(R.string.heure_d_but_aucune),
+                        modifier = Modifier.semantics {
+                            contentDescription = "Heure de début, aucune. Vous pouvez sélectionner une heure de début en défilant en droite sur le bouton."
+                        }
+                    )
                 } else {
-                    Text(text = stringResource(R.string.heure_d_but_objet, heureDebut!!))
+                    Text(
+                        text = stringResource(R.string.heure_d_but_objet, heureDebut!!),
+                        modifier = Modifier.semantics {
+                            contentDescription = "Heure de début, ${heureDebut!!.hour} heures et ${heureDebut!!.minute} minutes."
+                        }
+                    )
                 }
                 Button(
                     onClick = { mTimePickerDialogHeureDebut.show() },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF0F9D58))
                 ) {
-                    Text(text = stringResource(R.string.choisir_heure_d_but), color = Color.White)
+                    Text(
+                        text = stringResource(R.string.choisir_heure_d_but),
+                        color = Color.White,
+                        modifier = Modifier.semantics {
+                            contentDescription = "Choisir une heure de début pour la plage horaire."
+                        }
+                    )
                 }
 
 
@@ -492,16 +532,32 @@ fun AddPlageHorairePopup(
 
 
                 if ( heureFin == null ) {
-                    Text(text = stringResource(R.string.heure_fin_aucune))
+                    Text(
+                        text = stringResource(R.string.heure_fin_aucune),
+                        modifier = Modifier.semantics {
+                            contentDescription = "Heure de fin, aucune. Vous pouvez sélectionner une heure de fin en défilant en droite sur le bouton."
+                        }
+                    )
                 } else {
-                    Text(text = stringResource(R.string.heure_fin_objet, heureFin!!))
+                    Text(
+                        text = stringResource(R.string.heure_fin_objet, heureFin!!),
+                        modifier = Modifier.semantics {
+                            contentDescription = "Heure de fin, ${heureFin!!.hour} heures et ${heureFin!!.minute} minutes."
+                        }
+                    )
                 }
 
                 Button(
                     onClick = { mTimePickerDialogHeureFin.show() },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0XFF0F9D58))
                 ) {
-                    Text(text = stringResource(R.string.choisir_heure_fin), color = Color.White)
+                    Text(
+                        text = stringResource(R.string.choisir_heure_fin),
+                        color = Color.White,
+                        modifier = Modifier.semantics {
+                            contentDescription = "Choisir une heure de fin pour la plage horaire."
+                        }
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -513,9 +569,15 @@ fun AddPlageHorairePopup(
                 ) {
                     Button(
                         onClick = onDismiss,
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                     ) {
-                        Text(text = stringResource(R.string.annuler), color = Color.White)
+                        Text(
+                            text = stringResource(R.string.annuler),
+                            color = Color.White,
+                            modifier = Modifier.semantics {
+                                contentDescription = "Annuler la création de la plage horaire."
+                            }
+                        )
                     }
                     Button(
                         onClick = {
@@ -573,10 +635,16 @@ fun AddPlageHorairePopup(
                                     .show()
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
-                        Text(text = stringResource(R.string.ajouter), color = Color.White)
+                        Text(
+                            text = "Valider",
+                            color = Color.White,
+                            modifier = Modifier.semantics {
+                                contentDescription = "Valider la création de la plage horaire."
+                            }
+                        )
                     }
                 }
             }
@@ -832,7 +900,12 @@ fun AnnonceList(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = annonce.nom)
+                    Text(
+                        text = annonce.nom,
+                        modifier = Modifier.semantics {
+                            contentDescription = "Nom de l'annonce, ${annonce.nom}."
+                        }
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     if (isSelected) {
                         Icon(
