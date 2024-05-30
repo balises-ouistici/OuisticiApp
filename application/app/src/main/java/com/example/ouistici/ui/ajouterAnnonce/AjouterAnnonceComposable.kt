@@ -12,9 +12,13 @@ import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -25,6 +29,7 @@ import com.example.ouistici.ui.theme.FontColor
  * @brief Composable function to navigate in other pages that are useful for adding announcements.
  * @param navController The navigation controller to navigate between screens.
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AjouterAnnonce(navController: NavController) {
     Column(
@@ -45,7 +50,10 @@ fun AjouterAnnonce(navController: NavController) {
         Text(
             text = stringResource(R.string.vocale),
             fontSize = 15.sp,
-            color = FontColor
+            color = FontColor,
+            modifier = Modifier.semantics {
+                this.invisibleToUser()
+            }
         )
         LargeFloatingActionButton(
             onClick = { navController.navigate("annonceVocal") },
@@ -54,12 +62,14 @@ fun AjouterAnnonce(navController: NavController) {
             modifier = Modifier
                 .width(80.dp)
                 .height(80.dp)
-
         ) {
             Text(
                 text = "GO",
                 color = Color.White,
-                fontSize = 25.sp
+                fontSize = 25.sp,
+                modifier = Modifier.semantics {
+                    contentDescription = "Créez une annonce grâce à l'enregistreur vocal de votre téléphone."
+                }
             )
         }
 
@@ -69,7 +79,10 @@ fun AjouterAnnonce(navController: NavController) {
         Text(
             text = stringResource(R.string.texte),
             fontSize = 15.sp,
-            color = FontColor
+            color = FontColor,
+            modifier = Modifier.semantics {
+                this.invisibleToUser()
+            }
         )
         LargeFloatingActionButton(
             onClick = { navController.navigate("annonceTexte") },
@@ -83,7 +96,10 @@ fun AjouterAnnonce(navController: NavController) {
             Text(
                 text = "GO",
                 color = Color.White,
-                fontSize = 25.sp
+                fontSize = 25.sp,
+                modifier = Modifier.semantics {
+                    contentDescription = "Créez une annonce en écrivant un texte qui sera lu par un synthétiseur vocal."
+                }
             )
         }
 
@@ -93,7 +109,10 @@ fun AjouterAnnonce(navController: NavController) {
         Text(
             text = stringResource(R.string.charger_fichier_audio),
             fontSize = 15.sp,
-            color = FontColor
+            color = FontColor,
+            modifier = Modifier.semantics {
+                this.invisibleToUser()
+            }
         )
         LargeFloatingActionButton(
             onClick = { navController.navigate("annonceMptrois") },
@@ -107,9 +126,11 @@ fun AjouterAnnonce(navController: NavController) {
             Text(
                 text = "GO",
                 color = Color.White,
-                fontSize = 25.sp
+                fontSize = 25.sp,
+                modifier = Modifier.semantics {
+                    contentDescription = "Créez une annonce en chargeant un fichier audio depuis votre téléphone."
+                }
             )
         }
-
     }
 }
