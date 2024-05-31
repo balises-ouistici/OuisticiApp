@@ -107,7 +107,7 @@ fun RowScope.TableHeaderCell(
             .weight(weight)
             .padding(8.dp)
             .height(50.dp)
-            .semantics { this.invisibleToUser() },
+            .semantics { contentDescription = "Titre de colonne du tableau, ${text}." },
         color = textColor
         )
 }

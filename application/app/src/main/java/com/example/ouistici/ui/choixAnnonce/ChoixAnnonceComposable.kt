@@ -1246,7 +1246,7 @@ fun RowScope.TableHeaderCell(
             .padding(8.dp)
             .height(30.dp)
             .semantics {
-                       contentDescription = "Case du tableau, ${text}."
+                       contentDescription = "Titre de colonne du tableau, ${text}."
             },
         color = textColor
     )
