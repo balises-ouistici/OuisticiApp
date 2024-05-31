@@ -1400,7 +1400,7 @@ fun TableScreen(balise : Balise, navController: NavController) {
                     Icon(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "",
-                        modifier = Modifier.size(10.dp)
+                        modifier = Modifier.size(15.dp)
                     )
                 }
 
@@ -1437,7 +1437,7 @@ fun TableScreen(balise : Balise, navController: NavController) {
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "",
-                        modifier = Modifier.size(10.dp)
+                        modifier = Modifier.size(15.dp)
                     )
                 }
 
