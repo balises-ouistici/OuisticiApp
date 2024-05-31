@@ -52,6 +52,7 @@ import com.example.ouistici.model.Balise
 import com.example.ouistici.model.Langue
 import com.example.ouistici.model.LangueManager
 import com.example.ouistici.model.TextToSpeechManager
+import com.example.ouistici.model.ToastUtil
 import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.theme.FontColor
 import kotlinx.coroutines.Dispatchers
@@ -255,37 +256,21 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                                             )
                                         )
 
-                                        Toast.makeText(
-                                            context,
-                                            context.getString(R.string.annonce_ajout_e),
-                                            Toast.LENGTH_LONG
-                                        ).show()
+                                        ToastUtil.showToast(context, "Annonce ajoutée")
                                     } else {
                                         Log.e("CreateAnnonce", "Échec création d'annonce")
-                                        Toast.makeText(
-                                            context,
-                                            "Échec lors de l'envoie du fichier au serveur",
-                                            Toast.LENGTH_LONG
-                                        ).show()
+                                        ToastUtil.showToast(context, "Échec lors de l'envoie du fichier au serveur")
                                     }
                                 }
                             } else {
                                 Log.e("CreateAnnonce", "Échec création d'annonce")
-                                Toast.makeText(
-                                    context,
-                                    "Échec lors de la création de l'annonce",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                ToastUtil.showToast(context, "Échec lors de la création de l'annonce")
                             }
                         }
                         navController.navigate("annonceTexte")
                     }
                 } else {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.action_impossible_vous_devez_remplir_les_champs),
-                        Toast.LENGTH_LONG
-                    ).show()
+                    ToastUtil.showToast(context, "Action impossible, vous devez remplir les champs")
                 }
             },
             modifier = Modifier.padding(16.dp),

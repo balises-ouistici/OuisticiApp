@@ -60,6 +60,7 @@ import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.AndroidAudioRecorder
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
+import com.example.ouistici.model.ToastUtil
 import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.theme.FontColor
 import kotlinx.coroutines.delay
@@ -368,36 +369,20 @@ fun AnnonceVocale(
                                                 )
                                             )
 
-                                            Toast.makeText(
-                                                context,
-                                                context.getString(R.string.annonce_ajout_e),
-                                                Toast.LENGTH_LONG)
-                                                .show()
+                                            ToastUtil.showToast(context, "Annonce ajoutée")
                                         } else {
                                             Log.e("CreateAnnonce","Échec création d'annonce")
-                                            Toast.makeText(
-                                                context,
-                                                "Échec lors de l'envoie du fichier au serveur",
-                                                Toast.LENGTH_LONG)
-                                                .show()
+                                            ToastUtil.showToast(context, "Échec lors de l'envoie du fichier au serveur")
                                         }
                                     }
                                 } else {
                                     Log.e("CreateAnnonce","Échec création d'annonce")
-                                    Toast.makeText(
-                                        context,
-                                        "Échec lors de la création de l'annonce",
-                                        Toast.LENGTH_LONG)
-                                        .show()
+                                    ToastUtil.showToast(context, "Échec lors de la création de l'annonce")
                                 }
                             }
                             navController.navigate("annonceVocal")
                         } else {
-                            Toast.makeText(
-                                context,
-                                context.getString(R.string.action_impossible_vous_devez_saisir_un_nom),
-                                Toast.LENGTH_LONG)
-                                .show()
+                            ToastUtil.showToast(context, "Action impossible, vous devez choisir un nom !")
                         }
                     },
                     modifier = Modifier.padding(16.dp),
