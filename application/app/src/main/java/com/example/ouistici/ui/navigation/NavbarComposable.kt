@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.text
@@ -126,35 +127,40 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                         "addAnnonce",
                         stringResource(R.string.ajouter),
                         Icons.Filled.AddCircle,
-                        columnModifier
+                        columnModifier,
+                        "une annonce."
                     )
                     ClickableColumn(
                         navController,
                         "manageAnnonce",
                         stringResource(R.string.modifier),
                         Icons.Filled.Edit,
-                        columnModifier
+                        columnModifier,
+                        "les plages horaires."
                     )
                     ClickableColumn(
                         navController,
                         "infosBalise",
                         stringResource(R.string.infos),
                         Icons.Filled.Info,
-                        columnModifier
+                        columnModifier,
+                        "de la balise."
                     )
                     ClickableColumn(
                         navController,
                         "settings",
                         stringResource(R.string.options),
                         Icons.Filled.Settings,
-                        columnModifier
+                        columnModifier,
+                        "de l'application."
                     )
                     ClickableColumn(
                         navController,
                         "listeBalises",
                         stringResource(R.string.balises),
                         Icons.Filled.ExitToApp,
-                        columnModifier
+                        columnModifier,
+                        "liste des balises."
                     )
                 }
             }
@@ -269,7 +275,14 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
  * @param modifier The modifier for the column.
  */
 @Composable
-fun ClickableColumn(navController: NavController, destination: String, text: String, icon: ImageVector, modifier: Modifier) {
+fun ClickableColumn(
+    navController: NavController,
+    destination: String,
+    text: String,
+    icon: ImageVector,
+    modifier: Modifier,
+    textSemantics: String
+    ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.clickable {
@@ -286,6 +299,9 @@ fun ClickableColumn(navController: NavController, destination: String, text: Str
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 4.dp)
+                .semantics {
+                    contentDescription = "Barre de navigation, ${text} ${textSemantics}"
+                }
         )
     }
 }
