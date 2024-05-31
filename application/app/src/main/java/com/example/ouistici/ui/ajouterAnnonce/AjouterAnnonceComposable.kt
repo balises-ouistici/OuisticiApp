@@ -73,6 +73,7 @@ fun AjouterAnnonce(navController: NavController) {
                 this.invisibleToUser()
             }
         )
+        Spacer(modifier = Modifier.height(10.dp))
         LargeFloatingActionButton(
             onClick = { navController.navigate("annonceVocal") },
             shape = CircleShape,
@@ -102,6 +103,7 @@ fun AjouterAnnonce(navController: NavController) {
                 this.invisibleToUser()
             }
         )
+        Spacer(modifier = Modifier.height(10.dp))
         LargeFloatingActionButton(
             onClick = { navController.navigate("annonceTexte") },
             shape = CircleShape,
@@ -132,6 +134,7 @@ fun AjouterAnnonce(navController: NavController) {
                 this.invisibleToUser()
             }
         )
+        Spacer(modifier = Modifier.height(10.dp))
         LargeFloatingActionButton(
             onClick = { navController.navigate("annonceMptrois") },
             shape = CircleShape,

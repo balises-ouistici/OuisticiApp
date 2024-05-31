@@ -180,6 +180,7 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                 // ROUTES DE LA NAVBAR
 
                 composable(route = "addAnnonce") {
+                    isBottomAppBarVisible.value = true
                     AjouterAnnonce(
                         navController = navController
                     )
@@ -188,6 +189,7 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                 composable(route = "manageAnnonce") {
                     val selectedBalise = baliseViewModel.selectedBalise
                     if (selectedBalise != null) {
+                        isBottomAppBarVisible.value = true
                         ChoixAnnonce(
                             navController = navController,
                             balise = selectedBalise
@@ -208,6 +210,7 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                 }
 
                 composable(route = "settings") {
+                    isBottomAppBarVisible.value = true
                     ParametresAppli(
                         navController = navController
                     )
