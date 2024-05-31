@@ -66,6 +66,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -1248,7 +1249,8 @@ fun RowScope.TableHeaderCell(
             .semantics {
                        contentDescription = "Titre de colonne du tableau, ${text}."
             },
-        color = textColor
+        color = textColor,
+        textAlign = TextAlign.Center
     )
 }
 
@@ -1322,7 +1324,8 @@ fun RowScope.TableJoursCell(
             .semantics {
                        contentDescription = "${textSemantics}, ${ if (jours.count() == 7) "Tous les jours" else  jours }"
             },
-        color = textColor
+        color = textColor,
+        textAlign = TextAlign.Center
     )
 }
 
