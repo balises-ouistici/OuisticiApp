@@ -75,7 +75,10 @@ fun ParametresAppli(navController: NavController) {
         Text(
             text = stringResource(R.string.parametres_de_l_application),
             fontSize = 25.sp,
-            color = FontColor
+            color = FontColor,
+            modifier = Modifier.semantics {
+                contentDescription = "Page des paramètres de l'application."
+            }
         )
 
         Box(modifier = Modifier.padding(top = 16.dp)) {

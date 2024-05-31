@@ -120,7 +120,10 @@ fun InfosBalise(
         Text(
             text = stringResource(R.string.informations_balise),
             fontSize = 25.sp,
-            color = FontColor
+            color = FontColor,
+            modifier = Modifier.semantics {
+                contentDescription = "Page des informations de la balise."
+            }
         )
 
         // Boite avec nom, lieu, message par défaut
