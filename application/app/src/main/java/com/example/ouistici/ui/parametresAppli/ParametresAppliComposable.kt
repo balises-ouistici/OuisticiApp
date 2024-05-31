@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,17 +23,22 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.LocaleListCompat
@@ -41,6 +47,7 @@ import com.example.ouistici.R
 import com.example.ouistici.model.Langue
 import com.example.ouistici.model.LangueManager
 import com.example.ouistici.ui.theme.FontColor
+import kotlinx.coroutines.delay
 import java.util.Locale
 
 
@@ -51,9 +58,18 @@ import java.util.Locale
  */
 @Composable
 fun ParametresAppli(navController: NavController) {
-
     val context = LocalContext.current
 
+    // Accessibilité
+    val focusRequester = remember { FocusRequester() }
+    val view = LocalView.current
+    LaunchedEffect(Unit) {
+        delay(100) // Add a slight delay to ensure the screen is fully loaded
+        focusRequester.requestFocus()
+        view.announceForAccessibility("")
+    }
+
+    // Autre
     val availableLocales = listOf("fr", "en") // Liste des langues disponibles
 
     var expanded by remember { mutableStateOf(false) }
@@ -65,6 +81,7 @@ fun ParametresAppli(navController: NavController) {
             AppCompatDelegate.setApplicationLocales(appLocale)
         }
     }
+
 
     Column(
         modifier = Modifier
@@ -79,6 +96,8 @@ fun ParametresAppli(navController: NavController) {
             modifier = Modifier.semantics {
                 contentDescription = "Page des paramètres de l'application."
             }
+                .focusRequester(focusRequester)
+                .focusable()
         )
 
         Box(modifier = Modifier.padding(top = 16.dp)) {

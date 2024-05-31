@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,14 +19,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.invisibleToUser
@@ -39,6 +44,7 @@ import com.example.ouistici.model.Balise
 import com.example.ouistici.ui.baliseViewModel.BaliseViewModel
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
+import kotlinx.coroutines.delay
 
 
 /**
@@ -52,6 +58,14 @@ import com.example.ouistici.ui.theme.TableHeaderColor
 fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel) {
     val balises by remember { mutableStateOf(Stub.bal) }
 
+    val focusRequester = remember { FocusRequester() }
+    val view = LocalView.current
+    LaunchedEffect(Unit) {
+        delay(100) // Add a slight delay to ensure the screen is fully loaded
+        focusRequester.requestFocus()
+        view.announceForAccessibility("")
+    }
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -60,7 +74,10 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel)
         Text(
             text = stringResource(R.string.liste_des_balises),
             fontSize = 25.sp,
-            color = FontColor
+            color = FontColor,
+            modifier = Modifier
+                .focusRequester(focusRequester)
+                .focusable()
         )
 
         TableScreen(balises, navController, baliseViewModel)

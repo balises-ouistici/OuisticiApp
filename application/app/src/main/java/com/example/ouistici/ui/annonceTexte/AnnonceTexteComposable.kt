@@ -4,6 +4,7 @@ import android.media.MediaPlayer
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +21,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,8 +29,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -76,6 +81,14 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
     val context = LocalContext.current
     val ttsManager = remember { TextToSpeechManager(context) }
 
+    val focusRequester = remember { FocusRequester() }
+    val view = LocalView.current
+    LaunchedEffect(Unit) {
+        delay(100) // Add a slight delay to ensure the screen is fully loaded
+        focusRequester.requestFocus()
+        view.announceForAccessibility("")
+    }
+
 
     Column(
         modifier = Modifier
@@ -91,6 +104,8 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
             modifier = Modifier.semantics {
                 contentDescription = "Page de création d'une annonce avec synthétiseur vocal."
             }
+                .focusRequester(focusRequester)
+                .focusable()
         )
        
         Spacer(modifier = Modifier.height(40.dp))

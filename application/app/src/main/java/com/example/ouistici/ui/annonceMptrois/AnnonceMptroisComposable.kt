@@ -9,6 +9,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,14 +30,18 @@ import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -54,6 +59,7 @@ import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.theme.FontColor
+import kotlinx.coroutines.delay
 import java.io.File
 import java.io.FileOutputStream
 
@@ -86,6 +92,14 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
     }
 
 
+    val focusRequester = remember { FocusRequester() }
+    val view = LocalView.current
+    LaunchedEffect(Unit) {
+        delay(100) // Add a slight delay to ensure the screen is fully loaded
+        focusRequester.requestFocus()
+        view.announceForAccessibility("")
+    }
+
 
     Column(
         modifier = Modifier
@@ -101,6 +115,8 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
             modifier = Modifier.semantics {
                 contentDescription = "Page de création d'une annonce en choisissant un fichier audio depuis le téléphone."
             }
+                .focusRequester(focusRequester)
+                .focusable()
         )
         Spacer(modifier = Modifier.padding(10.dp))
         LargeFloatingActionButton(

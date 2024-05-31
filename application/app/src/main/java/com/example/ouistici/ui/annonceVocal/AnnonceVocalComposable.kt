@@ -3,6 +3,7 @@ package com.example.ouistici.ui.annonceVocal
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,9 +36,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -109,6 +113,14 @@ fun AnnonceVocale(
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
+    val focusRequester = remember { FocusRequester() }
+    val view = LocalView.current
+    LaunchedEffect(Unit) {
+        delay(100) // Add a slight delay to ensure the screen is fully loaded
+        focusRequester.requestFocus()
+        view.announceForAccessibility("")
+    }
+
 
     Column(
         modifier = Modifier
@@ -124,6 +136,8 @@ fun AnnonceVocale(
             modifier = Modifier.semantics {
                 contentDescription = "Page de création d'une annonce avec enregistrement vocal."
             }
+                .focusRequester(focusRequester)
+                .focusable()
         )
         Spacer(modifier = Modifier.padding(10.dp))
         when (currentStep) {
