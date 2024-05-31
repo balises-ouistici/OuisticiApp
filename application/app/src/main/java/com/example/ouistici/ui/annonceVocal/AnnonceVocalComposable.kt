@@ -118,7 +118,7 @@ fun AnnonceVocale(
     ) {
         Spacer(modifier = Modifier.height(40.dp))
         Text(
-            text = stringResource(R.string.enregistrer_annonce),
+            text = "Enregistreur vocal",
             fontSize = 25.sp,
             color = FontColor
         )

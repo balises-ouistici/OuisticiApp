@@ -30,6 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -121,9 +123,11 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
         Row (verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = stringResource(R.string.langue_de_la_voix),
-                color = FontColor
+                color = FontColor,
+                modifier = Modifier.semantics {
+                    contentDescription = "Langue de la voix, défilez à droite pour choisir la langue du synthétiseur vocal."
+                }
             )
-
 
             Box(
                 modifier = Modifier
@@ -135,13 +139,19 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                     Text(
                         text = stringResource(R.string.choisir),
                         fontSize = 16.sp,
-                        color = FontColor
+                        color = FontColor,
+                        modifier = Modifier.semantics {
+                            contentDescription = "Choisir la langue du synthétiseur vocal."
+                        }
                     )
                 } else {
                     Text(
                         text = langueSelectionnee.getLangueName(),
                         fontSize = 16.sp,
-                        color = FontColor
+                        color = FontColor,
+                        modifier = Modifier.semantics {
+                            contentDescription = "${langueSelectionnee.getLangueName()} choisit comme langue de synthétiseur."
+                        }
                     )
                 }
 
@@ -265,7 +275,10 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
         ) {
             Text(
                 text = stringResource(R.string.enregistrer),
-                color = Color.White
+                color = Color.White,
+                modifier = Modifier.semantics {
+                    contentDescription = "Enregistrer l'annonce créée."
+                }
             )
         }
 
@@ -289,6 +302,9 @@ fun DropdownMenuItemLangue(
         modifier = Modifier
             .clickable(onClick = { onClick(langue) })
             .padding(vertical = 8.dp, horizontal = 16.dp)
+            .semantics {
+                contentDescription = "Sélection en cours, ${langue.getLangueName()}"
+            }
     )
 }
 
