@@ -29,6 +29,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -49,6 +51,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.ouistici.R
 import com.example.ouistici.model.AndroidAudioPlayer
@@ -82,6 +85,8 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
     val baliseViewModel: BaliseViewModel = viewModel()
     val isBottomAppBarVisible = remember { mutableStateOf(true) }
 
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
 
     Scaffold(
         topBar = {
@@ -128,7 +133,8 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                         stringResource(R.string.ajouter),
                         Icons.Filled.AddCircle,
                         columnModifier,
-                        "une annonce."
+                        "une annonce.",
+                        currentRoute == "addAnnonce"
                     )
                     ClickableColumn(
                         navController,
@@ -136,7 +142,8 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                         stringResource(R.string.modifier),
                         Icons.Filled.Edit,
                         columnModifier,
-                        "les plages horaires."
+                        "les plages horaires.",
+                        currentRoute == "manageAnnonce"
                     )
                     ClickableColumn(
                         navController,
@@ -144,7 +151,8 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                         stringResource(R.string.infos),
                         Icons.Filled.Info,
                         columnModifier,
-                        "de la balise."
+                        "de la balise.",
+                        currentRoute == "infosBalise"
                     )
                     ClickableColumn(
                         navController,
@@ -152,7 +160,8 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                         stringResource(R.string.options),
                         Icons.Filled.Settings,
                         columnModifier,
-                        "de l'application."
+                        "de l'application.",
+                        currentRoute == "settings"
                     )
                     ClickableColumn(
                         navController,
@@ -160,7 +169,8 @@ fun BottomAppBarExample(recorder: AndroidAudioRecorder, player: AndroidAudioPlay
                         stringResource(R.string.balises),
                         Icons.Filled.ExitToApp,
                         columnModifier,
-                        "liste des balises."
+                        "liste des balises.",
+                        currentRoute == "listeBalises"
                     )
                 }
             }
@@ -284,26 +294,35 @@ fun ClickableColumn(
     text: String,
     icon: ImageVector,
     modifier: Modifier,
-    textSemantics: String
-    ) {
+    textSemantics: String,
+    isSelected: Boolean
+) {
+    val backgroundColor = if (isSelected) Color.Gray else Color.Transparent
+    val textColor = if (isSelected) Color.White else Color.Black
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.clickable {
-            navController.navigate(destination)
-        }
+        modifier = modifier
+            .background(backgroundColor)
+            .clickable {
+                navController.navigate(destination)
+            }
     ) {
         Icon(
             imageVector = icon,
             contentDescription = null,
-            modifier = Modifier.size(30.dp)
+            modifier = Modifier.size(30.dp),
+            tint = textColor
         )
         Text(
             text = text,
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 4.dp)
+            color = textColor,
+            modifier = Modifier
+                .padding(top = 4.dp)
                 .semantics {
-                    contentDescription = "Barre de navigation, ${text} ${textSemantics}"
+                    contentDescription = "Barre de navigation, $text $textSemantics"
                 }
         )
     }
