@@ -2,6 +2,7 @@ package com.example.ouistici.ui.listeBalises
 
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -191,7 +192,12 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                                 baliseViewModel.selectedBalise = loadedBalise
                                 navController.navigate("infosBalise")
                             } else {
-                                Log.d("Oui","Problème ahahahahahahahahaahahahah")
+                                Log.d("Oui","Problème")
+                                Toast.makeText(
+                                    context,
+                                    "Échec de la connexion à la balise",
+                                    Toast.LENGTH_LONG)
+                                    .show()
                             }
                         }
                     }
@@ -209,7 +215,12 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                                     baliseViewModel.selectedBalise = loadedBalise
                                     navController.navigate("infosBalise")
                                 } else {
-                                    Log.d("Oui","Problème ahahahahahahahahaahahahah")
+                                    Log.d("Oui","Problème")
+                                    Toast.makeText(
+                                        context,
+                                        "Échec de la connexion à la balise",
+                                        Toast.LENGTH_LONG)
+                                        .show()
                                 }
                             }
                         }
@@ -226,7 +237,12 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                                     baliseViewModel.selectedBalise = loadedBalise
                                     navController.navigate("infosBalise")
                                 } else {
-                                    Log.d("Oui","Problème ahahahahahahahahaahahahah")
+                                    Log.d("Oui","Problème")
+                                    Toast.makeText(
+                                        context,
+                                        "Échec de la connexion à la balise",
+                                        Toast.LENGTH_LONG)
+                                        .show()
                                 }
                             }
                         }
@@ -246,7 +262,12 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                                     baliseViewModel.selectedBalise = loadedBalise
                                     navController.navigate("infosBalise")
                                 } else {
-                                    Log.d("Oui","Problème ahahahahahahahahaahahahah")
+                                    Log.d("Oui","Problème")
+                                    Toast.makeText(
+                                        context,
+                                        "Échec de la connexion à la balise",
+                                        Toast.LENGTH_LONG)
+                                        .show()
                                 }
                             }
                         }
@@ -263,7 +284,12 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                                     baliseViewModel.selectedBalise = loadedBalise
                                     navController.navigate("infosBalise")
                                 } else {
-                                    // Handle error case if needed
+                                    Log.d("Oui","Problème")
+                                    Toast.makeText(
+                                        context,
+                                        "Échec de la connexion à la balise",
+                                        Toast.LENGTH_LONG)
+                                        .show()
                                 }
                             }
                         }
