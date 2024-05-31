@@ -80,6 +80,7 @@ import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.JoursSemaine
 import com.example.ouistici.model.PlageHoraire
+import com.example.ouistici.model.ToastUtil
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
@@ -352,20 +353,11 @@ fun DefaultMessagePopup(
                                                 .show()
                                         } else {
                                             Log.e("InfosBalise", "Échec nouvelle annonce par défaut")
-                                            Toast.makeText(
-                                                context,
-                                                "Échec lors de l'enregistrement de l'annonce par défaut",
-                                                Toast.LENGTH_LONG
-                                            )
-                                                .show()
+                                            ToastUtil.showToast(context, "Échec lors de l'enregistrement de l'annonce par défaut")
                                         }
                                     }
                                 } else {
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.action_impossible),
-                                        Toast.LENGTH_LONG)
-                                        .show()
+                                    ToastUtil.showToast(context, "Action impossible")
                                 }
                                 onDismiss()
                                 navController.navigate("manageAnnonce")
@@ -602,11 +594,7 @@ fun AddPlageHorairePopup(
                             // Création de la plage horaire
                             if (selectedAnnonce != null && selectedJours.isNotEmpty() && heureDebut != null && heureFin != null) {
                                 if ( heureDebut!! >= heureFin!! ) {
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.l_heure_de_fin_ne_peut_pas_tre_avant_celle_du_d_but),
-                                        Toast.LENGTH_LONG)
-                                        .show()
+                                    ToastUtil.showToast(context, "L'heure de fin ne peut pas être avant celle du début !")
                                 } else {
                                     val apiService = RestApiService()
                                     val timeslotInfo = TimeslotDto(
@@ -627,30 +615,17 @@ fun AddPlageHorairePopup(
                                         if (it?.id_timeslot != null) {
                                             balise.plages.add(PlageHoraire(balise.createIdTimeslot(), selectedAnnonce!!, selectedJours, heureDebut!!, heureFin!!))
                                             Log.d("InfosBalise", "Nouvelle plage horaire !")
-                                            Toast.makeText(
-                                                context,
-                                                "Nouvelle plage horaire créée !",
-                                                Toast.LENGTH_LONG)
-                                                .show()
+                                            ToastUtil.showToast(context, "Nouvelle plage horaire créée !")
                                         } else {
                                             Log.e("InfosBalise", "Échec nouvelle plage horaire")
-                                            Toast.makeText(
-                                                context,
-                                                "Échec lors de l'enregistrement de la nouvelle plage horaire",
-                                                Toast.LENGTH_LONG
-                                            )
-                                                .show()
+                                            ToastUtil.showToast(context, "Échec lors de l'enregistrement de la nouvelle plage horaire")
                                         }
                                     }
                                     onDismiss()
                                     navController.navigate("manageAnnonce")
                                 }
                             } else {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.informations_manquantes),
-                                    Toast.LENGTH_LONG)
-                                    .show()
+                                ToastUtil.showToast(context, "Informations manquantes !")
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
@@ -877,11 +852,7 @@ fun ModifyPlageHorairePopup(
                             // Création de la plage horaire
                             if (selectedAnnonce != null && selectedJours.isNotEmpty() && heureDebut != null && heureFin != null) {
                                 if ( heureDebut!! >= heureFin!! ) {
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.l_heure_de_fin_ne_peut_pas_tre_avant_celle_du_d_but),
-                                        Toast.LENGTH_LONG)
-                                        .show()
+                                    ToastUtil.showToast(context, "L'heure de fin ne peut pas être avant celle du début !")
                                 } else {
                                     val apiService = RestApiService()
                                     val timeslotInfo = TimeslotDto(
@@ -905,30 +876,17 @@ fun ModifyPlageHorairePopup(
                                             plageHoraire.heureDebut = heureDebut as LocalTime
                                             plageHoraire.heureFin = heureFin as LocalTime
                                             Log.d("InfosBalise", "Plage horaire modifiée !")
-                                            Toast.makeText(
-                                                context,
-                                                "La plage horaire a bien été modifiée !",
-                                                Toast.LENGTH_LONG)
-                                                .show()
+                                            ToastUtil.showToast(context, "La plage horaire a bien été modifiée !")
                                         } else {
                                             Log.e("InfosBalise", "Échec modification plage horaire")
-                                            Toast.makeText(
-                                                context,
-                                                "Échec lors de la modification de la plage horaire",
-                                                Toast.LENGTH_LONG
-                                            )
-                                                .show()
+                                            ToastUtil.showToast(context, "Échec lors de la modification de la plage horaire")
                                         }
                                     }
                                     onDismiss()
                                     navController.navigate("manageAnnonce")
                                 }
                             } else {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.informations_manquantes),
-                                    Toast.LENGTH_LONG)
-                                    .show()
+                                ToastUtil.showToast(context, "Informations manquantes")
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
@@ -1190,19 +1148,10 @@ fun ConfirmDeletePlagePopup(
                                 if (it?.id_timeslot != null) {
                                     balise.plages.remove(plageHoraire)
                                     Log.d("InfosBalise", "Plage horaire supprimée !")
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.plage_horaire_supprim_e),
-                                        Toast.LENGTH_LONG)
-                                        .show()
+                                    ToastUtil.showToast(context, "Plage horaire supprimée")
                                 } else {
                                     Log.e("InfosBalise", "Échec suppression plage horaire")
-                                    Toast.makeText(
-                                        context,
-                                        "Échec lors de la suppression de la plage horaire",
-                                        Toast.LENGTH_LONG
-                                    )
-                                        .show()
+                                    ToastUtil.showToast(context, "Échec lors de la suppression de la plage horaire")
                                 }
                             }
                             onDismiss()
@@ -1543,11 +1492,7 @@ fun OnOffButton(balise: Balise, navController: NavController) {
                         navController.navigate("manageAnnonce")
                     } else {
                         Log.e("BoutonOfOff","Échec modification état")
-                        Toast.makeText(
-                            context,
-                            "Échec lors de la modification de l'état du bouton",
-                            Toast.LENGTH_LONG)
-                            .show()
+                        ToastUtil.showToast(context, "Échec lors de la modification de l'état du bouton")
                     }
                 }
             },
