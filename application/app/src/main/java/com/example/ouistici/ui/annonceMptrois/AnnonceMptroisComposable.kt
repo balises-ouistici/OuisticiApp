@@ -38,6 +38,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -95,7 +97,10 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
         Text(
             text = stringResource(R.string.choisir_fichier_audio),
             fontSize = 25.sp,
-            color = FontColor
+            color = FontColor,
+            modifier = Modifier.semantics {
+                contentDescription = "Page de création d'une annonce en choisissant un fichier audio depuis le téléphone."
+            }
         )
         Spacer(modifier = Modifier.padding(10.dp))
         LargeFloatingActionButton(
@@ -112,7 +117,10 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
             Text(
                 text = "+",
                 color = Color.White,
-                fontSize = 25.sp
+                fontSize = 25.sp,
+                modifier = Modifier.semantics {
+                    contentDescription = "Choisir le fichier audio depuis le téléphone."
+                }
             )
         }
 
@@ -121,15 +129,24 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                 onClick = {
                     audioFile?.let { player.playFile(it) }
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                modifier = Modifier.semantics {
+                    contentDescription = "Écouter l'audio sélectionné."
+                }
             ) {
-                Icon(imageVector = Icons.Default.PlayArrow, contentDescription = "Play arrow")
+                Icon(
+                    imageVector = Icons.Default.PlayArrow,
+                    contentDescription = ""
+                )
             }
             Button(
                 onClick = {
                     player.stop()
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                modifier = Modifier.semantics {
+                    contentDescription = "Arrêter la lecture audio."
+                }
             ) {
                 Text(text = "||")
             }
@@ -148,7 +165,11 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
             if (duration > 0) {
                 Text(
                     text = stringResource(R.string.dur_e_ms, duration / 60, duration % 60),
-                    color = FontColor
+                    color = FontColor,
+                    modifier = Modifier
+                        .semantics {
+                            contentDescription = "Durée de l'audio, ${duration/60} minutes et ${duration%60} secondes."
+                        }
                 )
             } else {
                 Text(
@@ -270,7 +291,10 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
         ) {
             Text(
                 text = stringResource(R.string.enregistrer),
-                color = Color.White
+                color = Color.White,
+                modifier = Modifier.semantics {
+                    contentDescription = "Enregistrer l'annonce créée."
+                }
             )
         }
     }

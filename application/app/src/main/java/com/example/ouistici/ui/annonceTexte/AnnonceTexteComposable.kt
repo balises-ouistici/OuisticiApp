@@ -87,7 +87,10 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
         Text(
             text = stringResource(R.string.synth_tiseur_vocal),
             fontSize = 25.sp,
-            color = FontColor
+            color = FontColor,
+            modifier = Modifier.semantics {
+                contentDescription = "Page de création d'une annonce avec synthétiseur vocal."
+            }
         )
        
         Spacer(modifier = Modifier.height(40.dp))

@@ -120,7 +120,10 @@ fun AnnonceVocale(
         Text(
             text = "Enregistreur vocal",
             fontSize = 25.sp,
-            color = FontColor
+            color = FontColor,
+            modifier = Modifier.semantics {
+                contentDescription = "Page de création d'une annonce avec enregistrement vocal."
+            }
         )
         Spacer(modifier = Modifier.padding(10.dp))
         when (currentStep) {
