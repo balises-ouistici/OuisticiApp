@@ -81,6 +81,7 @@ import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.LangueManager
 import com.example.ouistici.model.TextToSpeechManager
+import com.example.ouistici.model.ToastUtil
 import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.annonceTexte.DropdownMenuItemLangue
 import com.example.ouistici.ui.choixAnnonce.AnnonceDefaultMessageList
@@ -289,18 +290,10 @@ fun InfosBalise(
                             if ( it?.balId != null ) {
                                 balise.volume = sliderPosition
                                 Log.d("InfosBalise","Nouveau volume !")
-                                Toast.makeText(
-                                    context,
-                                    "Le volume a été modifié",
-                                    Toast.LENGTH_LONG)
-                                    .show()
+                                ToastUtil.showToast(context, "Le volume a été modifié")
                             } else {
                                 Log.e("InfosBalise","Échec nouveau volume")
-                                Toast.makeText(
-                                    context,
-                                    "Échec lors de l'enregistrement du volume",
-                                    Toast.LENGTH_LONG)
-                                    .show()
+                                ToastUtil.showToast(context, "Échec lors de l'enregistrement du volume")
                             }
                         }
                     },
@@ -316,27 +309,15 @@ fun InfosBalise(
                 Button(
                     onClick = {
                         if ( balise.defaultMessage == null ) {
-                            Toast.makeText(
-                                context,
-                                "Impossible, il n'y a pas d'annonce par défaut",
-                                Toast.LENGTH_LONG)
-                                .show()
+                            ToastUtil.showToast(context, "Impossible, il n'y a pas d'annonce par défaut")
                         } else {
                             val apiService = RestApiService()
                             apiService.testSound() { statusCode ->
                                 Log.e("InfosBalise","test son : ${statusCode}")
                                 if (statusCode == 200 ) {
-                                    Toast.makeText(
-                                        context,
-                                        "Test du son réussi",
-                                        Toast.LENGTH_LONG)
-                                        .show()
+                                    ToastUtil.showToast(context, "Test son réussi !")
                                 } else {
-                                    Toast.makeText(
-                                        context,
-                                        "Échec du test son",
-                                        Toast.LENGTH_LONG)
-                                        .show()
+                                    ToastUtil.showToast(context, "Échec du test son")
                                 }
                             }
                         }
@@ -469,28 +450,16 @@ fun ModifyInfosBalisePopup(
                                         balise.nom = nomBalise
                                         balise.defaultMessage = selectedAnnonce
                                         Log.d("InfosBalise","Nouveau nom et lieu !")
-                                        Toast.makeText(
-                                            context,
-                                            context.getString(R.string.informations_modifi_es),
-                                            Toast.LENGTH_LONG)
-                                            .show()
+                                        ToastUtil.showToast(context, "Informations modifiées")
                                     } else {
                                         Log.e("InfosBalise","Échec nom/lieu")
-                                        Toast.makeText(
-                                            context,
-                                            "Échec lors de l'enregistrement",
-                                            Toast.LENGTH_LONG)
-                                            .show()
+                                        ToastUtil.showToast(context, "Échec lors de l'enregistrement")
                                     }
                                 }
                                 onDismiss()
                                 navController.navigate("infosBalise")
                             } else {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.la_balise_doit_avoir_un_nom),
-                                    Toast.LENGTH_LONG)
-                                    .show()
+                                ToastUtil.showToast(context, "La balise doit avoir un nom !")
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
@@ -732,50 +701,25 @@ fun ModifyAnnoncesBaliseTextePopup(
                                                         "CreateAnnonce",
                                                         "Échec création d'annonce"
                                                     )
-                                                    Toast.makeText(
-                                                        context,
-                                                        "Échec lors de l'envoie du fichier au serveur",
-                                                        Toast.LENGTH_LONG
-                                                    )
-                                                        .show()
+                                                    ToastUtil.showToast(context, "Échec lors de l'envoie du fichier au serveur")
                                                 }
                                             }
                                         } else {
                                             Log.e("CreateAnnonce", "Échec création d'annonce")
-                                            Toast.makeText(
-                                                context,
-                                                "Échec lors de la création de l'annonce",
-                                                Toast.LENGTH_LONG
-                                            )
-                                                .show()
+                                            ToastUtil.showToast(context, "Échec lors de la création de l'annonce")
                                         }
                                     }
                                     navController.navigate("infosBalise")
                                 }
                             } else {
                                 if ( nomAnnonce == "" && contenuAnnonceTexte != "" ) {
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.l_annonce_doit_avoir_un_nom),
-                                        Toast.LENGTH_LONG
-                                    )
-                                        .show()
+                                    ToastUtil.showToast(context, "L'annonce doit avoir un nom !")
                                 }
                                 if ( nomAnnonce != "" && contenuAnnonceTexte == "" ) {
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.l_annonce_doit_avoir_un_contenu),
-                                        Toast.LENGTH_LONG
-                                    )
-                                        .show()
+                                    ToastUtil.showToast(context, "L'annonce doit avoir un contenu !")
                                 }
                                 if ( nomAnnonce == "" && contenuAnnonceTexte == "" ) {
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.l_annonce_doit_avoir_un_nom_et_un_contenu),
-                                        Toast.LENGTH_LONG
-                                    )
-                                        .show()
+                                    ToastUtil.showToast(context, "L'annonce doit avoir un nom et un contenu !")
                                 }
                             }
                         },
@@ -910,30 +854,16 @@ fun ModifyAnnoncesBaliseAudioPopup(
                                 apiService.modifyAnnonce(annInfo) {
                                     if ( it?.nom != null ) {
                                         annonce.nom = nomAnnonce
-                                        Toast.makeText(
-                                            context,
-                                            context.getString(R.string.informations_modifi_es),
-                                            Toast.LENGTH_LONG
-                                        )
-                                            .show()
+                                        ToastUtil.showToast(context, "Informations validées")
                                     } else {
                                         Log.e("CreateAnnonce","Échec création d'annonce")
-                                        Toast.makeText(
-                                            context,
-                                            "Échec lors de la création de l'annonce",
-                                            Toast.LENGTH_LONG)
-                                            .show()
+                                        ToastUtil.showToast(context, "Échec lors de la création de l'annonce")
                                     }
                                 }
                                 navController.navigate("infosBalise")
                                 onDismiss()
                             } else {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.l_annonce_doit_avoir_un_nom),
-                                    Toast.LENGTH_LONG
-                                )
-                                    .show()
+                                ToastUtil.showToast(context, "L'annonce doit avoir un nom !")
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
@@ -1022,18 +952,10 @@ fun ConfirmDeleteAnnoncePopup(
                                         balise.defaultMessage = null
                                     }
                                     balise.annonces.remove(annonce)
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.annonce_supprim_e),
-                                        Toast.LENGTH_LONG)
-                                        .show()
+                                    ToastUtil.showToast(context, "Annonce supprimée")
                                 } else {
                                     Log.e("DeleteAnnonce","Échec suppression d'annonce")
-                                    Toast.makeText(
-                                        context,
-                                        "Échec lors de la suppression de l'annonce",
-                                        Toast.LENGTH_LONG)
-                                        .show()
+                                    ToastUtil.showToast(context, "Échec lors de la suppression de l'annonce")
                                 }
                             }
                             onDismiss()
@@ -1334,11 +1256,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                             for (i in balise.plages ) {
                                 if ( annonce == i.nomMessage ) {
                                     verif = true
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.annonce_non_supprimable_elle_est_utilis_e_dans_une_plage_horaire),
-                                        Toast.LENGTH_LONG)
-                                        .show()
+                                    ToastUtil.showToast(context, "Annonce non supprimable, elle est utilisée dans une plage horaire !")
                                 }
                             }
                             if (!verif) {

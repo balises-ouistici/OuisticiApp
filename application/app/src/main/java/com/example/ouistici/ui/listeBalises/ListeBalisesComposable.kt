@@ -43,6 +43,7 @@ import androidx.navigation.NavController
 import com.example.ouistici.R
 import com.example.ouistici.data.Stub
 import com.example.ouistici.model.Balise
+import com.example.ouistici.model.ToastUtil
 import com.example.ouistici.ui.baliseViewModel.BaliseViewModel
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
@@ -195,11 +196,7 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                                 navController.navigate("infosBalise")
                             } else {
                                 Log.d("Oui","Problème")
-                                Toast.makeText(
-                                    context,
-                                    "Échec de la connexion à la balise",
-                                    Toast.LENGTH_LONG)
-                                    .show()
+                                ToastUtil.showToast(context, "Échec de la connexion à la balise")
                             }
                         }
                     }
@@ -218,11 +215,7 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                                     navController.navigate("infosBalise")
                                 } else {
                                     Log.d("Oui","Problème")
-                                    Toast.makeText(
-                                        context,
-                                        "Échec de la connexion à la balise",
-                                        Toast.LENGTH_LONG)
-                                        .show()
+                                    ToastUtil.showToast(context, "Échec de la connexion à la balise")
                                 }
                             }
                         }
@@ -240,11 +233,7 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                                     navController.navigate("infosBalise")
                                 } else {
                                     Log.d("Oui","Problème")
-                                    Toast.makeText(
-                                        context,
-                                        "Échec de la connexion à la balise",
-                                        Toast.LENGTH_LONG)
-                                        .show()
+                                    ToastUtil.showToast(context, "Échec de la connexion à la balise")
                                 }
                             }
                         }
@@ -265,11 +254,7 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                                     navController.navigate("infosBalise")
                                 } else {
                                     Log.d("Oui","Problème")
-                                    Toast.makeText(
-                                        context,
-                                        "Échec de la connexion à la balise",
-                                        Toast.LENGTH_LONG)
-                                        .show()
+                                    ToastUtil.showToast(context, "Échec de la connexion à la balise")
                                 }
                             }
                         }
@@ -287,11 +272,7 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                                     navController.navigate("infosBalise")
                                 } else {
                                     Log.d("Oui","Problème")
-                                    Toast.makeText(
-                                        context,
-                                        "Échec de la connexion à la balise",
-                                        Toast.LENGTH_LONG)
-                                        .show()
+                                    ToastUtil.showToast(context, "Échec de la connexion à la balise")
                                 }
                             }
                         }
