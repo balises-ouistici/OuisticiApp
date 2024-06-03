@@ -68,6 +68,7 @@ import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -186,7 +187,9 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                             color = FontColor,
                             modifier = Modifier.semantics {
                                 contentDescription = "L'annonce par défaut de la balise est ${balise.defaultMessage!!.nom}"
-                            }
+                            },
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
 
@@ -941,7 +944,9 @@ fun AnnonceList(
                         text = annonce.nom,
                         modifier = Modifier.semantics {
                             contentDescription = "Nom de l'annonce, ${annonce.nom}."
-                        }
+                        },
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     if (isSelected) {
@@ -994,7 +999,9 @@ fun AnnonceDefaultMessageList(
                     ) {
                         Text(
                             text = annonce.nom,
-                            modifier = Modifier.semantics { contentDescription = "Nom de l'annonce : ${annonce.nom}" }
+                            modifier = Modifier.semantics { contentDescription = "Nom de l'annonce : ${annonce.nom}" },
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         if (isSelected) {
@@ -1311,7 +1318,9 @@ fun RowScope.TableCells(
                 .semantics {
                     contentDescription = "${textSemantics}, ${text}."
                 },
-            color = textColor
+            color = textColor,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }

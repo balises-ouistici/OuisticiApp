@@ -38,6 +38,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -153,7 +154,9 @@ fun RowScope.TableCell(
                 Modifier
                     .align(Alignment.Center)
                     .semantics { contentDescription = "$textSemantics : $text" },
-            color = textColor
+            color = textColor,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

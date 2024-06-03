@@ -1,5 +1,6 @@
 package com.example.ouistici.ui.infosBalise
 
+import android.R.attr.maxLines
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
@@ -67,6 +68,7 @@ import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -138,9 +140,10 @@ fun InfosBalise(
             fontSize = 25.sp,
             color = FontColor,
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.semantics {
-                contentDescription = "Page des informations de la balise."
-            }
+            modifier = Modifier
+                .semantics {
+                    contentDescription = "Page des informations de la balise."
+                }
                 .focusRequester(focusRequester)
                 .focusable()
         )
@@ -163,7 +166,9 @@ fun InfosBalise(
 
                     Text(
                         text = stringResource(R.string.nom_balise_info, balise.nom),
-                        color = FontColor
+                        color = FontColor,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
 
                     if ( balise.lieu == "" ) {
@@ -173,8 +178,10 @@ fun InfosBalise(
                         )
                     } else {
                         Text(
-                            text = stringResource(R.string.lieu_info, balise.lieu!!),
-                            color = FontColor
+                            text = stringResource(R.string.lieu_info, balise.lieu),
+                            color = FontColor,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
 
@@ -189,7 +196,9 @@ fun InfosBalise(
                                 R.string.message_d_faut_info,
                                 balise.defaultMessage!!.nom
                             ),
-                            color = FontColor
+                            color = FontColor,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
                 }
@@ -1006,7 +1015,9 @@ fun RowScope.TableCell(
             .height(30.dp)
             .semantics { contentDescription = "$textSemantics $text" },
         color = textColor,
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis
     )
 }
 
@@ -1193,7 +1204,10 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                                     .height(45.dp)
                                     .weight(column3Weight)
                                     .border(1.dp, Color.Black)
-                                    .semantics { contentDescription = "Modifier le nom et le contenu de l'annonce ${annonce.nom}" }
+                                    .semantics {
+                                        contentDescription =
+                                            "Modifier le nom et le contenu de l'annonce ${annonce.nom}"
+                                    }
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Edit,
@@ -1237,7 +1251,10 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                                 .height(45.dp)
                                 .weight(column3Weight)
                                 .border(1.dp, Color.Black)
-                                .semantics { contentDescription = "Modifier le nom de l'annonce ${annonce.nom}" }
+                                .semantics {
+                                    contentDescription =
+                                        "Modifier le nom de l'annonce ${annonce.nom}"
+                                }
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
