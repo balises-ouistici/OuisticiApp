@@ -1,6 +1,5 @@
 package com.example.ouistici.ui.infosBalise
 
-import android.app.ProgressDialog.show
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
@@ -37,6 +36,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
@@ -137,6 +137,7 @@ fun InfosBalise(
             text = stringResource(R.string.informations_balise),
             fontSize = 25.sp,
             color = FontColor,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.semantics {
                 contentDescription = "Page des informations de la balise."
             }
@@ -231,6 +232,7 @@ fun InfosBalise(
         Text(
             text = stringResource(R.string.liste_des_annonces),
             fontSize = 25.sp,
+            style = MaterialTheme.typography.titleLarge,
             color = FontColor
         )
         // Liste de toutes les annonces
@@ -258,6 +260,7 @@ fun InfosBalise(
                 Text(
                     text = stringResource(R.string.volume_de_la_balise),
                     fontSize = 25.sp,
+                    style = MaterialTheme.typography.titleLarge,
                     color = FontColor
                 )
                 Slider(

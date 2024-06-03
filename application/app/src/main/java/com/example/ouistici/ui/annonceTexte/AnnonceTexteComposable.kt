@@ -18,6 +18,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -102,6 +103,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
             text = stringResource(R.string.synth_tiseur_vocal),
             fontSize = 25.sp,
             color = FontColor,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.semantics {
                 contentDescription = "Page de création d'une annonce avec synthétiseur vocal."
             }

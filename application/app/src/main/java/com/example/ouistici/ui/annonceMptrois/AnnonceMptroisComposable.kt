@@ -27,6 +27,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -113,6 +114,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
             text = stringResource(R.string.choisir_fichier_audio),
             fontSize = 25.sp,
             color = FontColor,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.semantics {
                 contentDescription = "Page de création d'une annonce en choisissant un fichier audio depuis le téléphone."
             }

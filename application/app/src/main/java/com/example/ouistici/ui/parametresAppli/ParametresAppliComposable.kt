@@ -93,6 +93,7 @@ fun ParametresAppli(navController: NavController) {
             text = stringResource(R.string.parametres_de_l_application),
             fontSize = 25.sp,
             color = FontColor,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.semantics {
                 contentDescription = "Page des paramètres de l'application."
             }

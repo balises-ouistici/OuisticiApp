@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.LargeFloatingActionButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -57,6 +58,7 @@ fun AjouterAnnonce(navController: NavController) {
             text = stringResource(R.string.quel_type_d_annonce),
             fontSize = 25.sp,
             color = FontColor,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier
                 .focusRequester(focusRequester)
                 .focusable()

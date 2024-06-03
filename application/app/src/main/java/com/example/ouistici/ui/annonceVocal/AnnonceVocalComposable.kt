@@ -134,6 +134,7 @@ fun AnnonceVocale(
             text = "Enregistreur vocal",
             fontSize = 25.sp,
             color = FontColor,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.semantics {
                 contentDescription = "Page de création d'une annonce avec enregistrement vocal."
             }

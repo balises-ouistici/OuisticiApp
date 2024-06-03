@@ -39,6 +39,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -124,6 +125,7 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
             text = stringResource(R.string.choix_des_annonces),
             fontSize = 25.sp,
             color = FontColor,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.semantics { contentDescription = "Page de choix des annonces" }
                 .focusRequester(focusRequester)
                 .focusable()

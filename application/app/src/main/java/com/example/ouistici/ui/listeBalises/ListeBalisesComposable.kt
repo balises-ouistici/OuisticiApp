@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,9 +45,11 @@ import com.example.ouistici.R
 import com.example.ouistici.data.Stub
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.ToastUtil
+import com.example.ouistici.ui.annonceTexte.getAudioDurationText
 import com.example.ouistici.ui.baliseViewModel.BaliseViewModel
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
+import com.example.ouistici.ui.theme.TitleFontFamily
 import kotlinx.coroutines.delay
 
 
@@ -78,6 +81,7 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel)
             text = stringResource(R.string.liste_des_balises),
             fontSize = 25.sp,
             color = FontColor,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier
                 .focusRequester(focusRequester)
                 .focusable()
