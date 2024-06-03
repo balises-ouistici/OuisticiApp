@@ -1246,8 +1246,9 @@ fun RowScope.TableJoursCell(
     textSemantics: String
 ) {
     val context = LocalContext.current
+    val sortedJours = sortDaysOfWeek(jours)
 
-    val joursSemaineStringList = jours.map { jour ->
+    val joursSemaineStringList = sortedJours.map { jour ->
         val stringResourceId = context.resources.getIdentifier(jour.name.lowercase(Locale.ROOT), "string", context.packageName)
         if (stringResourceId != 0) {
             // Utilisation de substring pour obtenir les deux premières lettres
@@ -1257,7 +1258,7 @@ fun RowScope.TableJoursCell(
         }
     }
 
-    val textToShow = if (jours.size == 7) {
+    val textToShow = if (sortedJours.size == 7) {
         // Si tous les jours de la semaine sont sélectionnés, affiche "Tous"
         context.getString(R.string.tous_les_jours)
     } else {
@@ -1520,4 +1521,17 @@ fun OnOffButton(balise: Balise, navController: NavController) {
     }
 }
 
+
+fun sortDaysOfWeek(jours: List<JoursSemaine>): List<JoursSemaine> {
+    val daysOrder = listOf(
+        JoursSemaine.Lundi,
+        JoursSemaine.Mardi,
+        JoursSemaine.Mercredi,
+        JoursSemaine.Jeudi,
+        JoursSemaine.Vendredi,
+        JoursSemaine.Samedi,
+        JoursSemaine.Dimanche
+    )
+    return jours.sortedBy { daysOrder.indexOf(it) }
+}
 

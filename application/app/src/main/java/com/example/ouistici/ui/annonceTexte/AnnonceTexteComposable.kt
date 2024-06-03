@@ -217,7 +217,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                             ttsManager.saveToFile(textContenuInput, file)
                         }
 
-                        
+
                         // Pour laisser le temps au fichier d'être créé
                         delay(2000L)
 
