@@ -13,6 +13,10 @@ val TitleFontFamily = FontFamily(
     Font(R.font.title_font, FontWeight.Normal, FontStyle.Normal)
 )
 
+val TextFontFamily = FontFamily(
+    Font(R.font.text_font, FontWeight.Normal, FontStyle.Normal)
+)
+
 // Set of Material typography styles to start with
 val Typography = Typography(
     bodyLarge = TextStyle(
