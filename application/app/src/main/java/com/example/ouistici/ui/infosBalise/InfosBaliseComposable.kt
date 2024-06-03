@@ -657,6 +657,9 @@ fun ModifyAnnoncesBaliseTextePopup(
                                     }
 
 
+                                    // Pour laisser le temps au fichier d'être créé
+                                    delay(2000L)
+
                                     val duration = AndroidAudioPlayer.getAudioDuration(file) / 1000
 
                                     val apiService = RestApiService()
