@@ -211,11 +211,11 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                     val file = File(context.cacheDir, fileName)
                     coroutineScope.launch {
 
-                        withContext(Dispatchers.Default) {
+                        withContext(Dispatchers.IO) {
                             ttsManager.saveToFile(textContenuInput, file)
                         }
 
-                    // Utiliser une coroutine pour ajouter un délai de 2 secondes
+                        delay(2000L)
 
                         val duration = AndroidAudioPlayer.getAudioDuration(file) / 1000
 
