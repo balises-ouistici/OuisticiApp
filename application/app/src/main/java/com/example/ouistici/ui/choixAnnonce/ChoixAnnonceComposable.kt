@@ -295,7 +295,7 @@ fun DefaultMessagePopup(
                 AnnonceDefaultMessageList(
                     annonces = balise.annonces,
                     selectedAnnonce = selectedAnnonce,
-                    onAnnonceSelected = { selectedAnnonce = it }
+                    onAnnonceSelected = { selectedAnnonce = if (it == selectedAnnonce) null else it }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(
@@ -335,34 +335,30 @@ fun DefaultMessagePopup(
                         }
                         Button(
                             onClick = {
-                                if (selectedAnnonce != null) {
-                                    val apiService = RestApiService()
-                                    val balInfo = BaliseDto(
-                                        balId = null,
-                                        nom = balise.nom,
-                                        lieu = balise.lieu,
-                                        defaultMessage = selectedAnnonce!!.id,
-                                        volume = balise.volume,
-                                        sysOnOff = balise.sysOnOff,
-                                        ipBal = balise.ipBal
-                                    )
+                                val apiService = RestApiService()
+                                val balInfo = BaliseDto(
+                                    balId = null,
+                                    nom = balise.nom,
+                                    lieu = balise.lieu,
+                                    defaultMessage = selectedAnnonce?.id,
+                                    volume = balise.volume,
+                                    sysOnOff = balise.sysOnOff,
+                                    ipBal = balise.ipBal
+                                )
 
-                                    apiService.setDefaultMessage(balInfo) {
-                                        if (it?.balId != null) {
-                                            balise.defaultMessage = selectedAnnonce
-                                            Log.d("InfosBalise", "Nouvelle annonce par défaut !")
-                                            Toast.makeText(
-                                                context,
-                                                context.getString(R.string.nouvelle_annonce_par_d_faut),
-                                                Toast.LENGTH_LONG)
-                                                .show()
-                                        } else {
-                                            Log.e("InfosBalise", "Échec nouvelle annonce par défaut")
-                                            ToastUtil.showToast(context, "Échec lors de l'enregistrement de l'annonce par défaut")
-                                        }
+                                apiService.setDefaultMessage(balInfo) {
+                                    if (it?.balId != null) {
+                                        balise.defaultMessage = selectedAnnonce
+                                        Log.d("InfosBalise", "Nouvelle annonce par défaut !")
+                                        Toast.makeText(
+                                            context,
+                                            context.getString(R.string.nouvelle_annonce_par_d_faut),
+                                            Toast.LENGTH_LONG)
+                                            .show()
+                                    } else {
+                                        Log.e("InfosBalise", "Échec nouvelle annonce par défaut")
+                                        ToastUtil.showToast(context, "Échec lors de l'enregistrement de l'annonce par défaut")
                                     }
-                                } else {
-                                    ToastUtil.showToast(context, "Action impossible")
                                 }
                                 onDismiss()
                                 navController.navigate("manageAnnonce")
@@ -974,7 +970,7 @@ fun AnnonceList(
 fun AnnonceDefaultMessageList(
     annonces: List<Annonce>,
     selectedAnnonce: Annonce?,
-    onAnnonceSelected: (Annonce) -> Unit
+    onAnnonceSelected: (Annonce?) -> Unit
 ) {
     if ( annonces.isEmpty() ) {
         Text(
@@ -991,7 +987,7 @@ fun AnnonceDefaultMessageList(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { onAnnonceSelected(annonce) }
+                        .clickable { onAnnonceSelected(if (isSelected) null else annonce) }
                         .padding(16.dp)
                 ) {
                     Row(
@@ -999,7 +995,7 @@ fun AnnonceDefaultMessageList(
                     ) {
                         Text(
                             text = annonce.nom,
-                            modifier = Modifier.semantics { contentDescription = "Nom de l'annonce : ${annonce.nom}" },
+                            modifier = Modifier.semantics { contentDescription = "Nom de l'annonce, ${annonce.nom}." },
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )

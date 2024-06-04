@@ -126,6 +126,7 @@ class RestApiService {
         val nameAndPlace = JsonObject().apply {
             addProperty("nom", baliseData.nom)
             addProperty("lieu", baliseData.lieu)
+            addProperty("id_message", baliseData.defaultMessage)
         }
         retrofit.setNameAndPlace(nameAndPlace).enqueue(
             object: Callback<BaliseDto> {
