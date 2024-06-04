@@ -77,7 +77,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
     var textContenu by remember { mutableStateOf(TextFieldValue()) }
     var textValueInput by remember { mutableStateOf("") }
     var textContenuInput by remember { mutableStateOf("") }
-    var langueSelectionnee by remember { mutableStateOf(Langue("", "")) }
+    var langueSelectionnee by remember { mutableStateOf(LangueManager.langueActuelle) }
     var expanded by remember { mutableStateOf(false) }
 
     val context = LocalContext.current

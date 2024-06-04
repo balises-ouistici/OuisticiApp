@@ -73,12 +73,14 @@ fun ParametresAppli(navController: NavController) {
     val availableLocales = listOf("fr", "en") // Liste des langues disponibles
 
     var expanded by remember { mutableStateOf(false) }
-    var selectedLocale by remember { mutableStateOf("fr") }
+    var selectedLocale by remember { mutableStateOf(LangueManager.langueActuelle.code) }
 
     val onClickRefreshActivity = {
         context.findActivity()?.runOnUiThread {
             val appLocale = LocaleListCompat.forLanguageTags(selectedLocale)
             AppCompatDelegate.setApplicationLocales(appLocale)
+            if ( selectedLocale == "fr" ) LangueManager.langueActuelle = Langue("fr","Français")
+            else LangueManager.langueActuelle = Langue("en", "English")
         }
     }
 
