@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.speech.tts.TextToSpeech.QUEUE_FLUSH
 import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import java.io.File
@@ -38,6 +39,22 @@ class TextToSpeechManager(context: Context) : TextToSpeech.OnInitListener {
             tts.synthesizeToFile(text, params, file.path)
         }
     }
+
+    fun speak(text: String) {
+        if (isInitialized) {
+            val utteranceId = "AuthorizationManager.createCodeVerifier()"
+            val params: HashMap<String, String> = HashMap()
+            params[TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID] = utteranceId
+            tts.speak(text, QUEUE_FLUSH, params)
+        }
+    }
+
+    fun stop() {
+        if (isInitialized) {
+            tts.stop()
+        }
+    }
+
 
     fun shutdown() {
         if (isInitialized) {

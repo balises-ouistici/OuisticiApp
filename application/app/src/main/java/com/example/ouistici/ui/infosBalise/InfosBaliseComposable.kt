@@ -606,6 +606,42 @@ fun ModifyAnnoncesBaliseTextePopup(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                Row {
+                    Button(
+                        onClick = {
+                            val locale = when (langueSelectionnee!!.code) {
+                                "fr" -> Locale.FRENCH
+                                "en" -> Locale.ENGLISH
+                                else -> Locale.FRENCH
+                            }
+                            ttsManager.setLanguage(locale)
+                            ttsManager.speak(contenuAnnonceTexte)
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                        modifier = Modifier.semantics { contentDescription = "Écouter l'audio enregistré" }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.PlayArrow,
+                            contentDescription = ""
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            ttsManager.stop()
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                        modifier = Modifier.semantics {
+                            contentDescription = "Arrêter la lecture audio"
+                        }
+                    ) {
+                        Text(
+                            text = "||"
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 if ( annonce.duree != null ) {
                     Text(
                         text = stringResource(
