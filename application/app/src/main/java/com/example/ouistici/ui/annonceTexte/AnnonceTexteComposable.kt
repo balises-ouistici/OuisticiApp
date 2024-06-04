@@ -15,9 +15,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -194,6 +197,50 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
             }
         }
 
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Row {
+            Text(
+                text = "Écouter le message : ",
+                color = FontColor,
+                modifier = Modifier.semantics {
+                    contentDescription = "Écouter le message écris, glissez sur la droite pour accéder au bouton de lecture."
+                }
+                    .padding(vertical = 12.dp)
+            )
+            Button(
+                onClick = {
+                    val locale = when (langueSelectionnee.code) {
+                        "fr" -> Locale.FRENCH
+                        "en" -> Locale.ENGLISH
+                        else -> Locale.FRENCH
+                    }
+                    ttsManager.setLanguage(locale)
+                    ttsManager.speak(textContenuInput)
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                modifier = Modifier.semantics { contentDescription = "Écouter l'audio enregistré" }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.PlayArrow,
+                    contentDescription = ""
+                )
+            }
+            Button(
+                onClick = {
+                    ttsManager.stop()
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                modifier = Modifier.semantics {
+                    contentDescription = "Arrêter la lecture audio"
+                }
+            ) {
+                Text(
+                    text = "||"
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(50.dp))
 
