@@ -118,7 +118,7 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            // .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState())
         ,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -1349,6 +1349,7 @@ fun TableScreen(balise : Balise, navController: NavController) {
     LazyColumn(
         Modifier
             .fillMaxSize()
+            .height(343.dp)
             .padding(16.dp)
     ) {
         item {
