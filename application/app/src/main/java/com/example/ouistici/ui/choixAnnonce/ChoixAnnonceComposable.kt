@@ -972,47 +972,48 @@ fun AnnonceDefaultMessageList(
     selectedAnnonce: Annonce?,
     onAnnonceSelected: (Annonce?) -> Unit
 ) {
-    if ( annonces.isEmpty() ) {
+    if (annonces.isEmpty()) {
         Text(
             text = stringResource(R.string.cr_ez_d_abord_une_annonce),
-            modifier = Modifier.semantics { contentDescription = "Vous n'avez pas encore créé d'annonce, veuillez en créer une dans un premier temps." }
+            modifier = Modifier.semantics {
+                contentDescription = "Vous n'avez pas encore créé d'annonce, veuillez en créer une dans un premier temps."
+            }
         )
     } else {
         LazyColumn(
-            modifier = Modifier
-                .height(200.dp)
+            modifier = Modifier.height(200.dp)
         ) {
             items(annonces) { annonce ->
                 val isSelected = annonce == selectedAnnonce
-                Box(
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { onAnnonceSelected(if (isSelected) null else annonce) }
-                        .padding(16.dp)
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = annonce.nom,
-                            modifier = Modifier.semantics { contentDescription = "Nom de l'annonce, ${annonce.nom}." },
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                    Text(
+                        text = annonce.nom,
+                        modifier = Modifier
+                            .weight(1f)
+                            .semantics { contentDescription = "Nom de l'annonce, ${annonce.nom}." },
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    if (isSelected) {
                         Spacer(modifier = Modifier.width(8.dp))
-                        if (isSelected) {
-                            Icon(
-                                imageVector = Icons.Default.Check,
-                                contentDescription = "Selected",
-                                tint = Color.Green // Change the color as desired
-                            )
-                        }
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = "Selected",
+                            tint = Color.Green // Change the color as desired
+                        )
                     }
                 }
             }
         }
     }
 }
+
 
 
 /**
