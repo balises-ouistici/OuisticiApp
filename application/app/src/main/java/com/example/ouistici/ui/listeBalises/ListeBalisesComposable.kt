@@ -136,7 +136,7 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel 
                 onConfirm = { ip, port ->
                     val newBalise = BaliseEntity(
                         nom = "New Balise",
-                        lieu = "New Location",
+                        lieu = "",
                         defaultMessage = null,
                         ipBal = "http://$ip:$port/",
                         volume = 0f,
@@ -168,12 +168,20 @@ fun IpPortDialog(onDismiss: () -> Unit, onConfirm: (String, String) -> Unit) {
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text(text = "Enter IP and Port", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(
+                    text = "Entrez le nom, l'IP et le PORT de la balise",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .semantics {
+                            contentDescription = "Défilez à droite pour entrer le nom, l'adresse IP de la balise à ajouter et le port."
+                        }
+                )
                 Spacer(modifier = Modifier.height(16.dp))
                 TextField(
                     value = ip,
                     onValueChange = { ip = it },
-                    label = { Text("IP Address") }
+                    label = { Text("Adresse IP") }
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 TextField(
@@ -187,15 +195,20 @@ fun IpPortDialog(onDismiss: () -> Unit, onConfirm: (String, String) -> Unit) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    Button(onClick = onDismiss) {
-                        Text("Cancel")
+                    Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
+                    ) {
+                        Text(text = "Annuler", color = Color.White)
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(onClick = {
-                        onConfirm(ip, port)
-                        onDismiss()
-                    }) {
-                        Text("Confirm")
+                            onConfirm(ip, port)
+                            onDismiss()
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                    ) {
+                        Text(text = "Valider", color = Color.White)
                     }
                 }
             }
