@@ -20,24 +20,21 @@ object Stub {
     }
     */
 
-    /**
-     * @brief Creates a list of dummy beacons.
-     * @return The list of dummy beacons.
-     */
+
+    /*
     val bal by lazy {
         createBalises()
     }
+    */
 
-    /**
-     * @brief Creates a list of dummy beacons.
-     * @return The list of dummy beacons.
-     */
+    /*
     private fun createBalises(): List<Balise> {
         return listOf(
             Balise(1862,"Balise1","Accueil",  null, ArrayList(), 50f, ArrayList(), true, "http://192.168.30.64:5000/"),
             Balise(1862,"Balise2", "", null, ArrayList(), 30f, ArrayList(), false, "http://192.168.30.64:5000/")
         )
     }
+    */
 
     /*
     @RequiresApi(Build.VERSION_CODES.O)

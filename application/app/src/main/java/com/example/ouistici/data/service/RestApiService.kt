@@ -1,6 +1,7 @@
 package com.example.ouistici.data.service
 
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.ouistici.data.api.OuisticiApi
@@ -9,6 +10,7 @@ import com.example.ouistici.data.dto.BaliseDto
 import com.example.ouistici.data.dto.BaliseInfoDto
 import com.example.ouistici.data.dto.FileAnnonceDto
 import com.example.ouistici.data.dto.TimeslotDto
+import com.example.ouistici.data.entity.BaliseEntity
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.JoursSemaine
@@ -28,8 +30,10 @@ import java.time.LocalTime
 
 class RestApiService {
     // Get toutes les infos de la balise
-    fun fetchBaliseInfo(onResult: (Balise?) -> Unit) {
+    fun fetchBaliseInfo(balise: BaliseEntity, onResult: (Balise?) -> Unit) {
+        RetrofitClient.updateBaseUrl(balise.ipBal)
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
+        Log.d("test", "Valeur retrofit : ")
         retrofit.getBaliseInfo().enqueue(object: Callback<BaliseInfoDto> {
             override fun onFailure(call: Call<BaliseInfoDto>, t: Throwable) {
                 onResult(null)
@@ -39,6 +43,7 @@ class RestApiService {
             override fun onResponse(call: Call<BaliseInfoDto>, response: Response<BaliseInfoDto>) {
                 if (response.isSuccessful) {
                     val baliseInfoDto = response.body()
+                    Log.d("test", "Valeur BaliseInfoDto : " + baliseInfoDto?.balise?.nom)
                     if (baliseInfoDto != null) {
                         // Map DTO to Model
                         val annonces = baliseInfoDto.annonces.map { dto ->

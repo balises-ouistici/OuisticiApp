@@ -1,5 +1,6 @@
 package com.example.ouistici.ui.listeBalises
 
+import android.app.Application
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
@@ -72,6 +73,11 @@ import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
 import com.example.ouistici.ui.theme.TitleFontFamily
 import kotlinx.coroutines.delay
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.ouistici.data.entity.BaliseEntity
+import com.example.ouistici.model.Annonce
+import com.example.ouistici.ui.baliseViewModel.BaliseViewModelFactory
 
 
 /**
@@ -82,8 +88,8 @@ import kotlinx.coroutines.delay
  */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel) {
-    val balises by remember { mutableStateOf(Stub.bal) }
+fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel = viewModel()) {
+    val balises by baliseViewModel.allBalises.observeAsState(initial = emptyList())
     var showDialog by remember { mutableStateOf(false) }
 
     val focusRequester = remember { FocusRequester() }
@@ -128,8 +134,19 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel)
             IpPortDialog(
                 onDismiss = { showDialog = false },
                 onConfirm = { ip, port ->
-                    val baseUrl = "http://$ip:$port/"
-                    RetrofitClient.updateBaseUrl(baseUrl)
+                    val newBalise = BaliseEntity(
+                        nom = "New Balise",
+                        lieu = "New Location",
+                        defaultMessage = null,
+                        ipBal = "http://$ip:$port/",
+                        volume = 0f,
+                        sysOnOff = true,
+                        annonces = ArrayList(),
+                        id = 1862,
+                        plages = ArrayList()
+                    )
+                    baliseViewModel.insert(newBalise)
+                    showDialog = false
                 }
             )
         }
@@ -264,7 +281,7 @@ fun RowScope.TableCell(
  * @param baliseViewModel The BaliseViewModel for managing balise data.
  */
 @Composable
-fun TableScreen(balises : List<Balise>, navController: NavController, baliseViewModel: BaliseViewModel) {
+fun TableScreen(balises: List<BaliseEntity>, navController: NavController, baliseViewModel: BaliseViewModel) {
     val columnWeight = .3f
     val context = LocalContext.current
     var isLoading by remember { mutableStateOf(false) } // Loader state
@@ -280,7 +297,6 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                 TableHeaderCell(text = stringResource(R.string.nom_balise), weight = columnWeight, textColor = Color.Black)
                 TableHeaderCell(text = stringResource(R.string.lieu), weight = columnWeight, textColor = Color.Black)
                 TableHeaderCell(text = stringResource(R.string.message_d_faut), weight = columnWeight, textColor = Color.Black)
-
             }
         }
 
@@ -293,12 +309,12 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                     textSemantics = "Nom de la balise",
                     onClick = {
                         isLoading = true
-                        baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
+                        baliseViewModel.loadBaliseInfo(balise) { loadedBalise ->
                             if (loadedBalise != null) {
                                 baliseViewModel.selectedBalise = loadedBalise
                                 navController.navigate("infosBalise")
                             } else {
-                                Log.d("Oui","Problème")
+                                Log.d("Oui", "Problème")
                                 ToastUtil.showToast(context, "Échec de la connexion à la balise")
                             }
                             isLoading = false // Hide loader
@@ -306,92 +322,48 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                     }
                 )
 
-                if ( balise.lieu == "" ) {
-                    TableCell(
-                        text = context.getString(R.string.non_defini),
-                        weight = columnWeight,
-                        textColor = Color.Black,
-                        textSemantics = "Lieu de la balise",
-                        onClick = {
-                            isLoading = true
-                            baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
-                                if (loadedBalise != null) {
-                                    baliseViewModel.selectedBalise = loadedBalise
-                                    navController.navigate("infosBalise")
-                                } else {
-                                    Log.d("Oui","Problème")
-                                    ToastUtil.showToast(context, "Échec de la connexion à la balise")
-                                }
-                                isLoading = false // Hide loader
+                TableCell(
+                    text = if (balise.lieu.isEmpty()) context.getString(R.string.non_defini) else balise.lieu,
+                    weight = columnWeight,
+                    textColor = Color.Black,
+                    textSemantics = "Lieu de la balise",
+                    onClick = {
+                        isLoading = true
+                        baliseViewModel.loadBaliseInfo(balise) { loadedBalise ->
+                            if (loadedBalise != null) {
+                                baliseViewModel.selectedBalise = loadedBalise
+                                navController.navigate("infosBalise")
+                            } else {
+                                Log.d("Oui", "Problème")
+                                ToastUtil.showToast(context, "Échec de la connexion à la balise")
                             }
+                            isLoading = false // Hide loader
                         }
-                    )
-                } else {
-                    TableCell(
-                        text = balise.lieu,
-                        weight = columnWeight,
-                        textColor = Color.Black,
-                        textSemantics = "Lieu de la balise",
-                        onClick = {
-                            isLoading = true
-                            baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
-                                if (loadedBalise != null) {
-                                    baliseViewModel.selectedBalise = loadedBalise
-                                    navController.navigate("infosBalise")
-                                } else {
-                                    Log.d("Oui","Problème")
-                                    ToastUtil.showToast(context, "Échec de la connexion à la balise")
-                                }
-                                isLoading = false // Hide loader
-                            }
-                        }
-                    )
-                }
+                    }
+                )
 
-
-                if ( balise.defaultMessage == null ) {
-                    TableCell(
-                        text = context.getString(R.string.aucun),
-                        weight = columnWeight,
-                        textColor = Color.Black,
-                        textSemantics = "Message par défaut de la balise",
-                        onClick = {
-                            isLoading = true
-                            baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
-                                if (loadedBalise != null) {
-                                    baliseViewModel.selectedBalise = loadedBalise
-                                    navController.navigate("infosBalise")
-                                } else {
-                                    Log.d("Oui","Problème")
-                                    ToastUtil.showToast(context, "Échec de la connexion à la balise")
-                                }
-                                isLoading = false // Hide loader
+                TableCell(
+                    text = balise.defaultMessage ?: context.getString(R.string.aucun),
+                    weight = columnWeight,
+                    textColor = Color.Black,
+                    textSemantics = "Message par défaut de la balise",
+                    onClick = {
+                        isLoading = true
+                        baliseViewModel.loadBaliseInfo(balise) { loadedBalise ->
+                            if (loadedBalise != null) {
+                                baliseViewModel.selectedBalise = loadedBalise
+                                navController.navigate("infosBalise")
+                            } else {
+                                Log.d("Oui", "Problème")
+                                ToastUtil.showToast(context, "Échec de la connexion à la balise")
                             }
+                            isLoading = false // Hide loader
                         }
-                    )
-                } else {
-                    TableCell(
-                        text = balise.defaultMessage!!.nom,
-                        weight = columnWeight,
-                        textColor = Color.Black,
-                        textSemantics = "Message par défaut de la balise",
-                        onClick = {
-                            isLoading = true
-                            baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
-                                if (loadedBalise != null) {
-                                    baliseViewModel.selectedBalise = loadedBalise
-                                    navController.navigate("infosBalise")
-                                } else {
-                                    Log.d("Oui","Problème")
-                                    ToastUtil.showToast(context, "Échec de la connexion à la balise")
-                                }
-                                isLoading = false // Hide loader
-                            }
-                        }
-                    )
-                }
+                    }
+                )
                 Loader(isLoading = isLoading)
             }
         }
     }
 }
+

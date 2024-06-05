@@ -1,5 +1,7 @@
 package com.example.ouistici.model
 
+import androidx.room.Entity
+
 /**
  * @brief Represents a beacon.
  * @param nom The name of the beacon.
