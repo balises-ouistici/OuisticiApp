@@ -89,6 +89,7 @@ import com.example.ouistici.model.ToastUtil
 import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.annonceTexte.DropdownMenuItemLangue
 import com.example.ouistici.ui.choixAnnonce.AnnonceDefaultMessageList
+import com.example.ouistici.ui.loader.Loader
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
@@ -332,13 +333,13 @@ fun InfosBalise(
                             val apiService = RestApiService()
                             apiService.testSound() { statusCode ->
                                 Log.e("InfosBalise","test son : ${statusCode}")
-                                isLoading = false
                                 if (statusCode == 200 ) {
                                     ToastUtil.showToast(context, "Test son réussi !")
                                 } else {
                                     ToastUtil.showToast(context, "Échec du test son")
                                 }
                             }
+                            isLoading = false
                         }
                     },
                     colors = ButtonDefaults.buttonColors(TestButtonColor)
@@ -350,18 +351,7 @@ fun InfosBalise(
                             .semantics { contentDescription = "Tester le son sur la balise" }
                     )
                 }
-                if (isLoading) {
-                    Dialog(onDismissRequest = { }) {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .size(100.dp)
-                                .background(Color.White, shape = CircleShape)
-                        ) {
-                            CircularProgressIndicator(color = Color.Black)
-                        }
-                    }
-                }
+                Loader(isLoading = isLoading)
             }
         }
     }
@@ -505,18 +495,7 @@ fun ModifyInfosBalisePopup(
                             modifier = Modifier.semantics { contentDescription = "Valider les modifications faites." }
                         )
                     }
-                    if (isLoading) {
-                        Dialog(onDismissRequest = { }) {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier
-                                    .size(100.dp)
-                                    .background(Color.White, shape = CircleShape)
-                            ) {
-                                CircularProgressIndicator(color = Color.Black)
-                            }
-                        }
-                    }
+                    Loader(isLoading = isLoading)
                 }
             }
         }
@@ -822,19 +801,7 @@ fun ModifyAnnoncesBaliseTextePopup(
                             }
                         )
                     }
-
-                    if (isLoading) {
-                        Dialog(onDismissRequest = { }) {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier
-                                    .size(100.dp)
-                                    .background(Color.White, shape = CircleShape)
-                            ) {
-                                CircularProgressIndicator(color = Color.Black)
-                            }
-                        }
-                    }
+                    Loader(isLoading = isLoading)
                 }
             }
         }
@@ -979,18 +946,7 @@ fun ModifyAnnoncesBaliseAudioPopup(
                             modifier = Modifier.semantics { contentDescription = "Enregistrer les modifications apportées." }
                         )
                     }
-                    if (isLoading) {
-                        Dialog(onDismissRequest = { }) {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier
-                                    .size(100.dp)
-                                    .background(Color.White, shape = CircleShape)
-                            ) {
-                                CircularProgressIndicator(color = Color.Black)
-                            }
-                        }
-                    }
+                    Loader(isLoading = isLoading)
                 }
             }
         }
@@ -1089,18 +1045,7 @@ fun ConfirmDeleteAnnoncePopup(
                             modifier = Modifier.semantics { contentDescription = "Confirmer la suppression de l'annonce" }
                         )
                     }
-                    if (isLoading) {
-                        Dialog(onDismissRequest = { }) {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier
-                                    .size(100.dp)
-                                    .background(Color.White, shape = CircleShape)
-                            ) {
-                                CircularProgressIndicator(color = Color.Black)
-                            }
-                        }
-                    }
+                    Loader(isLoading = isLoading)
                 }
             }
         }

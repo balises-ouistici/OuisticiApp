@@ -53,6 +53,7 @@ import com.example.ouistici.model.Balise
 import com.example.ouistici.model.ToastUtil
 import com.example.ouistici.ui.annonceTexte.getAudioDurationText
 import com.example.ouistici.ui.baliseViewModel.BaliseViewModel
+import com.example.ouistici.ui.loader.Loader
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
 import com.example.ouistici.ui.theme.TitleFontFamily
@@ -207,12 +208,12 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                         baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
                             if (loadedBalise != null) {
                                 baliseViewModel.selectedBalise = loadedBalise
-                                isLoading = false // Hide loader
                                 navController.navigate("infosBalise")
                             } else {
                                 Log.d("Oui","Problème")
                                 ToastUtil.showToast(context, "Échec de la connexion à la balise")
                             }
+                            isLoading = false // Hide loader
                         }
                     }
                 )
@@ -228,12 +229,12 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                             baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
                                 if (loadedBalise != null) {
                                     baliseViewModel.selectedBalise = loadedBalise
-                                    isLoading = false // Hide loader
                                     navController.navigate("infosBalise")
                                 } else {
                                     Log.d("Oui","Problème")
                                     ToastUtil.showToast(context, "Échec de la connexion à la balise")
                                 }
+                                isLoading = false // Hide loader
                             }
                         }
                     )
@@ -248,12 +249,12 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                             baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
                                 if (loadedBalise != null) {
                                     baliseViewModel.selectedBalise = loadedBalise
-                                    isLoading = false // Hide loader
                                     navController.navigate("infosBalise")
                                 } else {
                                     Log.d("Oui","Problème")
                                     ToastUtil.showToast(context, "Échec de la connexion à la balise")
                                 }
+                                isLoading = false // Hide loader
                             }
                         }
                     )
@@ -271,12 +272,12 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                             baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
                                 if (loadedBalise != null) {
                                     baliseViewModel.selectedBalise = loadedBalise
-                                    isLoading = false // Hide loader
                                     navController.navigate("infosBalise")
                                 } else {
                                     Log.d("Oui","Problème")
                                     ToastUtil.showToast(context, "Échec de la connexion à la balise")
                                 }
+                                isLoading = false // Hide loader
                             }
                         }
                     )
@@ -291,28 +292,17 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                             baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
                                 if (loadedBalise != null) {
                                     baliseViewModel.selectedBalise = loadedBalise
-                                    isLoading = false // Hide loader
                                     navController.navigate("infosBalise")
                                 } else {
                                     Log.d("Oui","Problème")
                                     ToastUtil.showToast(context, "Échec de la connexion à la balise")
                                 }
+                                isLoading = false // Hide loader
                             }
                         }
                     )
                 }
-                if (isLoading) {
-                    Dialog(onDismissRequest = { }) {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .size(100.dp)
-                                .background(Color.White, shape = CircleShape)
-                        ) {
-                            CircularProgressIndicator(color = Color.Black)
-                        }
-                    }
-                }
+                Loader(isLoading = isLoading)
             }
         }
     }
