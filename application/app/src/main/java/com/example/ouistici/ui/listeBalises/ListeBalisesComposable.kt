@@ -8,25 +8,32 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,6 +52,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -57,6 +66,7 @@ import com.example.ouistici.model.Balise
 import com.example.ouistici.model.ToastUtil
 import com.example.ouistici.ui.annonceTexte.getAudioDurationText
 import com.example.ouistici.ui.baliseViewModel.BaliseViewModel
+import com.example.ouistici.ui.baliseViewModel.RetrofitClient
 import com.example.ouistici.ui.loader.Loader
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
@@ -74,6 +84,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel) {
     val balises by remember { mutableStateOf(Stub.bal) }
+    var showDialog by remember { mutableStateOf(false) }
 
     val focusRequester = remember { FocusRequester() }
     val view = LocalView.current
@@ -103,7 +114,7 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel)
         TableScreen(balises, navController, baliseViewModel)
 
         Button(
-            onClick = { TODO() },
+            onClick = { showDialog = true },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
         ) {
             Text(
@@ -113,6 +124,65 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel)
             )
         }
 
+        if (showDialog) {
+            IpPortDialog(
+                onDismiss = { showDialog = false },
+                onConfirm = { ip, port ->
+                    val baseUrl = "http://$ip:$port/"
+                    RetrofitClient.updateBaseUrl(baseUrl)
+                }
+            )
+        }
+
+    }
+}
+
+
+@Composable
+fun IpPortDialog(onDismiss: () -> Unit, onConfirm: (String, String) -> Unit) {
+    var ip by remember { mutableStateOf("") }
+    var port by remember { mutableStateOf("") }
+
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier.width(300.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(text = "Enter IP and Port", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Spacer(modifier = Modifier.height(16.dp))
+                TextField(
+                    value = ip,
+                    onValueChange = { ip = it },
+                    label = { Text("IP Address") }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = port,
+                    onValueChange = { port = it },
+                    label = { Text("Port") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(onClick = onDismiss) {
+                        Text("Cancel")
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(onClick = {
+                        onConfirm(ip, port)
+                        onDismiss()
+                    }) {
+                        Text("Confirm")
+                    }
+                }
+            }
+        }
     }
 }
 
