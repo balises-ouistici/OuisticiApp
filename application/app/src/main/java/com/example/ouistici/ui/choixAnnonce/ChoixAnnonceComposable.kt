@@ -83,6 +83,7 @@ import com.example.ouistici.model.Balise
 import com.example.ouistici.model.JoursSemaine
 import com.example.ouistici.model.PlageHoraire
 import com.example.ouistici.model.ToastUtil
+import com.example.ouistici.ui.loader.Loader
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
@@ -127,7 +128,8 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
             fontSize = 25.sp,
             color = FontColor,
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.semantics { contentDescription = "Page de choix des annonces" }
+            modifier = Modifier
+                .semantics { contentDescription = "Page de choix des annonces" }
                 .focusRequester(focusRequester)
                 .focusable()
         )
@@ -277,7 +279,7 @@ fun DefaultMessagePopup(
     onDismiss: () -> Unit
 ) {
     var selectedAnnonce: Annonce? by remember { mutableStateOf(balise.defaultMessage) }
-
+    var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     Dialog(
@@ -335,6 +337,7 @@ fun DefaultMessagePopup(
                         }
                         Button(
                             onClick = {
+                                isLoading = true
                                 val apiService = RestApiService()
                                 val balInfo = BaliseDto(
                                     balId = null,
@@ -360,6 +363,7 @@ fun DefaultMessagePopup(
                                         ToastUtil.showToast(context, "Échec lors de l'enregistrement de l'annonce par défaut")
                                     }
                                 }
+                                isLoading = false
                                 onDismiss()
                                 navController.navigate("manageAnnonce")
                             },
@@ -374,6 +378,7 @@ fun DefaultMessagePopup(
                                 }
                             )
                         }
+                        Loader(isLoading = isLoading)
                     }
                 }
             }
@@ -405,6 +410,7 @@ fun AddPlageHorairePopup(
     var selectedJours by remember { mutableStateOf<List<JoursSemaine>>(emptyList()) }
     var heureDebut by remember { mutableStateOf<LocalTime?>(null) }
     var heureFin by remember { mutableStateOf<LocalTime?>(null) }
+    var isLoading by remember { mutableStateOf(false) }
 
 
     val context = LocalContext.current
@@ -597,6 +603,7 @@ fun AddPlageHorairePopup(
                                 if ( heureDebut!! >= heureFin!! ) {
                                     ToastUtil.showToast(context, "L'heure de fin ne peut pas être avant celle du début !")
                                 } else {
+                                    isLoading = true
                                     val apiService = RestApiService()
                                     val timeslotInfo = TimeslotDto(
                                         id_timeslot = balise.createIdTimeslot(),
@@ -622,6 +629,7 @@ fun AddPlageHorairePopup(
                                             ToastUtil.showToast(context, "Échec lors de l'enregistrement de la nouvelle plage horaire")
                                         }
                                     }
+                                    isLoading = false
                                     onDismiss()
                                     navController.navigate("manageAnnonce")
                                 }
@@ -640,6 +648,7 @@ fun AddPlageHorairePopup(
                             }
                         )
                     }
+                    Loader(isLoading = isLoading)
                 }
             }
         }
@@ -668,6 +677,7 @@ fun ModifyPlageHorairePopup(
     var selectedJours by remember { mutableStateOf(plageHoraire?.jours ?: emptyList()) }
     var heureDebut by remember { mutableStateOf(plageHoraire?.heureDebut) }
     var heureFin by remember { mutableStateOf(plageHoraire?.heureFin) }
+    var isLoading by remember { mutableStateOf(false) }
 
 
     val context = LocalContext.current
@@ -855,6 +865,7 @@ fun ModifyPlageHorairePopup(
                                 if ( heureDebut!! >= heureFin!! ) {
                                     ToastUtil.showToast(context, "L'heure de fin ne peut pas être avant celle du début !")
                                 } else {
+                                    isLoading = true
                                     val apiService = RestApiService()
                                     val timeslotInfo = TimeslotDto(
                                         id_timeslot = plageHoraire!!.id_timeslot,
@@ -883,6 +894,7 @@ fun ModifyPlageHorairePopup(
                                             ToastUtil.showToast(context, "Échec lors de la modification de la plage horaire")
                                         }
                                     }
+                                    isLoading = false
                                     onDismiss()
                                     navController.navigate("manageAnnonce")
                                 }
@@ -901,6 +913,7 @@ fun ModifyPlageHorairePopup(
                             }
                         )
                     }
+                    Loader(isLoading = isLoading)
                 }
             }
         }
@@ -1097,6 +1110,7 @@ fun ConfirmDeletePlagePopup(
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
+    var isLoading by remember { mutableStateOf(false) }
 
     Dialog(
         onDismissRequest = onDismiss
@@ -1135,6 +1149,7 @@ fun ConfirmDeletePlagePopup(
                     }
                     Button(
                         onClick = {
+                            isLoading = true
                             val apiService = RestApiService()
                             val timeslotInfo = TimeslotDto(
                                 id_timeslot = plageHoraire.id_timeslot,
@@ -1160,6 +1175,7 @@ fun ConfirmDeletePlagePopup(
                                     ToastUtil.showToast(context, "Échec lors de la suppression de la plage horaire")
                                 }
                             }
+                            isLoading = false
                             onDismiss()
                             navController.navigate("manageAnnonce")
                         },
@@ -1174,6 +1190,7 @@ fun ConfirmDeletePlagePopup(
                             }
                         )
                     }
+                    Loader(isLoading = isLoading)
                 }
             }
         }
@@ -1202,7 +1219,7 @@ fun RowScope.TableHeaderCell(
             .padding(8.dp)
             .height(30.dp)
             .semantics {
-                       contentDescription = "Titre de colonne du tableau, ${text}."
+                contentDescription = "Titre de colonne du tableau, ${text}."
             },
         color = textColor,
         textAlign = TextAlign.Center
@@ -1278,7 +1295,8 @@ fun RowScope.TableJoursCell(
             .padding(8.dp)
             .height(50.dp)
             .semantics {
-                       contentDescription = "${textSemantics}, ${ if (jours.count() == 7) "Tous les jours" else  jours }"
+                contentDescription =
+                    "${textSemantics}, ${if (jours.count() == 7) "Tous les jours" else jours}"
             },
         color = textColor,
         textAlign = TextAlign.Center
@@ -1477,6 +1495,7 @@ fun OnOffButton(balise: Balise, navController: NavController) {
     val checkedState = remember { mutableStateOf(balise.sysOnOff) }
 
     val context = LocalContext.current
+    var isLoading by remember { mutableStateOf(false) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -1484,7 +1503,7 @@ fun OnOffButton(balise: Balise, navController: NavController) {
         Switch(
             checked = checkedState.value,
             onCheckedChange = { isChecked ->
-
+                isLoading = true
                 val apiService = RestApiService()
                 val balInfo = BaliseDto(
                     balId = null,
@@ -1505,6 +1524,7 @@ fun OnOffButton(balise: Balise, navController: NavController) {
                         ToastUtil.showToast(context, "Échec lors de la modification de l'état du bouton")
                     }
                 }
+                isLoading = false
             },
             colors = SwitchDefaults.colors(
                 checkedThumbColor = Color.White,
@@ -1526,6 +1546,7 @@ fun OnOffButton(balise: Balise, navController: NavController) {
             }
         )
     }
+    Loader(isLoading = isLoading)
 }
 
 
