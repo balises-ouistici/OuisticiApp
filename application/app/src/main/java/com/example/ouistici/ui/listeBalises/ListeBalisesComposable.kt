@@ -19,7 +19,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -81,7 +85,9 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel)
 
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
@@ -95,6 +101,17 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel)
         )
 
         TableScreen(balises, navController, baliseViewModel)
+
+        Button(
+            onClick = { TODO() },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
+        ) {
+            Text(
+                text = "Ajouter balise wifi",
+                color = Color.White,
+                modifier = Modifier.semantics { contentDescription = "Ajouter une balise fonctionnant avec du wifi." }
+            )
+        }
 
     }
 }
@@ -185,6 +202,7 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
     LazyColumn(
         Modifier
             .fillMaxSize()
+            .height(550.dp)
             .padding(16.dp)
     ) {
         item {
