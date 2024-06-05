@@ -16,8 +16,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -41,6 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.ouistici.R
 import com.example.ouistici.data.Stub
@@ -174,7 +179,8 @@ fun RowScope.TableCell(
 fun TableScreen(balises : List<Balise>, navController: NavController, baliseViewModel: BaliseViewModel) {
     val columnWeight = .3f
     val context = LocalContext.current
-    
+    var isLoading by remember { mutableStateOf(false) } // Loader state
+
     LazyColumn(
         Modifier
             .fillMaxSize()
@@ -197,9 +203,11 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                     textColor = Color.Black,
                     textSemantics = "Nom de la balise",
                     onClick = {
+                        isLoading = true
                         baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
                             if (loadedBalise != null) {
                                 baliseViewModel.selectedBalise = loadedBalise
+                                isLoading = false // Hide loader
                                 navController.navigate("infosBalise")
                             } else {
                                 Log.d("Oui","Problème")
@@ -216,9 +224,11 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                         textColor = Color.Black,
                         textSemantics = "Lieu de la balise",
                         onClick = {
+                            isLoading = true
                             baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
                                 if (loadedBalise != null) {
                                     baliseViewModel.selectedBalise = loadedBalise
+                                    isLoading = false // Hide loader
                                     navController.navigate("infosBalise")
                                 } else {
                                     Log.d("Oui","Problème")
@@ -234,9 +244,11 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                         textColor = Color.Black,
                         textSemantics = "Lieu de la balise",
                         onClick = {
+                            isLoading = true
                             baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
                                 if (loadedBalise != null) {
                                     baliseViewModel.selectedBalise = loadedBalise
+                                    isLoading = false // Hide loader
                                     navController.navigate("infosBalise")
                                 } else {
                                     Log.d("Oui","Problème")
@@ -255,9 +267,11 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                         textColor = Color.Black,
                         textSemantics = "Message par défaut de la balise",
                         onClick = {
+                            isLoading = true
                             baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
                                 if (loadedBalise != null) {
                                     baliseViewModel.selectedBalise = loadedBalise
+                                    isLoading = false // Hide loader
                                     navController.navigate("infosBalise")
                                 } else {
                                     Log.d("Oui","Problème")
@@ -273,9 +287,11 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                         textColor = Color.Black,
                         textSemantics = "Message par défaut de la balise",
                         onClick = {
+                            isLoading = true
                             baliseViewModel.loadBaliseInfo(balise.id) { loadedBalise ->
                                 if (loadedBalise != null) {
                                     baliseViewModel.selectedBalise = loadedBalise
+                                    isLoading = false // Hide loader
                                     navController.navigate("infosBalise")
                                 } else {
                                     Log.d("Oui","Problème")
@@ -284,6 +300,18 @@ fun TableScreen(balises : List<Balise>, navController: NavController, baliseView
                             }
                         }
                     )
+                }
+                if (isLoading) {
+                    Dialog(onDismissRequest = { }) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .size(100.dp)
+                                .background(Color.White, shape = CircleShape)
+                        ) {
+                            CircularProgressIndicator(color = Color.Black)
+                        }
+                    }
                 }
             }
         }

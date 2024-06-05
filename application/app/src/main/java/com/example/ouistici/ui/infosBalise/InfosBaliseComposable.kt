@@ -120,6 +120,7 @@ fun InfosBalise(
     var sliderPosition by remember {
         mutableFloatStateOf(balise.volume)
     }
+    var isLoading by remember { mutableStateOf(false) } // Loader state
 
     val context = LocalContext.current
 
@@ -289,6 +290,7 @@ fun InfosBalise(
 
                 Button(
                     onClick = {
+                        isLoading = true
                         val apiService = RestApiService()
                         val balInfo = BaliseDto(
                             balId = null,
@@ -310,6 +312,7 @@ fun InfosBalise(
                                 ToastUtil.showToast(context, "Échec lors de l'enregistrement du volume")
                             }
                         }
+                        isLoading = false
                     },
                     modifier = Modifier.padding(16.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
@@ -325,9 +328,11 @@ fun InfosBalise(
                         if ( balise.defaultMessage == null ) {
                             ToastUtil.showToast(context, "Impossible, il n'y a pas d'annonce par défaut")
                         } else {
+                            isLoading = true
                             val apiService = RestApiService()
                             apiService.testSound() { statusCode ->
                                 Log.e("InfosBalise","test son : ${statusCode}")
+                                isLoading = false
                                 if (statusCode == 200 ) {
                                     ToastUtil.showToast(context, "Test son réussi !")
                                 } else {
@@ -344,6 +349,18 @@ fun InfosBalise(
                         modifier = Modifier
                             .semantics { contentDescription = "Tester le son sur la balise" }
                     )
+                }
+                if (isLoading) {
+                    Dialog(onDismissRequest = { }) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .size(100.dp)
+                                .background(Color.White, shape = CircleShape)
+                        ) {
+                            CircularProgressIndicator(color = Color.Black)
+                        }
+                    }
                 }
             }
         }
@@ -368,6 +385,7 @@ fun ModifyInfosBalisePopup(
     val context = LocalContext.current
 
     var selectedAnnonce: Annonce? by remember { mutableStateOf(balise.defaultMessage) }
+    var isLoading by remember { mutableStateOf(false) }
 
     var nomBalise by remember { mutableStateOf(balise.nom) }
     var lieuBalise by remember { mutableStateOf(balise.lieu ?: "") }
@@ -446,6 +464,7 @@ fun ModifyInfosBalisePopup(
                     Button(
                         onClick = {
                             if ( nomBalise != "" ) {
+                                isLoading = true
                                 val apiService = RestApiService()
                                 val balInfo = BaliseDto(
                                     balId = null,
@@ -470,6 +489,7 @@ fun ModifyInfosBalisePopup(
                                         ToastUtil.showToast(context, "Échec lors de l'enregistrement")
                                     }
                                 }
+                                isLoading = false
                                 onDismiss()
                                 navController.navigate("infosBalise")
                             } else {
@@ -484,6 +504,18 @@ fun ModifyInfosBalisePopup(
                             color = Color.White,
                             modifier = Modifier.semantics { contentDescription = "Valider les modifications faites." }
                         )
+                    }
+                    if (isLoading) {
+                        Dialog(onDismissRequest = { }) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .background(Color.White, shape = CircleShape)
+                            ) {
+                                CircularProgressIndicator(color = Color.Black)
+                            }
+                        }
                     }
                 }
             }
@@ -827,6 +859,7 @@ fun ModifyAnnoncesBaliseAudioPopup(
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
+    var isLoading by remember { mutableStateOf(false) }
 
     var nomAnnonce by remember { mutableStateOf(annonce.nom) }
 
@@ -908,6 +941,7 @@ fun ModifyAnnoncesBaliseAudioPopup(
                     Button(
                         onClick = {
                             if (nomAnnonce != "") {
+                                isLoading = true
                                 val apiService = RestApiService()
                                 val annInfo = AnnonceDto(
                                     upload_sound_url = null,
@@ -929,6 +963,7 @@ fun ModifyAnnoncesBaliseAudioPopup(
                                         ToastUtil.showToast(context, "Échec lors de la création de l'annonce")
                                     }
                                 }
+                                isLoading = false
                                 navController.navigate("infosBalise")
                                 onDismiss()
                             } else {
@@ -943,6 +978,18 @@ fun ModifyAnnoncesBaliseAudioPopup(
                             color = Color.White,
                             modifier = Modifier.semantics { contentDescription = "Enregistrer les modifications apportées." }
                         )
+                    }
+                    if (isLoading) {
+                        Dialog(onDismissRequest = { }) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .background(Color.White, shape = CircleShape)
+                            ) {
+                                CircularProgressIndicator(color = Color.Black)
+                            }
+                        }
                     }
                 }
             }
@@ -968,6 +1015,7 @@ fun ConfirmDeleteAnnoncePopup(
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
+    var isLoading by remember { mutableStateOf(false) }
 
     Dialog(
         onDismissRequest = onDismiss
@@ -1004,6 +1052,7 @@ fun ConfirmDeleteAnnoncePopup(
                     }
                     Button(
                         onClick = {
+                            isLoading = true
                             val apiService = RestApiService()
                             val annInfo = AnnonceDto(
                                 upload_sound_url = null,
@@ -1027,6 +1076,7 @@ fun ConfirmDeleteAnnoncePopup(
                                     ToastUtil.showToast(context, "Échec lors de la suppression de l'annonce")
                                 }
                             }
+                            isLoading = false
                             onDismiss()
                             navController.navigate("infosBalise")
                         },
@@ -1038,6 +1088,18 @@ fun ConfirmDeleteAnnoncePopup(
                             color = Color.White,
                             modifier = Modifier.semantics { contentDescription = "Confirmer la suppression de l'annonce" }
                         )
+                    }
+                    if (isLoading) {
+                        Dialog(onDismissRequest = { }) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .background(Color.White, shape = CircleShape)
+                            ) {
+                                CircularProgressIndicator(color = Color.Black)
+                            }
+                        }
                     }
                 }
             }
