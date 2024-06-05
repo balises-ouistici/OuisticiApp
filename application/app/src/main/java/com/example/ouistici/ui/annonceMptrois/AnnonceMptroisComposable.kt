@@ -60,6 +60,7 @@ import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.ToastUtil
 import com.example.ouistici.model.TypeAnnonce
+import com.example.ouistici.ui.loader.Loader
 import com.example.ouistici.ui.theme.FontColor
 import kotlinx.coroutines.delay
 import java.io.File
@@ -93,7 +94,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
         }
     }
 
-
+    var isLoading by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
     val view = LocalView.current
     LaunchedEffect(Unit) {
@@ -115,9 +116,11 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
             fontSize = 25.sp,
             color = FontColor,
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.semantics {
-                contentDescription = "Page de création d'une annonce en choisissant un fichier audio depuis le téléphone."
-            }
+            modifier = Modifier
+                .semantics {
+                    contentDescription =
+                        "Page de création d'une annonce en choisissant un fichier audio depuis le téléphone."
+                }
                 .focusRequester(focusRequester)
                 .focusable()
         )
@@ -221,6 +224,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
         Button(
             onClick = {
                 if ( textValueInput != "" && audioFile != null ) {
+                    isLoading = true
                     val apiService = RestApiService()
                     val annInfo = AnnonceDto(
                         upload_sound_url = null,
@@ -269,6 +273,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                             ToastUtil.showToast(context, "Échec lors de la création de l'annonce")
                         }
                     }
+                    isLoading = false
                     navController.navigate("annonceMptrois")
                 }
                 if ( audioFile == null && textValueInput == "" ) {
@@ -292,6 +297,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                 }
             )
         }
+        Loader(isLoading = isLoading)
     }
 }
 

@@ -62,6 +62,7 @@ import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.ToastUtil
 import com.example.ouistici.model.TypeAnnonce
+import com.example.ouistici.ui.loader.Loader
 import com.example.ouistici.ui.theme.FontColor
 import kotlinx.coroutines.delay
 import java.io.File
@@ -92,7 +93,7 @@ fun AnnonceVocale(
     var textValue by remember { mutableStateOf(TextFieldValue()) }
     var textValueInput by remember { mutableStateOf("") }
 
-
+    var isLoading by remember { mutableStateOf(false) }
 
     val audioFile = File(cacheDir, balise.createId().toString()+".wav")
 
@@ -135,9 +136,10 @@ fun AnnonceVocale(
             fontSize = 25.sp,
             color = FontColor,
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.semantics {
-                contentDescription = "Page de création d'une annonce avec enregistrement vocal."
-            }
+            modifier = Modifier
+                .semantics {
+                    contentDescription = "Page de création d'une annonce avec enregistrement vocal."
+                }
                 .focusRequester(focusRequester)
                 .focusable()
         )
@@ -219,9 +221,12 @@ fun AnnonceVocale(
                         text = formatTime(timeMi = time),
                         style = MaterialTheme.typography.headlineLarge,
                         color = FontColor,
-                        modifier = Modifier.padding(9.dp)
+                        modifier = Modifier
+                            .padding(9.dp)
                             .semantics {
-                                contentDescription = "Durée de l'enregistrement, ${TimeUnit.MILLISECONDS.toMinutes(time) % 60} minutes et ${TimeUnit.MILLISECONDS.toSeconds(time) % 60} secondes."
+                                contentDescription = "Durée de l'enregistrement, ${
+                                    TimeUnit.MILLISECONDS.toMinutes(time) % 60
+                                } minutes et ${TimeUnit.MILLISECONDS.toSeconds(time) % 60} secondes."
                             }
                     )
                     LaunchedEffect(isRunning) {
@@ -309,9 +314,13 @@ fun AnnonceVocale(
                     text = formatTime(timeMi = time),
                     style = MaterialTheme.typography.headlineLarge,
                     color = FontColor,
-                    modifier = Modifier.padding(9.dp)
+                    modifier = Modifier
+                        .padding(9.dp)
                         .semantics {
-                            contentDescription = "Durée de l'enregistrement, ${TimeUnit.MILLISECONDS.toMinutes(time) % 60} minutes et ${TimeUnit.MILLISECONDS.toSeconds(time) % 60} secondes."
+                            contentDescription =
+                                "Durée de l'enregistrement, ${TimeUnit.MILLISECONDS.toMinutes(time) % 60} minutes et ${
+                                    TimeUnit.MILLISECONDS.toSeconds(time) % 60
+                                } secondes."
                         }
                 )
 
@@ -334,6 +343,7 @@ fun AnnonceVocale(
                         if ( textValueInput != "") {
                             val durationInSeconds = TimeUnit.MILLISECONDS.toSeconds(time)
 
+                            isLoading = true
                             val apiService = RestApiService()
                             val annInfo = AnnonceDto(
                                 upload_sound_url = null,
@@ -381,6 +391,7 @@ fun AnnonceVocale(
                                     ToastUtil.showToast(context, "Échec lors de la création de l'annonce")
                                 }
                             }
+                            isLoading = false
                             navController.navigate("annonceVocal")
                         } else {
                             ToastUtil.showToast(context, "Action impossible, vous devez choisir un nom !")
@@ -397,7 +408,7 @@ fun AnnonceVocale(
                         }
                     )
                 }
-
+                Loader(isLoading = isLoading)
 
             }
         }
