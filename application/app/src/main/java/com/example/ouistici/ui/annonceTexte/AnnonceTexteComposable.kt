@@ -3,6 +3,7 @@ package com.example.ouistici.ui.annonceTexte
 import android.media.MediaPlayer
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
@@ -13,12 +14,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -45,6 +49,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.ouistici.R
 import com.example.ouistici.data.dto.AnnonceDto
@@ -82,6 +87,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
     var textContenuInput by remember { mutableStateOf("") }
     var langueSelectionnee by remember { mutableStateOf(LangueManager.langueActuelle) }
     var expanded by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) } // Loader state
 
     val context = LocalContext.current
     val ttsManager = remember { TextToSpeechManager(context) }
@@ -93,7 +99,6 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
         focusRequester.requestFocus()
         view.announceForAccessibility("")
     }
-
 
     Column(
         modifier = Modifier
@@ -113,9 +118,8 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                 .focusRequester(focusRequester)
                 .focusable()
         )
-       
+
         Spacer(modifier = Modifier.height(40.dp))
-       
 
         TextField(
             value = textValue,
@@ -127,9 +131,8 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
             textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier.fillMaxWidth()
         )
-        
-        Spacer(modifier = Modifier.height(20.dp))
 
+        Spacer(modifier = Modifier.height(20.dp))
 
         TextField(
             value = textContenu,
@@ -159,7 +162,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                     .clickable(onClick = { expanded = true })
             ) {
 
-                if ( langueSelectionnee.code == "" && langueSelectionnee.nom == "" ) {
+                if (langueSelectionnee.code == "" && langueSelectionnee.nom == "") {
                     Text(
                         text = stringResource(R.string.choisir),
                         fontSize = 16.sp,
@@ -179,7 +182,6 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                     )
                 }
 
-
                 DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
@@ -196,7 +198,6 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                 }
             }
         }
-
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -248,7 +249,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
 
         Button(
             onClick = {
-                if (textValueInput != "" && textContenuInput != "" && langueSelectionnee.code != "" && langueSelectionnee.nom != "") {
+                if (textValueInput.isNotEmpty() && textContenuInput.isNotEmpty() && langueSelectionnee.code.isNotEmpty() && langueSelectionnee.nom.isNotEmpty()) {
                     val locale = when (langueSelectionnee.code) {
                         "fr" -> Locale.FRENCH
                         "en" -> Locale.ENGLISH
@@ -258,14 +259,13 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
 
                     val fileName = balise.createId().toString() + ".wav"
                     val file = File(context.cacheDir, fileName)
+                    isLoading = true // Show loader
                     coroutineScope.launch {
-
                         withContext(Dispatchers.IO) {
                             ttsManager.saveToFile(textContenuInput, file)
                         }
 
-
-                        // Pour laisser le temps au fichier d'être créé
+                        // To allow time for the file to be created
                         delay(2000L)
 
                         val duration = AndroidAudioPlayer.getAudioDuration(file) / 1000
@@ -284,7 +284,6 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
 
                         apiService.createAnnonce(annInfo) {
                             if (it?.nom != null) {
-
                                 val audioInfo = FileAnnonceDto(
                                     code = null,
                                     value = it.nom,
@@ -318,6 +317,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                                 ToastUtil.showToast(context, "Échec lors de la création de l'annonce")
                             }
                         }
+                        isLoading = false // Hide loader
                         navController.navigate("annonceTexte")
                     }
                 } else {
@@ -336,8 +336,21 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
             )
         }
 
+        if (isLoading) {
+            Dialog(onDismissRequest = { }) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(100.dp)
+                        .background(Color.White, shape = CircleShape)
+                ) {
+                    CircularProgressIndicator(color = Color.Black)
+                }
+            }
+        }
     }
 }
+
 
 
 /**

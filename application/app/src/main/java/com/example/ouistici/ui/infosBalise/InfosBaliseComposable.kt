@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -35,6 +36,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -512,6 +514,7 @@ fun ModifyAnnoncesBaliseTextePopup(
 
     var langueSelectionnee by remember { mutableStateOf(annonce.langue) }
     var expanded by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) } // Loader state
 
     val ttsManager = remember { TextToSpeechManager(context) }
 
@@ -695,6 +698,7 @@ fun ModifyAnnoncesBaliseTextePopup(
 
                                 val fileName = balise.createId().toString() + ".wav"
                                 val file = File(context.cacheDir, fileName)
+                                isLoading = true // Show loader
                                 coroutineScope.launch {
 
                                     withContext(Dispatchers.Default) {
@@ -760,6 +764,7 @@ fun ModifyAnnoncesBaliseTextePopup(
                                             ToastUtil.showToast(context, "Échec lors de la création de l'annonce")
                                         }
                                     }
+                                    isLoading = false // Hide loader
                                     navController.navigate("infosBalise")
                                 }
                             } else {
@@ -784,6 +789,19 @@ fun ModifyAnnoncesBaliseTextePopup(
                                 contentDescription = "Enregistrer les modifications apportées."
                             }
                         )
+                    }
+
+                    if (isLoading) {
+                        Dialog(onDismissRequest = { }) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .background(Color.White, shape = CircleShape)
+                            ) {
+                                CircularProgressIndicator(color = Color.Black)
+                            }
+                        }
                     }
                 }
             }
