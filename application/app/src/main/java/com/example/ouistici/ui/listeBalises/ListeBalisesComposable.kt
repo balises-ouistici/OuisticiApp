@@ -108,7 +108,7 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel 
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = stringResource(R.string.liste_des_balises),
+            text = "Liste des balises Wifi",
             fontSize = 25.sp,
             color = FontColor,
             style = MaterialTheme.typography.titleLarge,
@@ -117,7 +117,19 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel 
                 .focusable()
         )
 
-        TableScreen(balises, navController, baliseViewModel)
+        TableScreenWifi(balises, navController, baliseViewModel)
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = "Liste des balises Bluetooth",
+            fontSize = 25.sp,
+            color = FontColor,
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.semantics { contentDescription = "Liste des balises Bluetooth détectées à proximité." }
+        )
+
+        TableScreenBluetooth(balises = balises, navController = navController, baliseViewModel = baliseViewModel)
 
         Button(
             onClick = { showDialog = true },
@@ -294,7 +306,7 @@ fun RowScope.TableCell(
  * @param baliseViewModel The BaliseViewModel for managing balise data.
  */
 @Composable
-fun TableScreen(balises: List<BaliseEntity>, navController: NavController, baliseViewModel: BaliseViewModel) {
+fun TableScreenWifi(balises: List<BaliseEntity>, navController: NavController, baliseViewModel: BaliseViewModel) {
     val columnWeight = .3f
     val context = LocalContext.current
     var isLoading by remember { mutableStateOf(false) } // Loader state
@@ -302,7 +314,7 @@ fun TableScreen(balises: List<BaliseEntity>, navController: NavController, balis
     LazyColumn(
         Modifier
             .fillMaxSize()
-            .height(550.dp)
+            .height(230.dp)
             .padding(16.dp)
     ) {
         item {
@@ -379,4 +391,41 @@ fun TableScreen(balises: List<BaliseEntity>, navController: NavController, balis
         }
     }
 }
+
+
+
+
+@Composable
+fun TableScreenBluetooth(balises: List<BaliseEntity>, navController: NavController, baliseViewModel: BaliseViewModel) {
+    val columnWeight = .3f
+    val context = LocalContext.current
+    var isLoading by remember { mutableStateOf(false) } // Loader state
+
+    LazyColumn(
+        Modifier
+            .fillMaxSize()
+            .height(230.dp)
+            .padding(16.dp)
+    ) {
+        item {
+            Row(Modifier.background(TableHeaderColor)) {
+                TableHeaderCell(text = stringResource(R.string.nom_balise), weight = columnWeight, textColor = Color.Black)
+                TableHeaderCell(text = stringResource(R.string.lieu), weight = columnWeight, textColor = Color.Black)
+                TableHeaderCell(text = stringResource(R.string.message_d_faut), weight = columnWeight, textColor = Color.Black)
+            }
+        }
+
+        items(balises) { balise ->
+            Row(Modifier.fillMaxWidth()) {
+                // Intégrer les cellules avec TableCell pour les balises bluetooth
+
+
+
+                Loader(isLoading = isLoading)
+            }
+        }
+    }
+}
+
+
 
