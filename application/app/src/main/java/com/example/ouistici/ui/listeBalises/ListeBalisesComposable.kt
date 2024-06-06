@@ -85,7 +85,9 @@ import kotlinx.coroutines.delay
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.ouistici.data.dto.AnnonceDto
 import com.example.ouistici.data.entity.BaliseEntity
+import com.example.ouistici.data.service.RestApiService
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.ui.baliseViewModel.BaliseViewModelFactory
 import com.example.ouistici.ui.theme.BodyBackground
@@ -337,6 +339,77 @@ fun EditBaliseDialog(balise: BaliseEntity, onDismiss: () -> Unit, onConfirm: (St
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ConfirmDeleteBalisePopup(
+    balise: BaliseEntity,
+    navController: NavController,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit // Added a callback for confirming the deletion
+) {
+    val context = LocalContext.current
+    var isLoading by remember { mutableStateOf(false) }
+
+    Dialog(
+        onDismissRequest = onDismiss
+    ) {
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                .width(300.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    text = "Êtes-vous sûr de vouloir supprimer cette balise ?",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.annuler),
+                            color = Color.White,
+                            modifier = Modifier.semantics { contentDescription = "Annuler la suppression" }
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            isLoading = true
+                            // Call the onConfirm callback to handle deletion
+                            onConfirm()
+                            isLoading = false
+                            onDismiss()
+                            navController.navigate("listeBalises")
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                        modifier = Modifier.padding(start = 8.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.supprimer),
+                            color = Color.White,
+                            modifier = Modifier.semantics { contentDescription = "Confirmer la suppression de la balise" }
+                        )
+                    }
+                    Loader(isLoading = isLoading)
+                }
+            }
+        }
+    }
+}
+
+
+
 /**
  * @brief Composable function for rendering a header cell in a table row.
  *
@@ -419,6 +492,7 @@ fun TableScreenWifi(balises: List<BaliseEntity>, navController: NavController, b
     val context = LocalContext.current
     var isLoading by remember { mutableStateOf(false) } // Loader state
     var showEditDialog by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
     var selectedBalise by remember { mutableStateOf<BaliseEntity?>(null) }
 
 
@@ -433,6 +507,21 @@ fun TableScreenWifi(balises: List<BaliseEntity>, navController: NavController, b
                     it.ipBal = "http://$ip:$port/"
                     baliseViewModel.updateBalise(it)
                 }
+            }
+        )
+    }
+
+    if (showDeleteDialog && selectedBalise != null) {
+        ConfirmDeleteBalisePopup(
+            balise = selectedBalise!!,
+            navController = navController,
+            onDismiss = { showDeleteDialog = false },
+            onConfirm = {
+                selectedBalise?.let {
+                    baliseViewModel.deleteBalise(it)
+                    ToastUtil.showToast(context, "Balise supprimée")
+                }
+                showDeleteDialog = false
             }
         )
     }
@@ -511,7 +600,8 @@ fun TableScreenWifi(balises: List<BaliseEntity>, navController: NavController, b
 
                     OutlinedButton(
                         onClick = {
-                            baliseViewModel.deleteBalise(balise)
+                            selectedBalise = balise
+                            showDeleteDialog = true
                         },
                         shape = RectangleShape,
                         border = BorderStroke(1.dp, Color.Black),
