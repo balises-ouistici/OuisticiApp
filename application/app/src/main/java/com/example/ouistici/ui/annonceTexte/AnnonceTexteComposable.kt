@@ -375,11 +375,3 @@ fun DropdownMenuItemLangue(
     )
 }
 
-fun getAudioDurationText(file: File): Int {
-    val mediaPlayer = MediaPlayer()
-    mediaPlayer.setDataSource(file.absolutePath)
-    mediaPlayer.prepare()
-    val duration = mediaPlayer.duration
-    mediaPlayer.release()
-    return duration / 1000 // Convertit la durée en millisecondes en secondes
-}

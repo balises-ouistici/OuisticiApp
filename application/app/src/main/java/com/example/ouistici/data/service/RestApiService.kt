@@ -2,7 +2,6 @@ package com.example.ouistici.data.service
 
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.ouistici.data.api.OuisticiApi
 import com.example.ouistici.data.dto.AnnonceDto
@@ -15,10 +14,9 @@ import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.JoursSemaine
 import com.example.ouistici.model.Langue
-import com.example.ouistici.model.LangueManager
 import com.example.ouistici.model.PlageHoraire
 import com.example.ouistici.model.TypeAnnonce
-import com.example.ouistici.ui.baliseViewModel.RetrofitClient
+import com.example.ouistici.data.RetrofitClient
 import com.google.gson.JsonObject
 import okhttp3.MediaType
 import okhttp3.MultipartBody

@@ -1,6 +1,5 @@
-package com.example.ouistici.ui.baliseViewModel
+package com.example.ouistici.data
 
-import com.example.ouistici.data.api.OuisticiApi
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
