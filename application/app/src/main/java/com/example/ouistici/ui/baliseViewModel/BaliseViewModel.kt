@@ -46,6 +46,13 @@ class BaliseViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun getMaxId(callback: (Int) -> Unit) {
+        viewModelScope.launch {
+            val maxId = repository.getMaxId()
+            callback(maxId)
+        }
+    }
+
 
 
     fun loadBaliseInfo(balise: BaliseEntity, onResult: (Balise?) -> Unit) {

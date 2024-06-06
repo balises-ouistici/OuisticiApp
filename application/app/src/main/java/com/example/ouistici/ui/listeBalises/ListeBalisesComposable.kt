@@ -142,6 +142,8 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel 
 
         TableScreenBluetooth(balises = balises, navController = navController, baliseViewModel = baliseViewModel)
 
+        Spacer(modifier = Modifier.height(50.dp))
+        
         Button(
             onClick = { showDialog = true },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
@@ -156,20 +158,22 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel 
         if (showDialog) {
             IpPortDialog(
                 onDismiss = { showDialog = false },
-                onConfirm = { ip, port ->
-                    val newBalise = BaliseEntity(
-                        nom = "New Balise",
-                        lieu = "",
-                        defaultMessage = null,
-                        ipBal = "http://$ip:$port/",
-                        volume = 0f,
-                        sysOnOff = true,
-                        annonces = ArrayList(),
-                        id = 1862,
-                        plages = ArrayList()
-                    )
-                    baliseViewModel.insert(newBalise)
-                    showDialog = false
+                onConfirm = { ip, port, name ->
+                    baliseViewModel.getMaxId { maxId ->
+                        val newBalise = BaliseEntity(
+                            id = maxId + 1,
+                            nom = name,
+                            lieu = "",
+                            defaultMessage = null,
+                            ipBal = "http://$ip:$port/",
+                            volume = 0f,
+                            sysOnOff = true,
+                            annonces = ArrayList(),
+                            plages = ArrayList()
+                        )
+                        baliseViewModel.insert(newBalise)
+                        showDialog = false
+                    }
                 }
             )
         }
@@ -179,9 +183,10 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel 
 
 
 @Composable
-fun IpPortDialog(onDismiss: () -> Unit, onConfirm: (String, String) -> Unit) {
+fun IpPortDialog(onDismiss: () -> Unit, onConfirm: (String, String, String) -> Unit) {
     var ip by remember { mutableStateOf("") }
     var port by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -202,6 +207,12 @@ fun IpPortDialog(onDismiss: () -> Unit, onConfirm: (String, String) -> Unit) {
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 TextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = { Text("Nom de la balise") }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
                     value = ip,
                     onValueChange = { ip = it },
                     label = { Text("Adresse IP") }
@@ -213,7 +224,7 @@ fun IpPortDialog(onDismiss: () -> Unit, onConfirm: (String, String) -> Unit) {
                     label = { Text("Port") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
@@ -226,7 +237,7 @@ fun IpPortDialog(onDismiss: () -> Unit, onConfirm: (String, String) -> Unit) {
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(onClick = {
-                            onConfirm(ip, port)
+                            onConfirm(ip, port, name)
                             onDismiss()
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
@@ -242,9 +253,18 @@ fun IpPortDialog(onDismiss: () -> Unit, onConfirm: (String, String) -> Unit) {
 
 @Composable
 fun EditBaliseDialog(balise: BaliseEntity, onDismiss: () -> Unit, onConfirm: (String, String, String) -> Unit) {
+    val urlPattern = "http://(.*):(.*)/".toRegex()
+    val matchResult = urlPattern.matchEntire(balise.ipBal)
+    val (initialIp, initialPort) = if (matchResult != null && matchResult.groupValues.size == 3) {
+        matchResult.groupValues[1] to matchResult.groupValues[2]
+    } else {
+        "" to ""
+    }
+
+
     var name by remember { mutableStateOf(balise.nom) }
-    var ip by remember { mutableStateOf("") }
-    var port by remember { mutableStateOf("") }
+    var ip by remember { mutableStateOf(initialIp) }
+    var port by remember { mutableStateOf(initialPort) }
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -402,9 +422,7 @@ fun TableScreenWifi(balises: List<BaliseEntity>, navController: NavController, b
                 // Update the balise with the new values
                 selectedBalise?.let {
                     it.nom = name
-                    it.ipBal = ip
-                    // Assuming the port is stored in a separate field, update it here as well
-                    // If the port is part of the IP field or another field, adjust accordingly
+                    it.ipBal = "http://$ip:$port/"
                     baliseViewModel.updateBalise(it)
                 }
             }
@@ -468,7 +486,7 @@ fun TableScreenWifi(balises: List<BaliseEntity>, navController: NavController, b
                         contentPadding = PaddingValues(8.dp),
                         modifier = Modifier
                             .height(66.dp)
-                            .weight(columnWeight/2)
+                            .weight(columnWeight / 2)
                             .border(1.dp, Color.Black)
                             .semantics {
                                 contentDescription =
@@ -496,7 +514,7 @@ fun TableScreenWifi(balises: List<BaliseEntity>, navController: NavController, b
                         contentPadding = PaddingValues(8.dp),
                         modifier = Modifier
                             .height(66.dp)
-                            .weight(columnWeight/2)
+                            .weight(columnWeight / 2)
                             .border(1.dp, Color.Black)
                             .semantics { contentDescription = "Supprimer la balise ${balise.nom}" }
                     ) {

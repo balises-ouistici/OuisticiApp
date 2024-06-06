@@ -22,4 +22,7 @@ interface BaliseDao {
 
     @Update
     suspend fun update(balise: BaliseEntity)
+
+    @Query("SELECT MAX(id) FROM balises")
+    suspend fun getMaxId(): Int?
 }

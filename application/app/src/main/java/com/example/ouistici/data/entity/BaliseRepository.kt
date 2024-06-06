@@ -17,4 +17,8 @@ class BaliseRepository(private val baliseDao: BaliseDao) {
     suspend fun update(balise: BaliseEntity) {
         baliseDao.update(balise)
     }
+
+    suspend fun getMaxId(): Int {
+        return baliseDao.getMaxId() ?: 0
+    }
 }
