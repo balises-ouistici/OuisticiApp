@@ -1,11 +1,8 @@
 package com.example.ouistici.model
 
 import android.content.Context
-import android.os.Build
-import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.QUEUE_FLUSH
-import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import java.io.File
 import java.util.Locale

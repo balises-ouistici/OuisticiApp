@@ -5,21 +5,17 @@ import com.example.ouistici.data.dto.BaliseDto
 import com.example.ouistici.data.dto.BaliseInfoDto
 import com.example.ouistici.data.dto.FileAnnonceDto
 import com.example.ouistici.data.dto.TimeslotDto
-import com.example.ouistici.model.Balise
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
-import retrofit2.http.Path
-import java.io.File
 
 interface OuisticiApi {
     // Get toute la balise

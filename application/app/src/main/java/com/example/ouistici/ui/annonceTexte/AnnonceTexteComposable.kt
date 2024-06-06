@@ -1,8 +1,6 @@
 package com.example.ouistici.ui.annonceTexte
 
-import android.media.MediaPlayer
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
@@ -65,13 +63,11 @@ import com.example.ouistici.model.ToastUtil
 import com.example.ouistici.model.TypeAnnonce
 import com.example.ouistici.ui.theme.FontColor
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.Locale
-import kotlin.coroutines.coroutineContext
 
 
 /**

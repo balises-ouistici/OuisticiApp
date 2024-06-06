@@ -1,8 +1,5 @@
 package com.example.ouistici.data.dto
 
-import com.example.ouistici.model.Annonce
-import com.example.ouistici.model.Balise
-import com.example.ouistici.model.PlageHoraire
 import com.google.gson.annotations.SerializedName
 
 data class BaliseDto(

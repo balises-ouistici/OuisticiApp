@@ -1,7 +1,6 @@
 package com.example.ouistici.ui.annonceVocal
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
@@ -53,7 +52,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ouistici.R
 import com.example.ouistici.data.dto.AnnonceDto
-import com.example.ouistici.data.dto.BaliseDto
 import com.example.ouistici.data.dto.FileAnnonceDto
 import com.example.ouistici.data.service.RestApiService
 import com.example.ouistici.model.AndroidAudioPlayer
@@ -66,11 +64,7 @@ import com.example.ouistici.ui.loader.Loader
 import com.example.ouistici.ui.theme.FontColor
 import kotlinx.coroutines.delay
 import java.io.File
-import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 
 /**

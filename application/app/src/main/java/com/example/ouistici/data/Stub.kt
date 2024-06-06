@@ -2,7 +2,6 @@ package com.example.ouistici.data
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.example.ouistici.model.Balise
 
 /**
  * @brief Provides stub data for testing purposes.

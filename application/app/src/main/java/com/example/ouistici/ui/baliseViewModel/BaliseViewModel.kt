@@ -1,10 +1,8 @@
 package com.example.ouistici.ui.baliseViewModel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ouistici.data.entity.BaliseDatabase
 import com.example.ouistici.data.entity.BaliseEntity
