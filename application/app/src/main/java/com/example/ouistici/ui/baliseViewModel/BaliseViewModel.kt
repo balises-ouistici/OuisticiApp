@@ -34,6 +34,19 @@ class BaliseViewModel(application: Application) : AndroidViewModel(application) 
         repository.insert(balise)
     }
 
+    fun deleteBalise(balise: BaliseEntity) {
+        viewModelScope.launch {
+            repository.delete(balise)
+        }
+    }
+
+    fun updateBalise(balise: BaliseEntity) {
+        viewModelScope.launch {
+            repository.update(balise)
+        }
+    }
+
+
 
     fun loadBaliseInfo(balise: BaliseEntity, onResult: (Balise?) -> Unit) {
         val apiService = RestApiService()

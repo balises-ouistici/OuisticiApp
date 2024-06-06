@@ -5,6 +5,7 @@ import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,6 +13,7 @@ import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -28,10 +30,17 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -74,10 +83,12 @@ import com.example.ouistici.ui.theme.TableHeaderColor
 import com.example.ouistici.ui.theme.TitleFontFamily
 import kotlinx.coroutines.delay
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ouistici.data.entity.BaliseEntity
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.ui.baliseViewModel.BaliseViewModelFactory
+import com.example.ouistici.ui.theme.BodyBackground
 
 
 /**
@@ -229,6 +240,75 @@ fun IpPortDialog(onDismiss: () -> Unit, onConfirm: (String, String) -> Unit) {
 }
 
 
+@Composable
+fun EditBaliseDialog(balise: BaliseEntity, onDismiss: () -> Unit, onConfirm: (String, String, String) -> Unit) {
+    var name by remember { mutableStateOf(balise.nom) }
+    var ip by remember { mutableStateOf("") }
+    var port by remember { mutableStateOf("") }
+
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier.width(300.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    text = "Modifier la balise",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .semantics {
+                            contentDescription = "Modifier le nom, l'adresse IP et le port de la balise."
+                        }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                TextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = { Text("Nom de la balise") }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = ip,
+                    onValueChange = { ip = it },
+                    label = { Text("Adresse IP") }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = port,
+                    onValueChange = { port = it },
+                    label = { Text("Port") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
+                    ) {
+                        Text(text = "Annuler", color = Color.White)
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(onClick = {
+                        onConfirm(name, ip, port)
+                        onDismiss()
+                    },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                    ) {
+                        Text(text = "Valider", color = Color.White)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 /**
  * @brief Composable function for rendering a header cell in a table row.
  *
@@ -307,9 +387,30 @@ fun RowScope.TableCell(
  */
 @Composable
 fun TableScreenWifi(balises: List<BaliseEntity>, navController: NavController, baliseViewModel: BaliseViewModel) {
-    val columnWeight = .3f
+    val columnWeight = .5f
     val context = LocalContext.current
     var isLoading by remember { mutableStateOf(false) } // Loader state
+    var showEditDialog by remember { mutableStateOf(false) }
+    var selectedBalise by remember { mutableStateOf<BaliseEntity?>(null) }
+
+
+    if (showEditDialog && selectedBalise != null) {
+        EditBaliseDialog(
+            balise = selectedBalise!!,
+            onDismiss = { showEditDialog = false },
+            onConfirm = { name, ip, port ->
+                // Update the balise with the new values
+                selectedBalise?.let {
+                    it.nom = name
+                    it.ipBal = ip
+                    // Assuming the port is stored in a separate field, update it here as well
+                    // If the port is part of the IP field or another field, adjust accordingly
+                    baliseViewModel.updateBalise(it)
+                }
+            }
+        )
+    }
+
 
     LazyColumn(
         Modifier
@@ -320,10 +421,11 @@ fun TableScreenWifi(balises: List<BaliseEntity>, navController: NavController, b
         item {
             Row(Modifier.background(TableHeaderColor)) {
                 TableHeaderCell(text = stringResource(R.string.nom_balise), weight = columnWeight, textColor = Color.Black)
-                TableHeaderCell(text = stringResource(R.string.lieu), weight = columnWeight, textColor = Color.Black)
-                TableHeaderCell(text = stringResource(R.string.message_d_faut), weight = columnWeight, textColor = Color.Black)
+                TableHeaderCell(text = "Actions", weight = columnWeight, textColor = Color.Black)
             }
         }
+
+
 
         items(balises) { balise ->
             Row(Modifier.fillMaxWidth()) {
@@ -347,50 +449,70 @@ fun TableScreenWifi(balises: List<BaliseEntity>, navController: NavController, b
                     }
                 )
 
-                TableCell(
-                    text = if (balise.lieu.isEmpty()) context.getString(R.string.non_defini) else balise.lieu,
-                    weight = columnWeight,
-                    textColor = Color.Black,
-                    textSemantics = "Lieu de la balise",
-                    onClick = {
-                        isLoading = true
-                        baliseViewModel.loadBaliseInfo(balise) { loadedBalise ->
-                            if (loadedBalise != null) {
-                                baliseViewModel.selectedBalise = loadedBalise
-                                navController.navigate("infosBalise")
-                            } else {
-                                Log.d("Oui", "Problème")
-                                ToastUtil.showToast(context, "Échec de la connexion à la balise")
+                // New cell for edit and delete buttons
+                Row(
+                    Modifier.weight(columnWeight),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    OutlinedButton(
+                        onClick = {
+                            selectedBalise = balise
+                            showEditDialog = true
+                        },
+                        shape = RectangleShape,
+                        border = BorderStroke(1.dp, Color.Black),
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = Color.Black,
+                            containerColor = BodyBackground
+                        ),
+                        contentPadding = PaddingValues(8.dp),
+                        modifier = Modifier
+                            .height(66.dp)
+                            .weight(columnWeight/2)
+                            .border(1.dp, Color.Black)
+                            .semantics {
+                                contentDescription =
+                                    "Modifier la balise ${balise.nom}"
                             }
-                            isLoading = false // Hide loader
-                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "",
+                            modifier = Modifier.size(15.dp)
+                        )
                     }
-                )
 
-                TableCell(
-                    text = balise.defaultMessage ?: context.getString(R.string.aucun),
-                    weight = columnWeight,
-                    textColor = Color.Black,
-                    textSemantics = "Message par défaut de la balise",
-                    onClick = {
-                        isLoading = true
-                        baliseViewModel.loadBaliseInfo(balise) { loadedBalise ->
-                            if (loadedBalise != null) {
-                                baliseViewModel.selectedBalise = loadedBalise
-                                navController.navigate("infosBalise")
-                            } else {
-                                Log.d("Oui", "Problème")
-                                ToastUtil.showToast(context, "Échec de la connexion à la balise")
-                            }
-                            isLoading = false // Hide loader
-                        }
+
+                    OutlinedButton(
+                        onClick = {
+                            baliseViewModel.deleteBalise(balise)
+                        },
+                        shape = RectangleShape,
+                        border = BorderStroke(1.dp, Color.Black),
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = Color.Black,
+                            containerColor = BodyBackground
+                        ),
+                        contentPadding = PaddingValues(8.dp),
+                        modifier = Modifier
+                            .height(66.dp)
+                            .weight(columnWeight/2)
+                            .border(1.dp, Color.Black)
+                            .semantics { contentDescription = "Supprimer la balise ${balise.nom}" }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "",
+                            modifier = Modifier.size(15.dp)
+                        )
                     }
-                )
-                Loader(isLoading = isLoading)
+                }
             }
+            Loader(isLoading = isLoading)
         }
     }
 }
+
 
 
 

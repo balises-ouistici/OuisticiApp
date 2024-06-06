@@ -9,4 +9,12 @@ class BaliseRepository(private val baliseDao: BaliseDao) {
     suspend fun insert(balise: BaliseEntity) {
         baliseDao.insert(balise)
     }
+
+    suspend fun delete(balise: BaliseEntity) {
+        baliseDao.delete(balise)
+    }
+
+    suspend fun update(balise: BaliseEntity) {
+        baliseDao.update(balise)
+    }
 }

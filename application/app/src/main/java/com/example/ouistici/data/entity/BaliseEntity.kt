@@ -8,12 +8,12 @@ import com.example.ouistici.model.PlageHoraire
 @Entity(tableName = "balises")
 data class BaliseEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val nom: String,
+    var nom: String,
     val lieu: String,
     val defaultMessage: String?,
     val annonces: List<Annonce>, // Assuming Annonce is a Parcelable or a supported type
     val volume: Float,
     val plages: List<PlageHoraire>, // Assuming PlageHoraire is a Parcelable or a supported type
     val sysOnOff: Boolean,
-    val ipBal: String
+    var ipBal: String
 )
