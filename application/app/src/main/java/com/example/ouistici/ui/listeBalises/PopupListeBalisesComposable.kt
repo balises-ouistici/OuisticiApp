@@ -65,7 +65,7 @@ fun IpPortDialog(onDismiss: () -> Unit, onConfirm: (String, String, String) -> U
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Attention : Le nom de la balise sera seulement enregistré en local et ne correspondra pas forcément au nom de la balise réellement.",
+                    text = "Attention : Le nom de la balise sera seulement enregistré en local et ne correspondra pas forcément au nom réel de la balise.",
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 TextField(
@@ -148,7 +148,7 @@ fun EditBaliseDialog(balise: BaliseEntity, onDismiss: () -> Unit, onConfirm: (St
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Attention : Le nom de la balise sera seulement enregistré en local et ne correspondra pas forcément au nom de la balise réellement.",
+                    text = "Attention : Le nom de la balise sera seulement enregistré en local et ne correspondra pas forcément au nom réel de la balise.",
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 TextField(
