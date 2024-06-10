@@ -9,6 +9,7 @@ data class BaliseDto(
     @SerializedName("default_message") val  defaultMessage: Int?,
     @SerializedName("volume") val  volume : Float,
     @SerializedName("timeslots") val  sysOnOff : Boolean,
+    @SerializedName("autovolume") val  autovolume : Boolean,
     @SerializedName("ipBal") val  ipBal : String,
 )
 

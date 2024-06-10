@@ -134,6 +134,7 @@ fun DefaultMessagePopup(
                                     defaultMessage = selectedAnnonce?.id,
                                     volume = balise.volume,
                                     sysOnOff = balise.sysOnOff,
+                                    autovolume = balise.autovolume,
                                     ipBal = balise.ipBal
                                 )
 

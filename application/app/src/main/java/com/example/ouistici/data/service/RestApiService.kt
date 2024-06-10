@@ -90,6 +90,7 @@ class RestApiService {
                             volume = baliseDto.volume,
                             plages = ArrayList(plages),
                             sysOnOff = baliseDto.sysOnOff,
+                            autovolume = baliseDto.autovolume,
                             ipBal = ""
                         )
 
@@ -160,6 +161,23 @@ class RestApiService {
     }
 
 
+    fun setAutoVolume(baliseData: BaliseDto, onResult: (BaliseDto?) -> Unit) {
+        val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
+        val buttonState = JsonObject().apply {
+            addProperty("autovolume", baliseData.autovolume)
+        }
+        retrofit.setAutoVolume(buttonState).enqueue(
+            object: Callback<BaliseDto> {
+                override fun onFailure(call: Call<BaliseDto>, t: Throwable) {
+                    onResult(null)
+                }
+                override fun onResponse(call: Call<BaliseDto>, response: Response<BaliseDto>) {
+                    val changes = response.body()
+                    onResult(changes)
+                }
+            }
+        )
+    }
 
 
 

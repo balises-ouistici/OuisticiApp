@@ -256,6 +256,7 @@ fun OnOffButton(balise: Balise, navController: NavController) {
                     defaultMessage = balise.defaultMessage?.id,
                     volume = balise.volume,
                     sysOnOff = isChecked,
+                    autovolume = balise.autovolume,
                     ipBal = balise.ipBal
                 )
                 apiService.setButtonState(balInfo) {

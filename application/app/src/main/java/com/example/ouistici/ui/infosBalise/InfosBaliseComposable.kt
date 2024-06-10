@@ -8,6 +8,7 @@ import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,6 +29,8 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -251,6 +254,22 @@ fun InfosBalise(
                         .semantics { contentDescription = "Régler le volume de la balise" }
                 )
 
+                Row {
+                    Text(
+                        text = "Adaptation du volume : ",
+                        color = Color.Black,
+                        modifier = Modifier
+                            .padding(vertical = 10.dp)
+                            .semantics {
+                                contentDescription =
+                                    "Adaptation du volume de la balise, glissez à droite pour modifier."
+                            }
+
+                    )
+
+                    AutoVolumeButton(balise = balise, navController = navController)
+                }
+
                 Button(
                     onClick = {
                         isLoading = true
@@ -262,6 +281,7 @@ fun InfosBalise(
                             defaultMessage = balise.defaultMessage?.id,
                             volume = sliderPosition,
                             sysOnOff = balise.sysOnOff,
+                            autovolume = balise.autovolume,
                             ipBal = balise.ipBal
                         )
 
@@ -319,6 +339,68 @@ fun InfosBalise(
     }
 }
 
+
+
+
+@Composable
+fun AutoVolumeButton(balise: Balise, navController: NavController) {
+    val checkedState = remember { mutableStateOf(balise.autovolume) }
+
+    val context = LocalContext.current
+    var isLoading by remember { mutableStateOf(false) }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Switch(
+            checked = checkedState.value,
+            onCheckedChange = { isChecked ->
+                isLoading = true
+                val apiService = RestApiService()
+                val balInfo = BaliseDto(
+                    balId = null,
+                    nom = balise.nom,
+                    lieu = balise.lieu,
+                    defaultMessage = balise.defaultMessage?.id,
+                    volume = balise.volume,
+                    sysOnOff = balise.sysOnOff,
+                    autovolume = isChecked,
+                    ipBal = balise.ipBal
+                )
+                apiService.setAutoVolume(balInfo) {
+                    if ( it?.balId != null ) {
+                        checkedState.value = isChecked
+                        balise.autovolume = checkedState.value
+                        navController.navigate("infosBalise")
+                    } else {
+                        Log.e("Infos","Échec modification état")
+                        ToastUtil.showToast(context, "Échec lors de la modification de l'autovolume")
+                    }
+                }
+                isLoading = false
+            },
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = Color.White,
+                checkedTrackColor = Color.Green,
+                uncheckedThumbColor = Color.Gray,
+                uncheckedTrackColor = Color.Black,
+                checkedBorderColor = Color.Green,
+                uncheckedBorderColor = Color.Black
+            ),
+        )
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Text(
+            text = if (checkedState.value) "On" else "Off",
+            color = Color.Black,
+            modifier = Modifier.semantics {
+                contentDescription = "L'autovolume est ${if (checkedState.value) " activé " else " désactivé."}"
+            }
+        )
+    }
+    Loader(isLoading = isLoading)
+}
 
 
 

@@ -20,6 +20,7 @@ class Balise(
     var volume : Float,
     var plages : ArrayList<PlageHoraire>,
     var sysOnOff : Boolean,
+    var autovolume : Boolean,
     var ipBal : String
 ) {
     /**

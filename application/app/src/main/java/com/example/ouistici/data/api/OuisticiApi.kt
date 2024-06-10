@@ -35,6 +35,10 @@ interface OuisticiApi {
     @GET("test_sound")
     fun testSound(): Call<Void>
 
+    @Headers("Content-Type: application/json")
+    @POST("autovolume")
+    fun setAutoVolume(@Body buttonState: JsonObject): Call<BaliseDto>
+
 
     // Page choix annonce
     @Headers("Content-Type: application/json")
