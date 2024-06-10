@@ -1,10 +1,16 @@
 package com.example.ouistici.model
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
+import android.media.AudioFormat
+import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.os.Build
+import androidx.core.app.ActivityCompat
 import java.io.File
 import java.io.FileOutputStream
+import java.io.RandomAccessFile
 
 /**
  * @brief Implements the AudioRecorder interface to record audio on Android.
@@ -14,46 +20,87 @@ class AndroidAudioRecorder(
     private val context: Context
 ) : AudioRecorder {
 
-    private var recorder : MediaRecorder? = null
+    private var audioRecord: AudioRecord? = null
+    private var recordingThread: Thread? = null
+    private var isRecording = false
 
-    /**
-     * @brief Creates a new MediaRecorder audio recorder based on the Android version.
-     * @return A new MediaRecorder audio recorder.
-     */
-    private fun createRecorder(): MediaRecorder {
-        return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            MediaRecorder(context)
-        } else MediaRecorder()
+    private val sampleRate = 44100 // Sample rate in Hz
+    private val channelConfig = AudioFormat.CHANNEL_IN_MONO // Channel configuration
+    private val audioFormat = AudioFormat.ENCODING_PCM_16BIT // PCM format
+    private val bufferSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, audioFormat)
+
+    override fun start(outputFile: File) {
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ToastUtil.showToast(context, "Permission d'enregistrement non autorisée !")
+            return
+        }
+        audioRecord = AudioRecord(MediaRecorder.AudioSource.MIC, sampleRate, channelConfig, audioFormat, bufferSize)
+
+        audioRecord?.startRecording()
+        isRecording = true
+
+        recordingThread = Thread {
+            writeAudioDataToFile(outputFile)
+        }
+        recordingThread?.start()
     }
 
-    /**
-     * @brief Starts audio recording and writes data to the specified output file.
-     * @param outputFile The output file to record audio to.
-     */
-    override fun start(outputFile: File) {
-        createRecorder().apply {
-            setAudioSource(MediaRecorder.AudioSource.MIC)
-            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+    private fun writeAudioDataToFile(outputFile: File) {
+        val data = ByteArray(bufferSize)
+        FileOutputStream(outputFile).use { fos ->
+            while (isRecording) {
+                val read = audioRecord?.read(data, 0, data.size) ?: 0
+                if (read > 0) {
+                    fos.write(data, 0, read)
+                }
+            }
+        }
+        writeWavHeader(outputFile)
+    }
 
-            // Enhance audio quality
-            setAudioSamplingRate(44100) // Set sample rate
-            setAudioEncodingBitRate(128000) // Set bit rate
-            setOutputFile(FileOutputStream(outputFile).fd)
-
-            prepare()
-            start()
-
-            recorder = this
+    private fun writeWavHeader(outputFile: File) {
+        val fileLength = outputFile.length()
+        RandomAccessFile(outputFile, "rw").use { raf ->
+            raf.seek(0)
+            // Write WAV header
+            raf.writeBytes("RIFF") // ChunkID
+            raf.writeInt((fileLength - 8).toInt().reverseBytes()) // ChunkSize
+            raf.writeBytes("WAVE") // Format
+            raf.writeBytes("fmt ") // Subchunk1ID
+            raf.writeInt(16.reverseBytes()) // Subchunk1Size (PCM)
+            raf.writeShort(1.toShort().reverseBytes().toInt()) // AudioFormat (PCM)
+            raf.writeShort(1.toShort().reverseBytes().toInt()) // NumChannels (Mono)
+            raf.writeInt(sampleRate.reverseBytes()) // SampleRate
+            raf.writeInt((sampleRate * 2).reverseBytes()) // ByteRate
+            raf.writeShort(2.toShort().reverseBytes().toInt()) // BlockAlign
+            raf.writeShort(16.toShort().reverseBytes().toInt()) // BitsPerSample
+            raf.writeBytes("data") // Subchunk2ID
+            raf.writeInt((fileLength - 44).toInt().reverseBytes()) // Subchunk2Size
         }
     }
 
-    /**
-     * @brief Stops the ongoing audio recording.
-     */
     override fun stop() {
-        recorder?.stop()
-        recorder?.reset()
-        recorder = null
+        if (isRecording) {
+            isRecording = false
+            audioRecord?.stop()
+            audioRecord?.release()
+            audioRecord = null
+            recordingThread?.join()
+            recordingThread = null
+        }
     }
 }
+
+fun Int.reverseBytes(): Int {
+    return ((this shl 24) or ((this and 0xFF00) shl 8) or ((this shr 8) and 0xFF00) or (this ushr 24))
+}
+
+fun Short.reverseBytes(): Short {
+    return (((this.toInt() shl 8) and 0xFF00) or ((this.toInt() shr 8) and 0xFF)).toShort()
+}
+
+

@@ -1,6 +1,10 @@
 package com.example.ouistici.ui.annonceVocal
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
@@ -49,6 +53,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.example.ouistici.R
 import com.example.ouistici.data.dto.AnnonceDto
@@ -107,6 +112,24 @@ fun AnnonceVocale(
 
     val context = LocalContext.current
 
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted: Boolean ->
+            if (isGranted) {
+                if (audioFile != null) {
+                    recorder.start(audioFile)
+                }
+
+                startTime = System.currentTimeMillis() - time
+                isRunning = true
+                currentStep = 2
+            } else {
+                ToastUtil.showToast(context, "Permission d'enregistrement non autorisée !")
+            }
+        }
+    )
+
+
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val focusRequester = remember { FocusRequester() }
@@ -142,17 +165,22 @@ fun AnnonceVocale(
             1 -> {
                 LargeFloatingActionButton(
                     onClick = {
-                        if (audioFile != null) {
-                            recorder.start(audioFile)
+                        if (ContextCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.RECORD_AUDIO
+                            ) == PackageManager.PERMISSION_GRANTED
+                        ) {
+                            if (audioFile != null) {
+                                recorder.start(audioFile)
+                            }
+
+                            startTime = System.currentTimeMillis() - time
+                            isRunning = true
+                            keyboardController?.hide()
+                            currentStep = 2
+                        } else {
+                            launcher.launch(Manifest.permission.RECORD_AUDIO)
                         }
-
-
-                        startTime = System.currentTimeMillis() - time
-                        isRunning = true
-                        keyboardController?.hide()
-
-
-                        currentStep = 2
                     },
                     shape = CircleShape,
                     containerColor = Color.Gray,
