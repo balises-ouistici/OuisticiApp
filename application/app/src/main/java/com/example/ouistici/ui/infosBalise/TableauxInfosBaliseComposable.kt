@@ -28,9 +28,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -52,6 +54,7 @@ import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
 import com.example.ouistici.model.ToastUtil
 import com.example.ouistici.model.TypeAnnonce
+import com.example.ouistici.ui.loader.Loader
 import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
@@ -147,6 +150,8 @@ fun RowScope.TableAudioCell(
 ) {
     val context = LocalContext.current
 
+    var isLoading by remember { mutableStateOf(false) }
+
     Row(
         Modifier
             .weight(weight)
@@ -157,6 +162,7 @@ fun RowScope.TableAudioCell(
         Button(
             onClick = {
                 if ( audioFile == null ) {
+                    isLoading = true
                     val apiService = RestApiService()
                     apiService.downloadAudio(annonce.id) { bytes ->
                         if (bytes != null) {
@@ -168,6 +174,7 @@ fun RowScope.TableAudioCell(
                             ToastUtil.showToast(context, "Échec lors de la récupération de l'audio")
                         }
                     }
+                    isLoading = false
                 } else {
                     player.playFile(audioFile)
                 }
@@ -199,7 +206,7 @@ fun RowScope.TableAudioCell(
                 text = "||"
             )
         }
-
+        Loader(isLoading = isLoading)
     }
 }
 
