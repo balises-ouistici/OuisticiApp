@@ -21,6 +21,7 @@ import com.google.gson.JsonObject
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -177,6 +178,26 @@ class RestApiService {
                 }
             }
         )
+    }
+
+
+    fun downloadAudio(id_annonce: Int, callback: (ByteArray?) -> Unit) {
+        val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
+        retrofit.downloadAudio(id_annonce).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    val bytes = response.body()?.bytes()
+                    callback(bytes)
+                } else {
+                    callback(null)
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                println("La requête a échoué: ${t.message}")
+                callback(null)
+            }
+        })
     }
 
 

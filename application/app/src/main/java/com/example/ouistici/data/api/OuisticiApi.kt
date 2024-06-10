@@ -8,6 +8,7 @@ import com.example.ouistici.data.dto.TimeslotDto
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -16,6 +17,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface OuisticiApi {
     // Get toute la balise
@@ -38,6 +40,9 @@ interface OuisticiApi {
     @Headers("Content-Type: application/json")
     @POST("autovolume")
     fun setAutoVolume(@Body buttonState: JsonObject): Call<BaliseDto>
+
+    @GET("annonce/sound/{id_annonce}")
+    fun downloadAudio(@Path("id_annonce") id_annonce: Int): Call<ResponseBody>
 
 
     // Page choix annonce

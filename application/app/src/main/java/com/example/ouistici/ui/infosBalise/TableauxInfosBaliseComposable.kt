@@ -1,6 +1,8 @@
 package com.example.ouistici.ui.infosBalise
 
+import android.content.Context
 import android.os.Build
+import android.os.Environment
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -44,6 +46,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.ouistici.R
+import com.example.ouistici.data.service.RestApiService
 import com.example.ouistici.model.AndroidAudioPlayer
 import com.example.ouistici.model.Annonce
 import com.example.ouistici.model.Balise
@@ -53,6 +56,8 @@ import com.example.ouistici.ui.theme.BodyBackground
 import com.example.ouistici.ui.theme.FontColor
 import com.example.ouistici.ui.theme.TableHeaderColor
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 /**
  * @brief Composable function for rendering a table cell within a row.
@@ -137,8 +142,11 @@ fun RowScope.TableCellButtons(
 fun RowScope.TableAudioCell(
     audioFile: File?,
     weight: Float,
-    player: AndroidAudioPlayer
+    player: AndroidAudioPlayer,
+    annonce: Annonce
 ) {
+    val context = LocalContext.current
+
     Row(
         Modifier
             .weight(weight)
@@ -148,7 +156,21 @@ fun RowScope.TableAudioCell(
     ) {
         Button(
             onClick = {
-                player.playFile(audioFile ?: return@Button)
+                if ( audioFile == null ) {
+                    val apiService = RestApiService()
+                    apiService.downloadAudio(annonce.id) { bytes ->
+                        if (bytes != null) {
+                            val localFile = saveAudioFileLocally(context, bytes, annonce.filename)
+                            if (localFile != null) {
+                                player.playFile(localFile)
+                            }
+                        } else {
+                            ToastUtil.showToast(context, "Échec lors de la récupération de l'audio")
+                        }
+                    }
+                } else {
+                    player.playFile(audioFile)
+                }
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             modifier = Modifier
@@ -294,7 +316,8 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                         TableAudioCell(
                             audioFile = annonce.audio,
                             weight = column2Weight,
-                            player = player
+                            player = player,
+                            annonce = annonce
                         )
 
                         OutlinedButton(
@@ -381,4 +404,21 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
             }
         }
     }
+}
+
+
+
+
+// Définition de la fonction pour enregistrer le fichier audio localement
+fun saveAudioFileLocally(context: Context, bytes: ByteArray, filename: String): File? {
+    val file = File(context.cacheDir, filename)
+    try {
+        FileOutputStream(file).use { outputStream ->
+            outputStream.write(bytes)
+        }
+        return file
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+    return null
 }
