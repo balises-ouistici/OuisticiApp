@@ -224,6 +224,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
             onClick = {
                 if ( textValueInput != "" && audioFile != null ) {
                     isLoading = true
+                    val filename = balise.createId().toString()+".wav"
                     val apiService = RestApiService()
                     val annInfo = AnnonceDto(
                         upload_sound_url = null,
@@ -233,15 +234,16 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                         contenu = "",
                         langue = "",
                         duree = duration,
-                        filename = balise.createId().toString()+".wav"
+                        filename = filename
                     )
 
                     apiService.createAnnonce(annInfo) {
+                        val renamedFile = renameLocalFile(audioFile!!, filename)
                         if ( it?.nom != null ) {
                             val audioInfo = FileAnnonceDto(
                                 code = null,
                                 value = it.nom,
-                                audiofile = audioFile!!
+                                audiofile = renamedFile
                             )
                             apiService.createAudio(audioInfo) {
                                 Log.e("CreateAnnonce","Échec création d'annonce : $it")
@@ -252,11 +254,11 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                                             balise.createId(),
                                             textValueInput,
                                             TypeAnnonce.AUDIO,
-                                            audioFile,
+                                            renamedFile,
                                             null,
                                             null,
                                             duration,
-                                            balise.createId().toString()+".wav"
+                                            filename
                                         )
                                     )
 
@@ -347,6 +349,22 @@ fun getAudioDuration(file: File): Int {
     val duration = mediaPlayer.duration
     mediaPlayer.release()
     return duration / 1000 // Convertit la durée en millisecondes en secondes
+}
+
+
+/**
+ * @brief Renames the local file after successful upload.
+ * @param originalFile The original audio file.
+ * @param newFileName The new file name.
+ * @return The renamed file.
+ */
+private fun renameLocalFile(originalFile: File, newFileName: String): File {
+    val newFile = File(originalFile.parent, newFileName)
+    if (originalFile.renameTo(newFile)) {
+        return newFile
+    } else {
+        throw IllegalStateException("Could not rename file to $newFileName")
+    }
 }
 
 

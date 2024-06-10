@@ -35,6 +35,10 @@ class AndroidAudioRecorder(
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+
+            // Enhance audio quality
+            setAudioSamplingRate(44100) // Set sample rate
+            setAudioEncodingBitRate(128000) // Set bit rate
             setOutputFile(FileOutputStream(outputFile).fd)
 
             prepare()
