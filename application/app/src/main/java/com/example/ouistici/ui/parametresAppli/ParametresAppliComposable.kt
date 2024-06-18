@@ -91,9 +91,10 @@ fun ParametresAppli(navController: NavController) {
             fontSize = 25.sp,
             color = FontColor,
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.semantics {
-                contentDescription = "Page des paramètres de l'application."
-            }
+            modifier = Modifier
+                .semantics {
+                    contentDescription = context.getString(R.string.a11y_settings_title)
+                }
                 .focusRequester(focusRequester)
                 .focusable()
         )
@@ -106,7 +107,8 @@ fun ParametresAppli(navController: NavController) {
                 Text(
                     text = stringResource(R.string.changer_de_langue),
                     color = Color.White,
-                    modifier = Modifier.semantics { contentDescription = "Changer la langue de l'application." }
+                    modifier = Modifier.semantics { contentDescription =
+                        context.getString(R.string.a11y_settings_change_language) }
                 )
             }
             DropdownMenu(

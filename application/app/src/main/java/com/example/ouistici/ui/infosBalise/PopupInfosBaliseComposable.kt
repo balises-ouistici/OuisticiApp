@@ -110,7 +110,8 @@ fun ModifyInfosBalisePopup(
                 Text(
                     text = stringResource(R.string.nom_balise_info_popup),
                     fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.semantics { contentDescription = "Nom de la balise. Défiler vers la droite pour accéder à la zone de modification de texte." }
+                    modifier = Modifier.semantics { contentDescription =
+                        context.getString(R.string.a11y_infospopup_modify_name_text) }
                 )
                 TextField(
                     value = nomBalise,
@@ -122,7 +123,8 @@ fun ModifyInfosBalisePopup(
                 Text(
                     text = stringResource(R.string.lieu_info_popup),
                     fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.semantics { contentDescription = "Lieu de la balise. Défiler vers la droite pour accéder à la zone de modification de texte." }
+                    modifier = Modifier.semantics { contentDescription =
+                        context.getString(R.string.a11y_infospopup_modify_place_text) }
                 )
                 TextField(
                     value = lieuBalise,
@@ -133,9 +135,10 @@ fun ModifyInfosBalisePopup(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Choisir annonce par défaut :",
+                    text = stringResource(R.string.text_infospopup_chose_defaultmessage),
                     fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.semantics { contentDescription = "Liste des annonces en défilant sur la droite. Vous pouvez en sélectionner une pour qu'elle soit par défaut sur la balise." }
+                    modifier = Modifier.semantics { contentDescription =
+                        context.getString(R.string.a11y_infospopup_chose_defaultmessage) }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 AnnonceDefaultMessageList(
@@ -156,7 +159,8 @@ fun ModifyInfosBalisePopup(
                         Text(
                             text = stringResource(R.string.annuler),
                             color = Color.White,
-                            modifier = Modifier.semantics { contentDescription = "Annuler les modifications." }
+                            modifier = Modifier.semantics { contentDescription =
+                                context.getString(R.string.a11y_infospopup_cancel_modification) }
                         )
                     }
                     Button(
@@ -182,26 +186,30 @@ fun ModifyInfosBalisePopup(
                                         balise.nom = nomBalise
                                         balise.defaultMessage = selectedAnnonce
                                         Log.d("InfosBalise","Nouveau nom et lieu !")
-                                        ToastUtil.showToast(context, "Informations modifiées")
+                                        ToastUtil.showToast(context,
+                                            context.getString(R.string.toast_infospopup_succes_modification))
                                     } else {
                                         Log.e("InfosBalise","Échec nom/lieu")
-                                        ToastUtil.showToast(context, "Échec lors de l'enregistrement")
+                                        ToastUtil.showToast(context,
+                                            context.getString(R.string.toast_infospopup_failure_saving))
                                     }
                                 }
                                 isLoading = false
                                 onDismiss()
                                 navController.navigate("infosBalise")
                             } else {
-                                ToastUtil.showToast(context, "La balise doit avoir un nom !")
+                                ToastUtil.showToast(context,
+                                    context.getString(R.string.toast_infospopup_beaucon_must_have_name))
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
                         Text(
-                            text = "Valider",
+                            text = stringResource(R.string.text_infospopup_validate_button),
                             color = Color.White,
-                            modifier = Modifier.semantics { contentDescription = "Valider les modifications faites." }
+                            modifier = Modifier.semantics { contentDescription =
+                                context.getString(R.string.a11y_infospopup_validate_button) }
                         )
                     }
                     Loader(isLoading = isLoading)
@@ -256,7 +264,8 @@ fun ModifyAnnoncesBaliseTextePopup(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     modifier = Modifier.semantics {
-                        contentDescription = "Informations de l'annonce texte"
+                        contentDescription =
+                            context.getString(R.string.a11y_infospopup_text_announcement_infos)
                     }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -264,7 +273,8 @@ fun ModifyAnnoncesBaliseTextePopup(
                     text = stringResource(R.string.nom_annonce),
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.semantics {
-                        contentDescription = "Nom de l'annonce, défiler à droite pour accéder à la zone de modification de texte."
+                        contentDescription =
+                            context.getString(R.string.a11y_infospopup_announcement_name_slide)
                     }
                 )
                 TextField(
@@ -280,7 +290,8 @@ fun ModifyAnnoncesBaliseTextePopup(
                 Text(
                     text = stringResource(R.string.contenu),
                     fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.semantics { contentDescription = "Contenu de l'annonce, défiler à droite pour accéder à la zone de modification de texte." }
+                    modifier = Modifier.semantics { contentDescription =
+                        context.getString(R.string.a11y_infospopup_announcement_content_slide) }
 
                 )
                 TextField(
@@ -295,7 +306,8 @@ fun ModifyAnnoncesBaliseTextePopup(
                     Text(
                         text = stringResource(R.string.langue),
                         fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.semantics { contentDescription = "Langue de l'annonce, défiler à droite pour définir la langue du synthétiseur vocal." }
+                        modifier = Modifier.semantics { contentDescription =
+                            context.getString(R.string.a11y_infospopup_announcement_language_slide) }
 
                     )
                     Box(
@@ -308,7 +320,10 @@ fun ModifyAnnoncesBaliseTextePopup(
                             text = langueSelectionnee!!.getLangueName(),
                             fontSize = 16.sp,
                             color = Color.White,
-                            modifier = Modifier.semantics { contentDescription = "La langue sélectionné est : ${langueSelectionnee!!.getLangueName()}" }
+                            modifier = Modifier.semantics { contentDescription = context.getString(
+                                R.string.a11y_infospopup_annoucement_selected_language,
+                                langueSelectionnee!!.getLangueName()
+                            ) }
                         )
                         DropdownMenu(
                             expanded = expanded,
@@ -341,7 +356,8 @@ fun ModifyAnnoncesBaliseTextePopup(
                             ttsManager.speak(contenuAnnonceTexte)
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
-                        modifier = Modifier.semantics { contentDescription = "Écouter l'audio enregistré" }
+                        modifier = Modifier.semantics { contentDescription =
+                            context.getString(R.string.a11y_infospopup_play_button) }
                     ) {
                         Icon(
                             imageVector = Icons.Default.PlayArrow,
@@ -354,7 +370,8 @@ fun ModifyAnnoncesBaliseTextePopup(
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                         modifier = Modifier.semantics {
-                            contentDescription = "Arrêter la lecture audio"
+                            contentDescription =
+                                context.getString(R.string.a11y_infospopup_stop_button)
                         }
                     ) {
                         Text(
@@ -373,14 +390,19 @@ fun ModifyAnnoncesBaliseTextePopup(
                             annonce.duree!! % 60
                         ),
                         fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.semantics { contentDescription = "La durée de l'annonce est de ${annonce.duree!! / 60} minutes et ${annonce.duree!! % 60} secondes." }
+                        modifier = Modifier.semantics { contentDescription = context.getString(
+                            R.string.a11y_infospopup_announcement_duration,
+                            annonce.duree!! / 60,
+                            annonce.duree!! % 60
+                        ) }
                     )
                 } else {
                     Text(
                         text = stringResource(R.string.dur_e_probl_me),
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.semantics {
-                            contentDescription = "Problème rencontré lors de l'affichage de la durée."
+                            contentDescription =
+                                context.getString(R.string.a11y_infospopup_problems_rendering_duration)
                         }
                     )
                 }
@@ -399,7 +421,8 @@ fun ModifyAnnoncesBaliseTextePopup(
                             text = stringResource(R.string.annuler),
                             color = Color.White,
                             modifier = Modifier.semantics {
-                                contentDescription = "Annuler les modifications en cours"
+                                contentDescription =
+                                    context.getString(R.string.a11y_infospopup_cancel_modifications)
                             }
                         )
                     }
@@ -454,7 +477,7 @@ fun ModifyAnnoncesBaliseTextePopup(
                                             apiService.createAudio(audioInfo) {
                                                 Log.e(
                                                     "CreateAnnonce",
-                                                    "Échec création d'annonce : $it"
+                                                    "Échec modification  d'annonce : $it"
                                                 )
 
                                                 if (it?.code != null) {
@@ -464,24 +487,23 @@ fun ModifyAnnoncesBaliseTextePopup(
                                                     annonce.duree = duration
                                                     annonce.audio = file
 
-                                                    Toast.makeText(
-                                                        context,
-                                                        context.getString(R.string.informations_modifi_es),
-                                                        Toast.LENGTH_LONG
-                                                    )
-                                                        .show()
+
+                                                    ToastUtil.showToast(context, context.getString(R.string.informations_modifi_es))
                                                     onDismiss()
+
                                                 } else {
                                                     Log.e(
                                                         "CreateAnnonce",
-                                                        "Échec création d'annonce"
+                                                        "Échec modification d'annonce"
                                                     )
-                                                    ToastUtil.showToast(context, "Échec lors de l'envoie du fichier au serveur")
+                                                    ToastUtil.showToast(context,
+                                                        context.getString(R.string.toast_infospopup_failure_sending_file))
                                                 }
                                             }
                                         } else {
-                                            Log.e("CreateAnnonce", "Échec création d'annonce")
-                                            ToastUtil.showToast(context, "Échec lors de la création de l'annonce")
+                                            Log.e("ModifyAnnonce", "Échec modification d'annonce")
+                                            ToastUtil.showToast(context,
+                                                context.getString(R.string.toast_infospopup_failure_when_modifying_announce))
                                         }
                                     }
                                     isLoading = false // Hide loader
@@ -489,13 +511,16 @@ fun ModifyAnnoncesBaliseTextePopup(
                                 }
                             } else {
                                 if ( nomAnnonce == "" && contenuAnnonceTexte != "" ) {
-                                    ToastUtil.showToast(context, "L'annonce doit avoir un nom !")
+                                    ToastUtil.showToast(context,
+                                        context.getString(R.string.toast_infospopup_announce_must_have_name))
                                 }
                                 if ( nomAnnonce != "" && contenuAnnonceTexte == "" ) {
-                                    ToastUtil.showToast(context, "L'annonce doit avoir un contenu !")
+                                    ToastUtil.showToast(context,
+                                        context.getString(R.string.toast_infospopup_announce_must_have_content))
                                 }
                                 if ( nomAnnonce == "" && contenuAnnonceTexte == "" ) {
-                                    ToastUtil.showToast(context, "L'annonce doit avoir un nom et un contenu !")
+                                    ToastUtil.showToast(context,
+                                        context.getString(R.string.toast_infospopup_announce_must_have_name_and_content))
                                 }
                             }
                         },
@@ -503,10 +528,11 @@ fun ModifyAnnoncesBaliseTextePopup(
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
                         Text(
-                            text = "Valider",
+                            text = stringResource(R.string.text_infospopup_validate_button),
                             color = Color.White,
                             modifier = Modifier.semantics {
-                                contentDescription = "Enregistrer les modifications apportées."
+                                contentDescription =
+                                    context.getString(R.string.a11y_infospopup_validate_modification_announce)
                             }
                         )
                     }
@@ -556,7 +582,8 @@ fun ModifyAnnoncesBaliseAudioPopup(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     modifier = Modifier.semantics {
-                        contentDescription = "Informations de l'annonce audio"
+                        contentDescription =
+                            context.getString(R.string.a11y_infospopup_audio_announcement_infos)
                     }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -564,7 +591,8 @@ fun ModifyAnnoncesBaliseAudioPopup(
                     text = stringResource(R.string.nom_annonce),
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.semantics {
-                        contentDescription = "Nom de l'annonce, défiler à droite pour accéder à la zone de modification de texte."
+                        contentDescription =
+                            context.getString(R.string.a11y_infospopup_announcement_name_infos_slide)
                     }
                 )
                 TextField(
@@ -583,14 +611,18 @@ fun ModifyAnnoncesBaliseAudioPopup(
                             annonce.duree!! % 60
                         ),
                         fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.semantics { contentDescription = "La durée de l'annonce est de ${annonce.duree!! / 60} minutes et ${annonce.duree!! % 60} secondes." }
+                        modifier = Modifier.semantics { contentDescription = context.getString(
+                            R.string.a11y_infospopup_announcement_duration_info,
+                            annonce.duree!! / 60,
+                            annonce.duree!! % 60
+                        ) }
                     )
                 } else {
                     Text(
                         text = stringResource(R.string.dur_e_probl_me),
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.semantics {
-                            contentDescription = "Problème rencontré lors de l'affichage de la durée."
+                            contentDescription = context.getString(R.string.a11y_infospopup_problems_rendering_duration)
                         }
                     )
                 }
@@ -610,7 +642,7 @@ fun ModifyAnnoncesBaliseAudioPopup(
                             text = stringResource(R.string.annuler),
                             color = Color.White,
                             modifier = Modifier.semantics {
-                                contentDescription = "Annuler les modifications en cours"
+                                contentDescription = context.getString(R.string.a11y_infospopup_cancel_modifications)
                             }
                         )
                     }
@@ -633,26 +665,28 @@ fun ModifyAnnoncesBaliseAudioPopup(
                                 apiService.modifyAnnonce(annInfo) {
                                     if ( it?.nom != null ) {
                                         annonce.nom = nomAnnonce
-                                        ToastUtil.showToast(context, "Informations validées")
+                                        ToastUtil.showToast(context, context.getString(R.string.informations_modifi_es))
                                     } else {
-                                        Log.e("CreateAnnonce","Échec création d'annonce")
-                                        ToastUtil.showToast(context, "Échec lors de la création de l'annonce")
+                                        Log.e("ModifyAnnonce", "Échec modification d'annonce")
+                                        ToastUtil.showToast(context,
+                                            context.getString(R.string.toast_infospopup_failure_when_modifying_announce))
                                     }
                                 }
                                 isLoading = false
                                 navController.navigate("infosBalise")
                                 onDismiss()
                             } else {
-                                ToastUtil.showToast(context, "L'annonce doit avoir un nom !")
+                                ToastUtil.showToast(context,
+                                    context.getString(R.string.toast_infospopup_announce_must_have_name))
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                         modifier = Modifier.padding(end = 8.dp)
                     ) {
                         Text(
-                            text = "Valider",
+                            text = stringResource(R.string.text_infospopup_validate_button),
                             color = Color.White,
-                            modifier = Modifier.semantics { contentDescription = "Enregistrer les modifications apportées." }
+                            modifier = Modifier.semantics { contentDescription = context.getString(R.string.a11y_infospopup_validate_modification_announce) }
                         )
                     }
                     Loader(isLoading = isLoading)
@@ -712,7 +746,8 @@ fun ConfirmDeleteAnnoncePopup(
                         Text(
                             text = stringResource(R.string.annuler),
                             color = Color.White,
-                            modifier = Modifier.semantics { contentDescription = "Annuler la suppression" }
+                            modifier = Modifier.semantics { contentDescription =
+                                context.getString(R.string.a11y_infospopup_cancel_deletion) }
                         )
                     }
                     Button(
@@ -735,10 +770,12 @@ fun ConfirmDeleteAnnoncePopup(
                                         balise.defaultMessage = null
                                     }
                                     balise.annonces.remove(annonce)
-                                    ToastUtil.showToast(context, "Annonce supprimée")
+                                    ToastUtil.showToast(context,
+                                        context.getString(R.string.toast_infospopup_annoucement_deleted))
                                 } else {
                                     Log.e("DeleteAnnonce","Échec suppression d'annonce")
-                                    ToastUtil.showToast(context, "Échec lors de la suppression de l'annonce")
+                                    ToastUtil.showToast(context,
+                                        context.getString(R.string.toast_infospopup_deletion_failure))
                                 }
                             }
                             isLoading = false
@@ -751,7 +788,8 @@ fun ConfirmDeleteAnnoncePopup(
                         Text(
                             text = stringResource(R.string.supprimer),
                             color = Color.White,
-                            modifier = Modifier.semantics { contentDescription = "Confirmer la suppression de l'annonce" }
+                            modifier = Modifier.semantics { contentDescription =
+                                context.getString(R.string.a11y_infospopup_confirm_deletion) }
                         )
                     }
                     Loader(isLoading = isLoading)

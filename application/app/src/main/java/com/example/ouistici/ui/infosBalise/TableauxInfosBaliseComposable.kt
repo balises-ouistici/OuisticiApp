@@ -99,6 +99,7 @@ fun RowScope.TableCellHeader(
     weight: Float,
     textColor: Color,
 ) {
+    val context = LocalContext.current
     Text(
         text = text,
         Modifier
@@ -106,7 +107,10 @@ fun RowScope.TableCellHeader(
             .weight(weight)
             .padding(8.dp)
             .height(30.dp)
-            .semantics { contentDescription = "Titre de colonne du tableau, ${text}." },
+            .semantics {
+                contentDescription =
+                    context.getString(R.string.a11y_infostable_header, text)
+            },
         color = textColor,
         textAlign = TextAlign.Center
     )
@@ -171,7 +175,8 @@ fun RowScope.TableAudioCell(
                                 player.playFile(localFile)
                             }
                         } else {
-                            ToastUtil.showToast(context, "Échec lors de la récupération de l'audio")
+                            ToastUtil.showToast(context,
+                                context.getString(R.string.toast_infostable_failure_getting_audio))
                         }
                     }
                     isLoading = false
@@ -183,7 +188,10 @@ fun RowScope.TableAudioCell(
             modifier = Modifier
                 .height(40.dp)
                 .align(Alignment.CenterVertically)
-                .semantics { contentDescription = "Écouter l'audio de l'annonce" }
+                .semantics {
+                    contentDescription =
+                        context.getString(R.string.a11y_infostable_play_button)
+                }
         ) {
             Icon(
                 imageVector = Icons.Default.PlayArrow,
@@ -199,7 +207,7 @@ fun RowScope.TableAudioCell(
                 .height(40.dp)
                 .align(Alignment.CenterVertically)
                 .semantics {
-                    contentDescription = "Arrêter la lecture audio"
+                    contentDescription = context.getString(R.string.a11y_infostable_stop_button)
                 }
         ) {
             Text(
@@ -267,7 +275,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                         text = annonce.nom,
                         weight = column1Weight,
                         textColor = Color.Black,
-                        textSemantics = "Nom de l'annonce"
+                        textSemantics = context.getString(R.string.a11y_infostable_announce_name)
                     )
 
                     if (annonce.type == TypeAnnonce.TEXTE) {
@@ -276,7 +284,7 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                                 text = it,
                                 weight = column2Weight,
                                 textColor = Color.Black,
-                                textSemantics = "Contenu de l'annonce"
+                                textSemantics = context.getString(R.string.a11y_infostable_announce_content)
                             )
 
                             OutlinedButton(
@@ -297,7 +305,10 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                                     .border(1.dp, Color.Black)
                                     .semantics {
                                         contentDescription =
-                                            "Modifier le nom et le contenu de l'annonce ${annonce.nom}"
+                                            context.getString(
+                                                R.string.a11y_infostable_modify_content_and_name,
+                                                annonce.nom
+                                            )
                                     }
                             ) {
                                 Icon(
@@ -345,7 +356,10 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                                 .border(1.dp, Color.Black)
                                 .semantics {
                                     contentDescription =
-                                        "Modifier le nom de l'annonce ${annonce.nom}"
+                                        context.getString(
+                                            R.string.a11y_infostable_modify_name,
+                                            annonce.nom
+                                        )
                                 }
                         ) {
                             Icon(
@@ -371,7 +385,8 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                             for (i in balise.plages ) {
                                 if ( annonce == i.nomMessage ) {
                                     verif = true
-                                    ToastUtil.showToast(context, "Annonce non supprimable, elle est utilisée dans une plage horaire !")
+                                    ToastUtil.showToast(context,
+                                        context.getString(R.string.toast_infostable_not_deletable_announcement))
                                 }
                             }
                             if (!verif) {
@@ -390,7 +405,12 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
                             .height(45.dp)
                             .weight(column3Weight)
                             .border(1.dp, Color.Black)
-                            .semantics { contentDescription = "Supprimer l'annonce ${annonce.nom}" }
+                            .semantics {
+                                contentDescription = context.getString(
+                                    R.string.a11y_infostable_delete_announcement,
+                                    annonce.nom
+                                )
+                            }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,

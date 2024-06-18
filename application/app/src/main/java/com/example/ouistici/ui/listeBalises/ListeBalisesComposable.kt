@@ -34,7 +34,10 @@ import com.example.ouistici.ui.baliseViewModel.BaliseViewModel
 import com.example.ouistici.ui.theme.FontColor
 import kotlinx.coroutines.delay
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.ouistici.R
 import com.example.ouistici.data.entity.BaliseEntity
 
 
@@ -49,7 +52,7 @@ import com.example.ouistici.data.entity.BaliseEntity
 fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel = viewModel()) {
     val balises by baliseViewModel.allBalises.observeAsState(initial = emptyList())
     var showDialog by remember { mutableStateOf(false) }
-
+    val context = LocalContext.current
     val focusRequester = remember { FocusRequester() }
     val view = LocalView.current
     LaunchedEffect(Unit) {
@@ -66,7 +69,7 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel 
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = "Liste des balises Wifi",
+            text = stringResource(R.string.text_beaconlist_title_wifi),
             fontSize = 25.sp,
             color = FontColor,
             style = MaterialTheme.typography.titleLarge,
@@ -80,11 +83,12 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel 
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "Liste des balises Bluetooth",
+            text = stringResource(R.string.text_beaconlist_title_bluetooth),
             fontSize = 25.sp,
             color = FontColor,
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.semantics { contentDescription = "Liste des balises Bluetooth détectées à proximité." }
+            modifier = Modifier.semantics { contentDescription =
+                context.getString(R.string.a11y_beaconlist_title_bluetooth) }
         )
 
         TableScreenBluetooth(balises = balises, navController = navController, baliseViewModel = baliseViewModel)
@@ -96,9 +100,10 @@ fun ListeBalises(navController: NavController, baliseViewModel: BaliseViewModel 
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
         ) {
             Text(
-                text = "Ajouter balise wifi",
+                text = stringResource(R.string.text_beaconlist_add_wifi_beacon),
                 color = Color.White,
-                modifier = Modifier.semantics { contentDescription = "Ajouter une balise fonctionnant avec du wifi." }
+                modifier = Modifier.semantics { contentDescription =
+                    context.getString(R.string.a11y_beaconlist_add_wifi_beacon) }
             )
         }
 

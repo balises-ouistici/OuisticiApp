@@ -111,7 +111,7 @@ fun InfosBalise(
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier
                 .semantics {
-                    contentDescription = "Page des informations de la balise."
+                    contentDescription = context.getString(R.string.a11y_infos_title)
                 }
                 .focusRequester(focusRequester)
                 .focusable()
@@ -188,7 +188,10 @@ fun InfosBalise(
                     .width(50.dp)
                     .height(75.dp)
                     .padding(vertical = 15.dp)
-                    .semantics { contentDescription = "Modification des informations de la balise" }
+                    .semantics {
+                        contentDescription =
+                            context.getString(R.string.a11y_infos_modify_beacon_infos_button)
+                    }
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
@@ -251,7 +254,8 @@ fun InfosBalise(
                     ),
                     valueRange = 0f..100f,
                     modifier = Modifier
-                        .semantics { contentDescription = "Régler le volume de la balise" }
+                        .semantics { contentDescription =
+                            context.getString(R.string.a11y_infos_set_beacon_volume_slider) }
                 )
 
                 Row {
@@ -262,7 +266,7 @@ fun InfosBalise(
                             .padding(vertical = 10.dp)
                             .semantics {
                                 contentDescription =
-                                    "Adaptation du volume de la balise, glissez à droite pour modifier."
+                                    context.getString(R.string.a11y_infos_volume_adapter)
                             }
 
                     )
@@ -289,10 +293,12 @@ fun InfosBalise(
                             if ( it?.balId != null ) {
                                 balise.volume = sliderPosition
                                 Log.d("InfosBalise","Nouveau volume !")
-                                ToastUtil.showToast(context, "Le volume a été modifié")
+                                ToastUtil.showToast(context,
+                                    context.getString(R.string.toast_infos_volume_modified))
                             } else {
                                 Log.e("InfosBalise","Échec nouveau volume")
-                                ToastUtil.showToast(context, "Échec lors de l'enregistrement du volume")
+                                ToastUtil.showToast(context,
+                                    context.getString(R.string.toast_infos_failure_modifying_volume))
                             }
                         }
                         isLoading = false
@@ -301,24 +307,28 @@ fun InfosBalise(
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                 ) {
                     Text(
-                        text = "Enregistrer volume balise",
+                        text = stringResource(R.string.text_infos_save_beacon_volume),
                         color = Color.White,
-                        modifier = Modifier.semantics { contentDescription = "Enregistrer le volume sur la balise" }
+                        modifier = Modifier.semantics { contentDescription =
+                            context.getString(R.string.a11y_infos_save_beacon_volume_button) }
                     )
                 }
                 Button(
                     onClick = {
                         if ( balise.defaultMessage == null ) {
-                            ToastUtil.showToast(context, "Impossible, il n'y a pas d'annonce par défaut")
+                            ToastUtil.showToast(context,
+                                context.getString(R.string.toast_infos_impossible_play_button))
                         } else {
                             isLoading = true
                             val apiService = RestApiService()
                             apiService.testSound() { statusCode ->
                                 Log.e("InfosBalise","test son : ${statusCode}")
                                 if (statusCode == 200 ) {
-                                    ToastUtil.showToast(context, "Test son réussi !")
+                                    ToastUtil.showToast(context,
+                                        context.getString(R.string.toast_infos_testsound_success))
                                 } else {
-                                    ToastUtil.showToast(context, "Échec du test son")
+                                    ToastUtil.showToast(context,
+                                        context.getString(R.string.toast_infos_testsound_failure))
                                 }
                             }
                             isLoading = false
@@ -327,10 +337,11 @@ fun InfosBalise(
                     colors = ButtonDefaults.buttonColors(TestButtonColor)
                 ) {
                     Text(
-                        text = "Tester sur la balise",
+                        text = stringResource(R.string.text_infos_test_sound_on_beacon_button),
                         color = Color.White,
                         modifier = Modifier
-                            .semantics { contentDescription = "Tester le son sur la balise" }
+                            .semantics { contentDescription =
+                                context.getString(R.string.a11y_infos_test_sound_on_beacon_button) }
                     )
                 }
                 Loader(isLoading = isLoading)
@@ -374,7 +385,8 @@ fun AutoVolumeButton(balise: Balise, navController: NavController) {
                         navController.navigate("infosBalise")
                     } else {
                         Log.e("Infos","Échec modification état")
-                        ToastUtil.showToast(context, "Échec lors de la modification de l'autovolume")
+                        ToastUtil.showToast(context,
+                            context.getString(R.string.toast_infos_failure_modify_autovolume))
                     }
                 }
                 isLoading = false
@@ -395,7 +407,10 @@ fun AutoVolumeButton(balise: Balise, navController: NavController) {
             text = if (checkedState.value) "On" else "Off",
             color = Color.Black,
             modifier = Modifier.semantics {
-                contentDescription = "L'autovolume est ${if (checkedState.value) " activé " else " désactivé."}"
+                contentDescription = context.getString(
+                    R.string.a11y_infos_autovolume_state,
+                    if (checkedState.value) " activé " else " désactivé."
+                )
             }
         )
     }

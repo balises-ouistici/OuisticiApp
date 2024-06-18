@@ -66,6 +66,7 @@ fun RowScope.TableHeaderCell(
     weight: Float,
     textColor: Color,
 ) {
+    val context = LocalContext.current
     Text(
         text = text,
         Modifier
@@ -73,7 +74,10 @@ fun RowScope.TableHeaderCell(
             .weight(weight)
             .padding(8.dp)
             .height(50.dp)
-            .semantics { contentDescription = "Titre de colonne du tableau, ${text}." },
+            .semantics {
+                contentDescription =
+                    context.getString(R.string.a11y_beaconlisttable_header_title, text)
+            },
         color = textColor,
         textAlign = TextAlign.Center
     )
@@ -162,7 +166,8 @@ fun TableScreenWifi(balises: List<BaliseEntity>, navController: NavController, b
             onConfirm = {
                 selectedBalise?.let {
                     baliseViewModel.deleteBalise(it)
-                    ToastUtil.showToast(context, "Balise supprimée")
+                    ToastUtil.showToast(context,
+                        context.getString(R.string.toast_beaconlisttable_beacon_deleted))
                 }
                 showDeleteDialog = false
             }
@@ -191,7 +196,7 @@ fun TableScreenWifi(balises: List<BaliseEntity>, navController: NavController, b
                     text = balise.nom,
                     weight = columnWeight,
                     textColor = Color.Black,
-                    textSemantics = "Nom de la balise",
+                    textSemantics = context.getString(R.string.a11y_beaconlisttable_beacon_name),
                     onClick = {
                         isLoading = true
                         baliseViewModel.loadBaliseInfo(balise) { loadedBalise ->
@@ -200,7 +205,8 @@ fun TableScreenWifi(balises: List<BaliseEntity>, navController: NavController, b
                                 navController.navigate("infosBalise")
                             } else {
                                 Log.d("Oui", "Problème")
-                                ToastUtil.showToast(context, "Échec de la connexion à la balise")
+                                ToastUtil.showToast(context,
+                                    context.getString(R.string.toast_beaconlisttable_failure_connexion_to_beacon))
                             }
                             isLoading = false // Hide loader
                         }
@@ -230,7 +236,10 @@ fun TableScreenWifi(balises: List<BaliseEntity>, navController: NavController, b
                             .border(1.dp, Color.Black)
                             .semantics {
                                 contentDescription =
-                                    "Modifier la balise ${balise.nom}"
+                                    context.getString(
+                                        R.string.a11y_beaconlisttable_modify_beacon,
+                                        balise.nom
+                                    )
                             }
                     ) {
                         Icon(
@@ -257,7 +266,12 @@ fun TableScreenWifi(balises: List<BaliseEntity>, navController: NavController, b
                             .height(66.dp)
                             .weight(columnWeight / 2)
                             .border(1.dp, Color.Black)
-                            .semantics { contentDescription = "Supprimer la balise ${balise.nom}" }
+                            .semantics {
+                                contentDescription = context.getString(
+                                    R.string.a11y_beaconlisttable_delete_beacon,
+                                    balise.nom
+                                )
+                            }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,

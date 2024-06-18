@@ -45,6 +45,7 @@ fun IpPortDialog(onDismiss: () -> Unit, onConfirm: (String, String, String) -> U
     var ip by remember { mutableStateOf("") }
     var port by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -55,36 +56,42 @@ fun IpPortDialog(onDismiss: () -> Unit, onConfirm: (String, String, String) -> U
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "Entrez le nom, l'IP et le PORT de la balise",
+                    text = stringResource(R.string.text_beaconlistpopup_enter_ip_and_port),
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     modifier = Modifier
                         .semantics {
-                            contentDescription = "Défilez à droite pour entrer le nom, l'adresse IP de la balise à ajouter et le port."
+                            contentDescription =
+                                context.getString(R.string.a11y_beaconlistpopup_enter_ip_and_port)
                         }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Attention : Le nom de la balise sera seulement enregistré en local et ne correspondra pas forcément au nom réel de la balise.",
+                    text = stringResource(R.string.text_beaconlistpopup_warning),
+                    modifier = Modifier
+                        .semantics {
+                            contentDescription =
+                                context.getString(R.string.a11y_beaconlistpopup_warning)
+                        }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 TextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text("Nom de la balise") }
+                    label = { Text(stringResource(R.string.text_beaconlistpopup_beacon_name)) }
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 TextField(
                     value = ip,
                     onValueChange = { ip = it },
-                    label = { Text("Adresse IP") },
+                    label = { Text(stringResource(R.string.text_beaconlistpopup_ip)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 TextField(
                     value = port,
                     onValueChange = { port = it },
-                    label = { Text("Port") },
+                    label = { Text(stringResource(R.string.text_beaconlistpopup_port)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -96,7 +103,13 @@ fun IpPortDialog(onDismiss: () -> Unit, onConfirm: (String, String, String) -> U
                         onClick = onDismiss,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                     ) {
-                        Text(text = "Annuler", color = Color.White)
+                        Text(
+                            text = stringResource(R.string.text_beaconlistpopup_cancel_button),
+                            color = Color.White,
+                            modifier = Modifier
+                                .semantics { contentDescription =
+                                    context.getString(R.string.a11y_beaconlistpopup_cancel_create_button) }
+                        )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(onClick = {
@@ -105,7 +118,13 @@ fun IpPortDialog(onDismiss: () -> Unit, onConfirm: (String, String, String) -> U
                     },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
                     ) {
-                        Text(text = "Valider", color = Color.White)
+                        Text(
+                            text = stringResource(R.string.text_beaconlistpopup_validate_button),
+                            color = Color.White,
+                            modifier = Modifier
+                                .semantics { contentDescription =
+                                    context.getString(R.string.a11y_beaconlistpopup_validate_create_button) }
+                        )
                     }
                 }
             }
@@ -124,7 +143,7 @@ fun EditBaliseDialog(balise: BaliseEntity, onDismiss: () -> Unit, onConfirm: (St
         "" to ""
     }
 
-
+    val context = LocalContext.current
     var name by remember { mutableStateOf(balise.nom) }
     var ip by remember { mutableStateOf(initialIp) }
     var port by remember { mutableStateOf(initialPort) }
@@ -138,36 +157,42 @@ fun EditBaliseDialog(balise: BaliseEntity, onDismiss: () -> Unit, onConfirm: (St
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "Modifier la balise",
+                    text = stringResource(R.string.text_beaconlistpopup_modify_beacon),
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     modifier = Modifier
                         .semantics {
-                            contentDescription = "Modifier le nom, l'adresse IP et le port de la balise."
+                            contentDescription =
+                                context.getString(R.string.a11y_beaconlistpopup_modify_name_ip_and_port)
                         }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Attention : Le nom de la balise sera seulement enregistré en local et ne correspondra pas forcément au nom réel de la balise.",
+                    text = stringResource(R.string.text_beaconlistpopup_warning),
+                    modifier = Modifier
+                        .semantics {
+                            contentDescription =
+                                context.getString(R.string.a11y_beaconlistpopup_warning)
+                        }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 TextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text("Nom de la balise") }
+                    label = { Text(stringResource(R.string.text_beaconlistpopup_beacon_name)) }
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 TextField(
                     value = ip,
                     onValueChange = { ip = it },
-                    label = { Text("Adresse IP") },
+                    label = { Text(stringResource(R.string.text_beaconlistpopup_ip)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 TextField(
                     value = port,
                     onValueChange = { port = it },
-                    label = { Text("Port") },
+                    label = { Text(stringResource(R.string.text_beaconlistpopup_port)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -179,7 +204,13 @@ fun EditBaliseDialog(balise: BaliseEntity, onDismiss: () -> Unit, onConfirm: (St
                         onClick = onDismiss,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                     ) {
-                        Text(text = "Annuler", color = Color.White)
+                        Text(
+                            stringResource(R.string.text_beaconlistpopup_cancel_button),
+                            color = Color.White,
+                            modifier = Modifier
+                                .semantics { contentDescription =
+                                    context.getString(R.string.a11y_beaconlistpopup_cancel_edit_button) }
+                        )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(onClick = {
@@ -188,7 +219,13 @@ fun EditBaliseDialog(balise: BaliseEntity, onDismiss: () -> Unit, onConfirm: (St
                     },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
                     ) {
-                        Text(text = "Valider", color = Color.White)
+                        Text(
+                            text = stringResource(R.string.text_beaconlistpopup_validate_button),
+                            color = Color.White,
+                            modifier = Modifier
+                                .semantics { contentDescription =
+                                    context.getString(R.string.a11y_beaconlistpopup_validate_edit_button) }
+                        )
                     }
                 }
             }
@@ -221,7 +258,7 @@ fun ConfirmDeleteBalisePopup(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
-                    text = "Êtes-vous sûr de vouloir supprimer cette balise ?",
+                    text = stringResource(R.string.text_beaconlistpopup_confirm_delete_beacon),
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
                 )
@@ -238,7 +275,8 @@ fun ConfirmDeleteBalisePopup(
                         Text(
                             text = stringResource(R.string.annuler),
                             color = Color.White,
-                            modifier = Modifier.semantics { contentDescription = "Annuler la suppression" }
+                            modifier = Modifier.semantics { contentDescription =
+                                context.getString(R.string.a11y_beaconlistpopup_cancel_deletion) }
                         )
                     }
                     Button(
@@ -256,7 +294,8 @@ fun ConfirmDeleteBalisePopup(
                         Text(
                             text = stringResource(R.string.supprimer),
                             color = Color.White,
-                            modifier = Modifier.semantics { contentDescription = "Confirmer la suppression de la balise" }
+                            modifier = Modifier.semantics { contentDescription =
+                                context.getString(R.string.a11y_beaconlistpopup_confirm_deletion) }
                         )
                     }
                     Loader(isLoading = isLoading)
