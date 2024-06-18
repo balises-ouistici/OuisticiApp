@@ -108,9 +108,10 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
             fontSize = 25.sp,
             color = FontColor,
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.semantics {
-                contentDescription = "Page de création d'une annonce avec synthétiseur vocal."
-            }
+            modifier = Modifier
+                .semantics {
+                    contentDescription = context.getString(R.string.ally_textfile_title)
+                }
                 .focusRequester(focusRequester)
                 .focusable()
         )
@@ -148,7 +149,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                 text = stringResource(R.string.langue_de_la_voix),
                 color = FontColor,
                 modifier = Modifier.semantics {
-                    contentDescription = "Langue de la voix, défilez à droite pour choisir la langue du synthétiseur vocal."
+                    contentDescription = context.getString(R.string.a11y_textfile_language)
                 }
             )
 
@@ -164,7 +165,8 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                         fontSize = 16.sp,
                         color = FontColor,
                         modifier = Modifier.semantics {
-                            contentDescription = "Choisir la langue du synthétiseur vocal."
+                            contentDescription =
+                                context.getString(R.string.a11y_textfile_language_choice)
                         }
                     )
                 } else {
@@ -173,7 +175,10 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                         fontSize = 16.sp,
                         color = FontColor,
                         modifier = Modifier.semantics {
-                            contentDescription = "${langueSelectionnee.getLangueName()} choisit comme langue de synthétiseur."
+                            contentDescription = context.getString(
+                                R.string.ally_textfile_language_chosen,
+                                langueSelectionnee.getLangueName()
+                            )
                         }
                     )
                 }
@@ -199,11 +204,13 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
 
         Row {
             Text(
-                text = "Écouter le message : ",
+                text = stringResource(R.string.text_textfile_listen_message),
                 color = FontColor,
-                modifier = Modifier.semantics {
-                    contentDescription = "Écouter le message écris, glissez sur la droite pour accéder au bouton de lecture."
-                }
+                modifier = Modifier
+                    .semantics {
+                        contentDescription =
+                            context.getString(R.string.a11y_textfile_listen_message)
+                    }
                     .padding(vertical = 12.dp)
             )
             Button(
@@ -217,7 +224,8 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                     ttsManager.speak(textContenuInput)
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
-                modifier = Modifier.semantics { contentDescription = "Écouter l'audio enregistré" }
+                modifier = Modifier.semantics { contentDescription =
+                    context.getString(R.string.a11y_textfile_play_button) }
             ) {
                 Icon(
                     imageVector = Icons.Default.PlayArrow,
@@ -230,7 +238,7 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                 modifier = Modifier.semantics {
-                    contentDescription = "Arrêter la lecture audio"
+                    contentDescription = context.getString(R.string.a11y_textfile_stop_button)
                 }
             ) {
                 Text(
@@ -302,22 +310,26 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                                             )
                                         )
 
-                                        ToastUtil.showToast(context, "Annonce ajoutée")
+                                        ToastUtil.showToast(context,
+                                            context.getString(R.string.toast_textfile_announcement_added))
                                     } else {
                                         Log.e("CreateAnnonce", "Échec création d'annonce")
-                                        ToastUtil.showToast(context, "Échec lors de l'envoie du fichier au serveur")
+                                        ToastUtil.showToast(context,
+                                            context.getString(R.string.toast_textfile_failure_sending_file))
                                     }
                                 }
                             } else {
                                 Log.e("CreateAnnonce", "Échec création d'annonce")
-                                ToastUtil.showToast(context, "Échec lors de la création de l'annonce")
+                                ToastUtil.showToast(context,
+                                    context.getString(R.string.toast_textfile_failure_creating_announcement))
                             }
                         }
                         isLoading = false // Hide loader
                         navController.navigate("annonceTexte")
                     }
                 } else {
-                    ToastUtil.showToast(context, "Action impossible, vous devez remplir les champs")
+                    ToastUtil.showToast(context,
+                        context.getString(R.string.toast_textfile_failure_must_fillinthe_fields))
                 }
             },
             modifier = Modifier.padding(16.dp),
@@ -327,7 +339,8 @@ fun AnnonceTexte(navController: NavController, balise: Balise) {
                 text = stringResource(R.string.enregistrer),
                 color = Color.White,
                 modifier = Modifier.semantics {
-                    contentDescription = "Enregistrer l'annonce créée."
+                    contentDescription =
+                        context.getString(R.string.a11y_textfile_save_announcement_button)
                 }
             )
         }
@@ -359,6 +372,8 @@ fun DropdownMenuItemLangue(
     langue: Langue,
     onClick: (Langue) -> Unit
 ) {
+    val context = LocalContext.current
+
     Text(
         text = langue.getLangueName(),
         fontSize = 16.sp,
@@ -366,7 +381,8 @@ fun DropdownMenuItemLangue(
             .clickable(onClick = { onClick(langue) })
             .padding(vertical = 8.dp, horizontal = 16.dp)
             .semantics {
-                contentDescription = "Sélection en cours, ${langue.getLangueName()}"
+                contentDescription =
+                    context.getString(R.string.a11y_textfile_language_menu, langue.getLangueName())
             }
     )
 }

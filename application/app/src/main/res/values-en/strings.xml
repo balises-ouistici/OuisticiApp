@@ -30,7 +30,7 @@
     <string name="aucun">None</string>
 
     <!-- Tag info page -->
-    <string name="informations_balise">Beacon information</string>
+    <string name="informations_balise">Beacon informations</string>
     <string name="nom_balise_info">Beacon name : %1$s</string>
     <string name="lieu_non_d_fini">Place : Not defined</string>
     <string name="lieu_info">Place : %1$s</string>
@@ -138,4 +138,7 @@
     <string name="vendredi">Friday</string>
     <string name="samedi">Saturday</string>
     <string name="dimanche">Sunday</string>
+    <string name="a11y_vocal_button">Create an announcement using your phone\'s voice recorder.</string>
+    <string name="a11y_text_button">"Create an announcement by writing text that will be read by a voice synthesizer. "</string>
+    <string name="a11y_audiofile_button">"Create an announcement by uploading an audio file from your phone. "</string>
 </resources>

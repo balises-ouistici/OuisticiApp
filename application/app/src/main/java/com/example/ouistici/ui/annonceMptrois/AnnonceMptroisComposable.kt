@@ -118,7 +118,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
             modifier = Modifier
                 .semantics {
                     contentDescription =
-                        "Page de création d'une annonce en choisissant un fichier audio depuis le téléphone."
+                        context.getString(R.string.a11y_audiofile_title)
                 }
                 .focusRequester(focusRequester)
                 .focusable()
@@ -140,7 +140,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                 color = Color.White,
                 fontSize = 25.sp,
                 modifier = Modifier.semantics {
-                    contentDescription = "Choisir le fichier audio depuis le téléphone."
+                    contentDescription = context.getString(R.string.a11y_audiofile_chose_file)
                 }
             )
         }
@@ -152,7 +152,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                 modifier = Modifier.semantics {
-                    contentDescription = "Écouter l'audio sélectionné."
+                    contentDescription = context.getString(R.string.a11y_audiofile_play_button)
                 }
             ) {
                 Icon(
@@ -166,7 +166,7 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                 modifier = Modifier.semantics {
-                    contentDescription = "Arrêter la lecture audio."
+                    contentDescription = context.getString(R.string.a11y_audiofile_stop_button)
                 }
             ) {
                 Text(text = "||")
@@ -189,7 +189,11 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                     color = FontColor,
                     modifier = Modifier
                         .semantics {
-                            contentDescription = "Durée de l'audio, ${duration/60} minutes et ${duration%60} secondes."
+                            contentDescription = context.getString(
+                                R.string.a11y_audiofile_file_duration,
+                                duration / 60,
+                                duration % 60
+                            )
                         }
                 )
             } else {
@@ -263,28 +267,34 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                                     )
 
 
-                                    ToastUtil.showToast(context, "Annonce ajoutée")
+                                    ToastUtil.showToast(context,
+                                        context.getString(R.string.toast_audiofile_announcement_added))
                                 } else {
                                     Log.e("CreateAnnonce","Échec création d'annonce")
-                                    ToastUtil.showToast(context, "Échec lors de l'envoie du fichier au serveur")
+                                    ToastUtil.showToast(context,
+                                        context.getString(R.string.toast_audiofile_failure_sending_file))
                                 }
                             }
                         } else {
                             Log.e("CreateAnnonce","Échec création d'annonce")
-                            ToastUtil.showToast(context, "Échec lors de la création de l'annonce")
+                            ToastUtil.showToast(context,
+                                context.getString(R.string.toast_audiofile_failure_creating_announcement))
                         }
                     }
                     isLoading = false
                     navController.navigate("annonceMptrois")
                 }
                 if ( audioFile == null && textValueInput == "" ) {
-                    ToastUtil.showToast(context, "Action impossible, vous devez sélectionner un audio et saisir un nom")
+                    ToastUtil.showToast(context,
+                        context.getString(R.string.toast_audio_file_failure_audio_name))
                 }
                 if ( audioFile == null && textValueInput != "" ) {
-                    ToastUtil.showToast(context, "Action impossible, vous devez sélectionner un audio")
+                    ToastUtil.showToast(context,
+                        context.getString(R.string.toast_audiofile_failure_audio))
                 }
                 if ( audioFile != null && textValueInput == "" ) {
-                    ToastUtil.showToast(context, "Action impossible, vous devez saisir un nom")
+                    ToastUtil.showToast(context,
+                        context.getString(R.string.toast_audiofile_failure_name))
                 }
             },
             modifier = Modifier.padding(16.dp),
@@ -294,7 +304,8 @@ fun AnnonceMptrois(navController: NavController, player: AndroidAudioPlayer, bal
                 text = stringResource(R.string.enregistrer),
                 color = Color.White,
                 modifier = Modifier.semantics {
-                    contentDescription = "Enregistrer l'annonce créée."
+                    contentDescription =
+                        context.getString(R.string.a11y_audio_file_save_announcement)
                 }
             )
         }

@@ -124,7 +124,8 @@ fun AnnonceVocale(
                 isRunning = true
                 currentStep = 2
             } else {
-                ToastUtil.showToast(context, "Permission d'enregistrement non autorisée !")
+                ToastUtil.showToast(context,
+                    context.getString(R.string.toast_vocalfile_recording_unauthorized))
             }
         }
     )
@@ -149,13 +150,13 @@ fun AnnonceVocale(
     ) {
         Spacer(modifier = Modifier.height(40.dp))
         Text(
-            text = "Enregistreur vocal",
+            text = stringResource(R.string.text_vocalfile_title),
             fontSize = 25.sp,
             color = FontColor,
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier
                 .semantics {
-                    contentDescription = "Page de création d'une annonce avec enregistrement vocal."
+                    contentDescription = context.getString(R.string.a11y_vocalfile_title)
                 }
                 .focusRequester(focusRequester)
                 .focusable()
@@ -246,9 +247,11 @@ fun AnnonceVocale(
                         modifier = Modifier
                             .padding(9.dp)
                             .semantics {
-                                contentDescription = "Durée de l'enregistrement, ${
-                                    TimeUnit.MILLISECONDS.toMinutes(time) % 60
-                                } minutes et ${TimeUnit.MILLISECONDS.toSeconds(time) % 60} secondes."
+                                contentDescription = context.getString(
+                                    R.string.a11y_vocalfile_announcement_duration,
+                                    TimeUnit.MILLISECONDS.toMinutes(time) % 60,
+                                    TimeUnit.MILLISECONDS.toSeconds(time) % 60
+                                )
                             }
                     )
                     LaunchedEffect(isRunning) {
@@ -300,7 +303,7 @@ fun AnnonceVocale(
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.micro),
-                        contentDescription = "Recommencez l'enregistrement audio",
+                        contentDescription = stringResource(R.string.a11y_vocalfile_restart_recording),
                         modifier = Modifier.size(70.dp)
                     )
                 }
@@ -310,7 +313,8 @@ fun AnnonceVocale(
                             player.playFile(audioFile)
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
-                        modifier = Modifier.semantics { contentDescription = "Écouter l'audio enregistré" }
+                        modifier = Modifier.semantics { contentDescription =
+                            context.getString(R.string.a11y_vocalfile_play_button) }
                     ) {
                         Icon(
                             imageVector = Icons.Default.PlayArrow,
@@ -323,7 +327,8 @@ fun AnnonceVocale(
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                         modifier = Modifier.semantics {
-                            contentDescription = "Arrêter la lecture audio"
+                            contentDescription =
+                                context.getString(R.string.a11y_vocalfile_stop_button)
                         }
                     ) {
                         Text(
@@ -340,9 +345,11 @@ fun AnnonceVocale(
                         .padding(9.dp)
                         .semantics {
                             contentDescription =
-                                "Durée de l'enregistrement, ${TimeUnit.MILLISECONDS.toMinutes(time) % 60} minutes et ${
+                                context.getString(
+                                    R.string.a11y_vocalfile_announcement_duration,
+                                    TimeUnit.MILLISECONDS.toMinutes(time) % 60,
                                     TimeUnit.MILLISECONDS.toSeconds(time) % 60
-                                } secondes."
+                                )
                         }
                 )
 
@@ -402,21 +409,25 @@ fun AnnonceVocale(
                                                 )
                                             )
 
-                                            ToastUtil.showToast(context, "Annonce ajoutée")
+                                            ToastUtil.showToast(context,
+                                                context.getString(R.string.toast_vocalfile_announcement_added))
                                         } else {
                                             Log.e("CreateAnnonce","Échec création d'annonce")
-                                            ToastUtil.showToast(context, "Échec lors de l'envoie du fichier au serveur")
+                                            ToastUtil.showToast(context,
+                                                context.getString(R.string.toast_vocalfile_failure_sending_file))
                                         }
                                     }
                                 } else {
                                     Log.e("CreateAnnonce","Échec création d'annonce")
-                                    ToastUtil.showToast(context, "Échec lors de la création de l'annonce")
+                                    ToastUtil.showToast(context,
+                                        context.getString(R.string.toast_vocalfile_failure_creating_announcement))
                                 }
                             }
                             isLoading = false
                             navController.navigate("annonceVocal")
                         } else {
-                            ToastUtil.showToast(context, "Action impossible, vous devez choisir un nom !")
+                            ToastUtil.showToast(context,
+                                context.getString(R.string.toast_vocalfile_impossible_must_enter_name))
                         }
                     },
                     modifier = Modifier.padding(16.dp),
@@ -426,7 +437,8 @@ fun AnnonceVocale(
                         text = stringResource(R.string.enregistrer),
                         color = Color.White,
                         modifier = Modifier.semantics {
-                            contentDescription = "Enregistrer l'annonce conçue."
+                            contentDescription =
+                                context.getString(R.string.a11y_vocalfile_save_announcement)
                         }
                     )
                 }

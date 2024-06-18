@@ -69,6 +69,7 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
     val showAddPlageHorairePopup = remember { mutableStateOf(false) }
     val showDefaultMessagePopup = remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
 
     val focusRequester = remember { FocusRequester() }
     val view = LocalView.current
@@ -92,7 +93,7 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
             color = FontColor,
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier
-                .semantics { contentDescription = "Page de choix des annonces" }
+                .semantics { contentDescription = context.getString(R.string.a11y_timeslot_title) }
                 .focusRequester(focusRequester)
                 .focusable()
         )
@@ -118,7 +119,7 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                         .padding(vertical = 10.dp)
                         .semantics {
                             contentDescription =
-                                "Choisir l'annonce par défaut de la balise, défiler à droite pour accéder au bouton."
+                                context.getString(R.string.a11y_timeslot_chose_defaultannounce_slide)
                         }
                 )
 
@@ -133,7 +134,8 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                            text = stringResource(R.string.choisir),
                            color = Color.White,
                            modifier = Modifier.semantics {
-                               contentDescription = "Choisir l'annonce par défaut de la balise"
+                               contentDescription =
+                                   context.getString(R.string.a11y_timeslot_chose_announce_button)
                            }
                        )
                     }
@@ -143,7 +145,8 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                             text = stringResource(R.string.aucun),
                             color = FontColor,
                             modifier = Modifier.semantics {
-                                contentDescription = "Aucune annonce par défaut sélectionnée, si vous voulez en sélectionner une, défiler vers la gauche pour accéder au bouton."
+                                contentDescription =
+                                    context.getString(R.string.a11y_timeslot_no_defaultmessage)
                             }
                         )
                     } else {
@@ -151,7 +154,10 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                             text = balise.defaultMessage!!.nom, // Afficher le message par défaut de la balise
                             color = FontColor,
                             modifier = Modifier.semantics {
-                                contentDescription = "L'annonce par défaut de la balise est ${balise.defaultMessage!!.nom}"
+                                contentDescription = context.getString(
+                                    R.string.a11y_timeslot_defaultmessage_name,
+                                    balise.defaultMessage!!.nom
+                                )
                             },
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
@@ -180,7 +186,7 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                     .padding(vertical = 10.dp)
                     .semantics {
                         contentDescription =
-                            "Système de plage horaire, glisser vers la droite pour accéder au bouton on/off"
+                            context.getString(R.string.a11y_timeslot_sysonoff_slide)
                     }
 
             )
@@ -199,7 +205,8 @@ fun ChoixAnnonce(navController: NavController, balise: Balise) {
                     text = stringResource(R.string.ajouter_une_plage_horaire),
                     color = Color.White,
                     modifier = Modifier.semantics {
-                        contentDescription = "Ajouter une nouvelle plage horaire."
+                        contentDescription =
+                            context.getString(R.string.a11y_timeslot_add_timeslot_button)
                     }
                 )
             }
@@ -266,7 +273,8 @@ fun OnOffButton(balise: Balise, navController: NavController) {
                         navController.navigate("manageAnnonce")
                     } else {
                         Log.e("BoutonOfOff","Échec modification état")
-                        ToastUtil.showToast(context, "Échec lors de la modification de l'état du bouton")
+                        ToastUtil.showToast(context,
+                            context.getString(R.string.toast_timeslot_failure_modifying_button_state))
                     }
                 }
                 isLoading = false
@@ -287,7 +295,10 @@ fun OnOffButton(balise: Balise, navController: NavController) {
             text = if (checkedState.value) "On" else "Off",
             color = Color.Black,
             modifier = Modifier.semantics {
-                contentDescription = "Le système de plage horaire est ${if (checkedState.value) " activé " else " désactivé."}"
+                contentDescription = context.getString(
+                    R.string.a11y_timeslot_sysonoff_state,
+                    if (checkedState.value) " activé " else " désactivé."
+                )
             }
         )
     }

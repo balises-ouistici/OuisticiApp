@@ -106,7 +106,8 @@ fun DefaultMessagePopup(
                                 color = Color.White,
                                 modifier = Modifier
                                     .semantics {
-                                        contentDescription = "Créer une annonce"
+                                        contentDescription =
+                                            context.getString(R.string.a11y_timeslotpopup_create_announce_button)
                                     }
                             )
                         }
@@ -119,7 +120,8 @@ fun DefaultMessagePopup(
                                 text = stringResource(R.string.annuler),
                                 color = Color.White,
                                 modifier = Modifier.semantics {
-                                    contentDescription = "Annuler l'ajout d'une annonce par défaut."
+                                    contentDescription =
+                                        context.getString(R.string.a11y_timeslotpopup_cancel_defaultmessage)
                                 }
                             )
                         }
@@ -142,14 +144,11 @@ fun DefaultMessagePopup(
                                     if (it?.balId != null) {
                                         balise.defaultMessage = selectedAnnonce
                                         Log.d("InfosBalise", "Nouvelle annonce par défaut !")
-                                        Toast.makeText(
-                                            context,
-                                            context.getString(R.string.nouvelle_annonce_par_d_faut),
-                                            Toast.LENGTH_LONG)
-                                            .show()
+                                        ToastUtil.showToast(context, context.getString(R.string.nouvelle_annonce_par_d_faut))
                                     } else {
                                         Log.e("InfosBalise", "Échec nouvelle annonce par défaut")
-                                        ToastUtil.showToast(context, "Échec lors de l'enregistrement de l'annonce par défaut")
+                                        ToastUtil.showToast(context,
+                                            context.getString(R.string.toast_timeslotpopup_failure_defaultmessage))
                                     }
                                 }
                                 isLoading = false
@@ -160,10 +159,13 @@ fun DefaultMessagePopup(
                             modifier = Modifier.padding(end = 8.dp)
                         ) {
                             Text(
-                                text = "Valider",
+                                text = stringResource(R.string.text_timeslotpopup_validate_button),
                                 color = Color.White,
                                 modifier = Modifier.semantics {
-                                    contentDescription = "Définir ${selectedAnnonce?.nom} comme annonce par défaut de la balise"
+                                    contentDescription = context.getString(
+                                        R.string.a11y_timeslotpopup_validate_button,
+                                        selectedAnnonce?.nom
+                                    )
                                 }
                             )
                         }
@@ -252,7 +254,8 @@ fun AddPlageHorairePopup(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     modifier = Modifier.semantics {
-                        contentDescription = "Ajouter une plage horaire."
+                        contentDescription =
+                            context.getString(R.string.a11y_timeslotpopup_add_timeslot)
                     }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -260,14 +263,16 @@ fun AddPlageHorairePopup(
                     text = stringResource(R.string.choisir_annonce),
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.semantics {
-                        contentDescription = "Choisir annonce, défilez vers la droite pour choisir l'annonce qui sera utilisé pour la plage horaire."
+                        contentDescription =
+                            context.getString(R.string.a11y_timeslotpopup_chose_announce_for_timeslot)
                     }
                 )
                 if ( balise.annonces.isEmpty() )  {
                     Text(
                         text = stringResource(R.string.cr_ez_d_abord_une_annonce),
                         modifier = Modifier.semantics {
-                            contentDescription = "Créez d'abord une annonce, vous n'avez pas d'annonce créée, vous ne pouvez donc pas définir de plage horaire."
+                            contentDescription =
+                                context.getString(R.string.a11y_timeslotpopup_must_create_announce_for_timeslot)
                         }
                     )
                     Spacer(modifier = Modifier.height(65.dp))
@@ -284,7 +289,8 @@ fun AddPlageHorairePopup(
                     text = stringResource(R.string.choisir_les_jours_d_activations),
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.semantics {
-                        contentDescription = "Choisir les jours d'activation, défiler à droite pour choisir les jours d'activation de la plage horaire."
+                        contentDescription =
+                            context.getString(R.string.a11y_timeslotpopup_chose_activation_days)
                     }
                 )
                 JoursSemaineSelector(
@@ -300,7 +306,8 @@ fun AddPlageHorairePopup(
                     text = stringResource(R.string.choisir_les_p_riodes),
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.semantics {
-                        contentDescription = "Choisir les périodes, défilez à droite pour choisir une heure de début et une heure de fin pour la plage horaire."
+                        contentDescription =
+                            context.getString(R.string.a11y_timeslotpopup_chose_periods)
                     }
                 )
 
@@ -309,14 +316,19 @@ fun AddPlageHorairePopup(
                     Text(
                         text = stringResource(R.string.heure_d_but_aucune),
                         modifier = Modifier.semantics {
-                            contentDescription = "Heure de début, aucune. Vous pouvez sélectionner une heure de début en défilant en droite sur le bouton."
+                            contentDescription =
+                                context.getString(R.string.a11y_timeslotpopup_beggining_hour)
                         }
                     )
                 } else {
                     Text(
                         text = stringResource(R.string.heure_d_but_objet, heureDebut!!),
                         modifier = Modifier.semantics {
-                            contentDescription = "Heure de début, ${heureDebut!!.hour} heures et ${heureDebut!!.minute} minutes."
+                            contentDescription = context.getString(
+                                R.string.a11y_timeslotpopup_beggining_time,
+                                heureDebut!!.hour,
+                                heureDebut!!.minute
+                            )
                         }
                     )
                 }
@@ -328,7 +340,8 @@ fun AddPlageHorairePopup(
                         text = stringResource(R.string.choisir_heure_d_but),
                         color = Color.White,
                         modifier = Modifier.semantics {
-                            contentDescription = "Choisir une heure de début pour la plage horaire."
+                            contentDescription =
+                                context.getString(R.string.a11y_timeslotpopup_beggining_hour_button)
                         }
                     )
                 }
@@ -341,14 +354,19 @@ fun AddPlageHorairePopup(
                     Text(
                         text = stringResource(R.string.heure_fin_aucune),
                         modifier = Modifier.semantics {
-                            contentDescription = "Heure de fin, aucune. Vous pouvez sélectionner une heure de fin en défilant en droite sur le bouton."
+                            contentDescription =
+                                context.getString(R.string.a11y_timeslotpopup_ending_hour)
                         }
                     )
                 } else {
                     Text(
                         text = stringResource(R.string.heure_fin_objet, heureFin!!),
                         modifier = Modifier.semantics {
-                            contentDescription = "Heure de fin, ${heureFin!!.hour} heures et ${heureFin!!.minute} minutes."
+                            contentDescription = context.getString(
+                                R.string.a11y_timeslotpopup_ending_time,
+                                heureFin!!.hour,
+                                heureFin!!.minute
+                            )
                         }
                     )
                 }
@@ -361,7 +379,8 @@ fun AddPlageHorairePopup(
                         text = stringResource(R.string.choisir_heure_fin),
                         color = Color.White,
                         modifier = Modifier.semantics {
-                            contentDescription = "Choisir une heure de fin pour la plage horaire."
+                            contentDescription =
+                                context.getString(R.string.a11y_timeslotpopup_ending_hour_button)
                         }
                     )
                 }
@@ -381,7 +400,8 @@ fun AddPlageHorairePopup(
                             text = stringResource(R.string.annuler),
                             color = Color.White,
                             modifier = Modifier.semantics {
-                                contentDescription = "Annuler la création de la plage horaire."
+                                contentDescription =
+                                    context.getString(R.string.a11y_timeslotpopup_cancel_creation_timeslot)
                             }
                         )
                     }
@@ -390,7 +410,8 @@ fun AddPlageHorairePopup(
                             // Création de la plage horaire
                             if (selectedAnnonce != null && selectedJours.isNotEmpty() && heureDebut != null && heureFin != null) {
                                 if ( heureDebut!! >= heureFin!! ) {
-                                    ToastUtil.showToast(context, "L'heure de fin ne peut pas être avant celle du début !")
+                                    ToastUtil.showToast(context,
+                                        context.getString(R.string.toast_timeslotpopup_endinghour_error_beggininghour))
                                 } else {
                                     isLoading = true
                                     val apiService = RestApiService()
@@ -412,10 +433,12 @@ fun AddPlageHorairePopup(
                                         if (it?.id_timeslot != null) {
                                             balise.plages.add(PlageHoraire(balise.createIdTimeslot(), selectedAnnonce!!, selectedJours, heureDebut!!, heureFin!!))
                                             Log.d("InfosBalise", "Nouvelle plage horaire !")
-                                            ToastUtil.showToast(context, "Nouvelle plage horaire créée !")
+                                            ToastUtil.showToast(context,
+                                                context.getString(R.string.toast_timeslotpopup_new_timeslot))
                                         } else {
                                             Log.e("InfosBalise", "Échec nouvelle plage horaire")
-                                            ToastUtil.showToast(context, "Échec lors de l'enregistrement de la nouvelle plage horaire")
+                                            ToastUtil.showToast(context,
+                                                context.getString(R.string.toast_timeslotpopup_failure_saving_timeslot))
                                         }
                                     }
                                     isLoading = false
@@ -423,7 +446,8 @@ fun AddPlageHorairePopup(
                                     navController.navigate("manageAnnonce")
                                 }
                             } else {
-                                ToastUtil.showToast(context, "Informations manquantes !")
+                                ToastUtil.showToast(context,
+                                    context.getString(R.string.toast_timeslotpopup_missing_informations))
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
@@ -433,7 +457,8 @@ fun AddPlageHorairePopup(
                             text = "Valider",
                             color = Color.White,
                             modifier = Modifier.semantics {
-                                contentDescription = "Valider la création de la plage horaire."
+                                contentDescription =
+                                    context.getString(R.string.a11y_timeslotpopup_validate_timeslot_creation)
                             }
                         )
                     }
@@ -519,7 +544,8 @@ fun ModifyPlageHorairePopup(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     modifier = Modifier.semantics {
-                        contentDescription = "Modifier une plage horaire."
+                        contentDescription =
+                            context.getString(R.string.a11y_timeslotpopup_modify_timeslot_text)
                     }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -527,7 +553,8 @@ fun ModifyPlageHorairePopup(
                     text = stringResource(R.string.choisir_annonce),
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.semantics {
-                        contentDescription = "Choisir annonce, défilez vers la droite pour choisir l'annonce qui sera utilisé pour la plage horaire."
+                        contentDescription =
+                            context.getString(R.string.a11y_timeslotpopup_chose_announce_timeslot)
                     }
                 )
 
@@ -543,7 +570,8 @@ fun ModifyPlageHorairePopup(
                     text = stringResource(R.string.choisir_les_jours_d_activations),
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.semantics {
-                        contentDescription = "Choisir les jours d'activation, défiler à droite pour choisir les jours d'activation de la plage horaire."
+                        contentDescription =
+                            context.getString(R.string.a11y_timeslot_chose_activation_day)
                     }
                 )
                 JoursSemaineSelector(
@@ -559,7 +587,8 @@ fun ModifyPlageHorairePopup(
                     text = stringResource(R.string.choisir_les_p_riodes),
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.semantics {
-                        contentDescription = "Choisir les périodes, défilez à droite pour choisir une heure de début et une heure de fin pour la plage horaire."
+                        contentDescription =
+                            context.getString(R.string.a11y_timeslotpopup_chose_periods)
                     }
                 )
 
@@ -568,14 +597,19 @@ fun ModifyPlageHorairePopup(
                     Text(
                         text = stringResource(R.string.heure_d_but_aucune),
                         modifier = Modifier.semantics {
-                            contentDescription = "Heure de début, aucune. Vous pouvez sélectionner une heure de début en défilant en droite sur le bouton."
+                            contentDescription =
+                                context.getString(R.string.a11y_timeslotpopup_beggining_hour)
                         }
                     )
                 } else {
                     Text(
                         text = stringResource(R.string.heure_d_but_objet, heureDebut!!),
                         modifier = Modifier.semantics {
-                            contentDescription = "Heure de début, ${heureDebut!!.hour} heures et ${heureDebut!!.minute} minutes."
+                            contentDescription = context.getString(
+                                R.string.a11y_timeslotpopup_beggining_time,
+                                heureDebut!!.hour,
+                                heureDebut!!.minute
+                            )
                         }
                     )
                 }
@@ -589,7 +623,8 @@ fun ModifyPlageHorairePopup(
                         text = stringResource(R.string.choisir_heure_d_but),
                         color = Color.White,
                         modifier = Modifier.semantics {
-                            contentDescription = "Choisir une heure de début pour la plage horaire."
+                            contentDescription =
+                                context.getString(R.string.a11y_timeslotpopup_beggining_hour_button)
                         }
                     )
                 }
@@ -602,14 +637,19 @@ fun ModifyPlageHorairePopup(
                     Text(
                         text = stringResource(R.string.heure_fin_aucune),
                         modifier = Modifier.semantics {
-                            contentDescription = "Heure de fin, aucune. Vous pouvez sélectionner une heure de fin en défilant en droite sur le bouton."
+                            contentDescription =
+                                context.getString(R.string.a11y_timeslotpopup_ending_hour)
                         }
                     )
                 } else {
                     Text(
                         text = stringResource(R.string.heure_fin_objet, heureFin!!),
                         modifier = Modifier.semantics {
-                            contentDescription = "Heure de fin, ${heureFin!!.hour} heures et ${heureFin!!.minute} minutes."
+                            contentDescription = context.getString(
+                                R.string.a11y_timeslotpopup_ending_time,
+                                heureFin!!.hour,
+                                heureFin!!.minute
+                            )
                         }
                     )
                 }
@@ -623,7 +663,8 @@ fun ModifyPlageHorairePopup(
                     Text(
                         text = stringResource(R.string.choisir_heure_fin), color = Color.White,
                         modifier = Modifier.semantics {
-                            contentDescription = "Choisir une heure de fin pour la plage horaire."
+                            contentDescription =
+                                context.getString(R.string.a11y_timeslotpopup_ending_hour_button)
                         }
                     )
                 }
@@ -643,7 +684,8 @@ fun ModifyPlageHorairePopup(
                             text = stringResource(R.string.annuler),
                             color = Color.White,
                             modifier = Modifier.semantics {
-                                contentDescription = "Annuler la modification de la plage horaire."
+                                contentDescription =
+                                    context.getString(R.string.a11y_timeslotpopup_cancel_modify_timeslot)
                             }
                         )
                     }
@@ -652,7 +694,8 @@ fun ModifyPlageHorairePopup(
                             // Création de la plage horaire
                             if (selectedAnnonce != null && selectedJours.isNotEmpty() && heureDebut != null && heureFin != null) {
                                 if ( heureDebut!! >= heureFin!! ) {
-                                    ToastUtil.showToast(context, "L'heure de fin ne peut pas être avant celle du début !")
+                                    ToastUtil.showToast(context,
+                                        context.getString(R.string.toast_timeslotpopup_endinghour_error_beggininghour))
                                 } else {
                                     isLoading = true
                                     val apiService = RestApiService()
@@ -677,10 +720,12 @@ fun ModifyPlageHorairePopup(
                                             plageHoraire.heureDebut = heureDebut as LocalTime
                                             plageHoraire.heureFin = heureFin as LocalTime
                                             Log.d("InfosBalise", "Plage horaire modifiée !")
-                                            ToastUtil.showToast(context, "La plage horaire a bien été modifiée !")
+                                            ToastUtil.showToast(context,
+                                                context.getString(R.string.toast_timeslotpopup_timeslot_modified))
                                         } else {
                                             Log.e("InfosBalise", "Échec modification plage horaire")
-                                            ToastUtil.showToast(context, "Échec lors de la modification de la plage horaire")
+                                            ToastUtil.showToast(context,
+                                                context.getString(R.string.toast_timeslotpopup_failure_modifying_timeslot))
                                         }
                                     }
                                     isLoading = false
@@ -688,7 +733,8 @@ fun ModifyPlageHorairePopup(
                                     navController.navigate("manageAnnonce")
                                 }
                             } else {
-                                ToastUtil.showToast(context, "Informations manquantes")
+                                ToastUtil.showToast(context,
+                                    context.getString(R.string.toast_timeslotpopup_missing_informations))
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
@@ -698,7 +744,8 @@ fun ModifyPlageHorairePopup(
                             text = "Valider",
                             color = Color.White,
                             modifier = Modifier.semantics {
-                                contentDescription = "Valider la modification de la plage horaire."
+                                contentDescription =
+                                    context.getString(R.string.a11y_timeslotpopup_validate_modification_timeslot)
                             }
                         )
                     }
@@ -761,7 +808,8 @@ fun ConfirmDeletePlagePopup(
                             text = stringResource(R.string.annuler),
                             color = Color.White,
                             modifier = Modifier.semantics {
-                                contentDescription = "Annuler la suppression de la plage horaire."
+                                contentDescription =
+                                    context.getString(R.string.a11y_timeslotpopup_cancel_delete_timeslot)
                             }
                         )
                     }
@@ -787,10 +835,12 @@ fun ConfirmDeletePlagePopup(
                                 if (it?.id_timeslot != null) {
                                     balise.plages.remove(plageHoraire)
                                     Log.d("InfosBalise", "Plage horaire supprimée !")
-                                    ToastUtil.showToast(context, "Plage horaire supprimée")
+                                    ToastUtil.showToast(context,
+                                        context.getString(R.string.toast_timeslotpopup_timeslot_deleted))
                                 } else {
                                     Log.e("InfosBalise", "Échec suppression plage horaire")
-                                    ToastUtil.showToast(context, "Échec lors de la suppression de la plage horaire")
+                                    ToastUtil.showToast(context,
+                                        context.getString(R.string.toast_timeslotpopup_delete_timeslot_failure))
                                 }
                             }
                             isLoading = false
@@ -804,7 +854,8 @@ fun ConfirmDeletePlagePopup(
                             text = stringResource(R.string.supprimer),
                             color = Color.White,
                             modifier = Modifier.semantics {
-                                contentDescription = "Valider la suppression de la plage horaire."
+                                contentDescription =
+                                    context.getString(R.string.a11y_timeslotpopup_validate_delete_timeslot_button)
                             }
                         )
                     }

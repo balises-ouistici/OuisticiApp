@@ -63,6 +63,7 @@ fun RowScope.TableHeaderCell(
     weight: Float,
     textColor: Color,
 ) {
+    val context = LocalContext.current
     Text(
         text = text,
         Modifier
@@ -71,7 +72,7 @@ fun RowScope.TableHeaderCell(
             .padding(8.dp)
             .height(30.dp)
             .semantics {
-                contentDescription = "Titre de colonne du tableau, ${text}."
+                contentDescription = context.getString(R.string.a11y_timeslottable_header, text)
             },
         color = textColor,
         textAlign = TextAlign.Center
@@ -148,7 +149,11 @@ fun RowScope.TableJoursCell(
             .height(50.dp)
             .semantics {
                 contentDescription =
-                    "${textSemantics}, ${if (jours.count() == 7) "Tous les jours" else jours}"
+                    context.getString(
+                        R.string.a11y_timeslottable_days_cell,
+                        textSemantics,
+                        if (jours.count() == 7) context.getString(R.string.a11y_timeslottable_all_days) else jours
+                    )
             },
         color = textColor,
         textAlign = TextAlign.Center
@@ -239,21 +244,21 @@ fun TableScreen(balise : Balise, navController: NavController) {
                     text = plage.nomMessage.nom,
                     weight = column1Weight,
                     textColor = Color.Black,
-                    textSemantics = "Nom de l'annonce sélectionnée"
+                    textSemantics = context.getString(R.string.a11y_timeslottable_announce_name)
                 )
 
                 TableJoursCell(
                     jours = plage.jours,
                     weight = columnJours,
                     textColor = Color.Black,
-                    textSemantics = "Jours d'activation de la plage horaire"
+                    textSemantics = context.getString(R.string.a11y_timeslottable_selected_days)
                 )
 
                 TableCells(
                     text = context.getString(R.string.de_a, plage.heureDebut, plage.heureFin),
                     weight = column2Weight,
                     textColor = Color.Black,
-                    textSemantics = "Plage horaire active"
+                    textSemantics = context.getString(R.string.a11y_timeslottable_activation_time)
                 )
 
 
@@ -274,7 +279,8 @@ fun TableScreen(balise : Balise, navController: NavController) {
                         .height(66.dp)
                         .border(1.dp, Color.Black)
                         .semantics {
-                            contentDescription = "Modification de la plage horaire."
+                            contentDescription =
+                                context.getString(R.string.a11y_timeslottable_timeslot_modification)
                         }
                 ) {
                     Icon(
@@ -311,7 +317,8 @@ fun TableScreen(balise : Balise, navController: NavController) {
                         .height(66.dp)
                         .border(1.dp, Color.Black)
                         .semantics {
-                            contentDescription = "Suppression de la plage horaire."
+                            contentDescription =
+                                context.getString(R.string.a11u_timeslottable_timeslot_deletion)
                         }
                 ) {
                     Icon(

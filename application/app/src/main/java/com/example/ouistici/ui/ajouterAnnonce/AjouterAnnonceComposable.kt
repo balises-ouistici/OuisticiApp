@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -42,6 +43,9 @@ import kotlinx.coroutines.delay
 fun AjouterAnnonce(navController: NavController) {
     val focusRequester = remember { FocusRequester() }
     val view = LocalView.current
+
+    val context = LocalContext.current
+
     LaunchedEffect(Unit) {
         delay(100) // Add a slight delay to ensure the screen is fully loaded
         focusRequester.requestFocus()
@@ -89,7 +93,7 @@ fun AjouterAnnonce(navController: NavController) {
                 color = Color.White,
                 fontSize = 25.sp,
                 modifier = Modifier.semantics {
-                    contentDescription = "Créez une annonce grâce à l'enregistreur vocal de votre téléphone."
+                    contentDescription = context.getString(R.string.a11y_vocal_button)
                 }
             )
         }
@@ -120,7 +124,7 @@ fun AjouterAnnonce(navController: NavController) {
                 color = Color.White,
                 fontSize = 25.sp,
                 modifier = Modifier.semantics {
-                    contentDescription = "Créez une annonce en écrivant un texte qui sera lu par un synthétiseur vocal."
+                    contentDescription = context.getString(R.string.a11y_text_button)
                 }
             )
         }
@@ -151,7 +155,7 @@ fun AjouterAnnonce(navController: NavController) {
                 color = Color.White,
                 fontSize = 25.sp,
                 modifier = Modifier.semantics {
-                    contentDescription = "Créez une annonce en chargeant un fichier audio depuis votre téléphone."
+                    contentDescription = context.getString(R.string.a11y_audiofile_button)
                 }
             )
         }

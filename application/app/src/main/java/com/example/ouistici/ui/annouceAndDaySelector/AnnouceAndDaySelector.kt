@@ -47,6 +47,8 @@ fun AnnonceList(
     selectedAnnonce: Annonce?,
     onAnnonceSelected: (Annonce) -> Unit
 ) {
+    val context = LocalContext.current
+
     LazyColumn(
         modifier = Modifier
             .height(100.dp)
@@ -65,7 +67,10 @@ fun AnnonceList(
                     Text(
                         text = annonce.nom,
                         modifier = Modifier.semantics {
-                            contentDescription = "Nom de l'annonce, ${annonce.nom}."
+                            contentDescription = context.getString(
+                                R.string.a11y_announceandday_announce_name,
+                                annonce.nom
+                            )
                         },
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -98,11 +103,14 @@ fun AnnonceDefaultMessageList(
     selectedAnnonce: Annonce?,
     onAnnonceSelected: (Annonce?) -> Unit
 ) {
+    val context = LocalContext.current
+
     if (annonces.isEmpty()) {
         Text(
             text = stringResource(R.string.cr_ez_d_abord_une_annonce),
             modifier = Modifier.semantics {
-                contentDescription = "Vous n'avez pas encore créé d'annonce, veuillez en créer une dans un premier temps."
+                contentDescription =
+                    context.getString(R.string.a11y_announceandday_must_create_announce)
             }
         )
     } else {
@@ -122,7 +130,12 @@ fun AnnonceDefaultMessageList(
                         text = annonce.nom,
                         modifier = Modifier
                             .weight(1f)
-                            .semantics { contentDescription = "Nom de l'annonce, ${annonce.nom}." },
+                            .semantics {
+                                contentDescription = context.getString(
+                                    R.string.a11y_announceandday_announce_name_list,
+                                    annonce.nom
+                                )
+                            },
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )

@@ -3,7 +3,6 @@ package com.example.ouistici
 import android.Manifest.permission.RECORD_AUDIO
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
