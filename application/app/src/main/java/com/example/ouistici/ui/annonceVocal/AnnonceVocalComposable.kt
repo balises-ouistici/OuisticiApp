@@ -1,6 +1,7 @@
 package com.example.ouistici.ui.annonceVocal
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -80,6 +81,7 @@ import java.util.concurrent.TimeUnit
  * @param cacheDir Where the temp file created by the audio recorder temporary save the temp file.
  * @param balise The beacon associated with the announcements.
  */
+@SuppressLint("StringFormatMatches")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AnnonceVocale(

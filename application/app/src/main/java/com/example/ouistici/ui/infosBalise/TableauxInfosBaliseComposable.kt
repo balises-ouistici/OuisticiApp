@@ -2,7 +2,6 @@ package com.example.ouistici.ui.infosBalise
 
 import android.content.Context
 import android.os.Build
-import android.os.Environment
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
