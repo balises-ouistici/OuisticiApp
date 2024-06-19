@@ -305,8 +305,14 @@ fun OnOffButton(balise: Balise, navController: NavController) {
     Loader(isLoading = isLoading)
 }
 
-
+/**
+ * Sorts a list of days of the week based on a predefined order.
+ *
+ * @param jours The list of days of the week (JoursSemaine) to be sorted.
+ * @return The sorted list of days of the week.
+ */
 fun sortDaysOfWeek(jours: List<JoursSemaine>): List<JoursSemaine> {
+    // Predefined order of days of the week
     val daysOrder = listOf(
         JoursSemaine.Lundi,
         JoursSemaine.Mardi,
@@ -316,6 +322,7 @@ fun sortDaysOfWeek(jours: List<JoursSemaine>): List<JoursSemaine> {
         JoursSemaine.Samedi,
         JoursSemaine.Dimanche
     )
+    // Sort the list of days based on their index in daysOrder
     return jours.sortedBy { daysOrder.indexOf(it) }
 }
 

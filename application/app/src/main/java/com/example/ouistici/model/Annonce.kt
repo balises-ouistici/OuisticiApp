@@ -11,6 +11,7 @@ import java.io.File
  * @param contenu The content of the announcement (optional).
  * @param langue The language of the announcement (optional).
  * @param duree The duration of the announcement in seconds (optional).
+ * @param filename Name of the audio file.
  */
 class Annonce (
     var id : Int,

@@ -13,8 +13,10 @@ import java.io.FileOutputStream
 import java.io.RandomAccessFile
 
 /**
- * @brief Implements the AudioRecorder interface to record audio on Android.
- * @param context The context of the Android application.
+ * AndroidAudioRecorder provides functionality to record audio from the device's microphone
+ * and save it to a WAV file format with PCM 16-bit encoding.
+ *
+ * @param context The application context used for checking permissions and showing toasts.
  */
 class AndroidAudioRecorder(
     private val context: Context
@@ -29,6 +31,11 @@ class AndroidAudioRecorder(
     private val audioFormat = AudioFormat.ENCODING_PCM_16BIT // PCM format
     private val bufferSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, audioFormat)
 
+    /**
+     * Starts recording audio from the microphone and writes it to the specified [outputFile].
+     *
+     * @param outputFile The file to which the recorded audio will be saved.
+     */
     override fun start(outputFile: File) {
         if (ActivityCompat.checkSelfPermission(
                 context,
@@ -49,6 +56,11 @@ class AndroidAudioRecorder(
         recordingThread?.start()
     }
 
+    /**
+     * Writes the recorded audio data to the specified [outputFile] in WAV format with a proper header.
+     *
+     * @param outputFile The file where the recorded audio data is saved.
+     */
     private fun writeAudioDataToFile(outputFile: File) {
         val data = ByteArray(bufferSize)
         FileOutputStream(outputFile).use { fos ->
@@ -62,6 +74,11 @@ class AndroidAudioRecorder(
         writeWavHeader(outputFile)
     }
 
+    /**
+     * Writes the WAV header to the specified [outputFile].
+     *
+     * @param outputFile The file where the WAV header is written.
+     */
     private fun writeWavHeader(outputFile: File) {
         val fileLength = outputFile.length()
         RandomAccessFile(outputFile, "rw").use { raf ->
@@ -83,6 +100,9 @@ class AndroidAudioRecorder(
         }
     }
 
+    /**
+     * Stops the audio recording and releases resources.
+     */
     override fun stop() {
         if (isRecording) {
             isRecording = false
@@ -95,10 +115,22 @@ class AndroidAudioRecorder(
     }
 }
 
+/**
+ * Reverses the byte order of an integer.
+ *
+ * @param this@reverseBytes The integer to reverse.
+ * @return The integer with its byte order reversed.
+ */
 fun Int.reverseBytes(): Int {
     return ((this shl 24) or ((this and 0xFF00) shl 8) or ((this shr 8) and 0xFF00) or (this ushr 24))
 }
 
+/**
+ * Reverses the byte order of a short.
+ *
+ * @param this@reverseBytes The short to reverse.
+ * @return The short with its byte order reversed.
+ */
 fun Short.reverseBytes(): Short {
     return (((this.toInt() shl 8) and 0xFF00) or ((this.toInt() shr 8) and 0xFF)).toShort()
 }

@@ -91,8 +91,13 @@ fun RowScope.TableCell(
     )
 }
 
-
-@OptIn(ExperimentalComposeUiApi::class)
+/**
+ * Composable function to create a table cell header with text.
+ *
+ * @param text The text to display in the header cell.
+ * @param weight The weight of the header cell in the Row.
+ * @param textColor The color of the text in the header cell.
+ */
 @Composable
 fun RowScope.TableCellHeader(
     text: String,
@@ -116,6 +121,13 @@ fun RowScope.TableCellHeader(
     )
 }
 
+/**
+ * Composable function to create a table cell button with text.
+ *
+ * @param text The text to display in the cell button.
+ * @param weight The weight of the cell button in the Row.
+ * @param textColor The color of the text in the cell button.
+ */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun RowScope.TableCellButtons(
@@ -437,6 +449,15 @@ fun TableScreen(balise : Balise, player: AndroidAudioPlayer, navController: NavC
 
 
 // Définition de la fonction pour enregistrer le fichier audio localement
+
+/**
+ * Saves the audio data represented by a byte array to a local file in the cache directory of the application.
+ *
+ * @param context The context of the application or activity.
+ * @param bytes The byte array containing the audio data to be saved.
+ * @param filename The name of the file to be created.
+ * @return A File object representing the saved audio file, or null if there was an error during saving.
+ */
 fun saveAudioFileLocally(context: Context, bytes: ByteArray, filename: String): File? {
     val file = File(context.cacheDir, filename)
     try {

@@ -27,8 +27,18 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalTime
 
+/**
+ * Handles communication with the Ouistici API using Retrofit for various operations related to a Balise entity.
+ */
 class RestApiService {
     // Get toutes les infos de la balise
+
+    /**
+     * Fetches detailed information about a Balise from the API.
+     *
+     * @param balise The BaliseEntity object representing the Balise for which information is fetched.
+     * @param onResult Callback function with a nullable Balise parameter that will be called with the fetched Balise information or null if an error occurs.
+     */
     fun fetchBaliseInfo(balise: BaliseEntity, onResult: (Balise?) -> Unit) {
         RetrofitClient.updateBaseUrl(balise.ipBal)
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
@@ -108,6 +118,13 @@ class RestApiService {
 
 
     // Page infos balise
+
+    /**
+     * Sets the volume for a Balise through the API.
+     *
+     * @param baliseData The BaliseDto object containing the volume information to be set.
+     * @param onResult Callback function with a nullable BaliseDto parameter that will be called with the updated BaliseDto or null if an error occurs.
+     */
     fun setVolume(baliseData: BaliseDto, onResult: (BaliseDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
         val volume = JsonObject().apply {
@@ -126,6 +143,12 @@ class RestApiService {
         )
     }
 
+    /**
+     * Sets the name and place for a Balise through the API.
+     *
+     * @param baliseData The BaliseDto object containing the new name and place information.
+     * @param onResult Callback function with a nullable BaliseDto parameter that will be called with the updated BaliseDto or null if an error occurs.
+     */
     fun setNameAndPlace(baliseData: BaliseDto, onResult: (BaliseDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
         val nameAndPlace = JsonObject().apply {
@@ -147,6 +170,11 @@ class RestApiService {
     }
 
 
+    /**
+     * Tests the sound functionality of the Balise through the API.
+     *
+     * @param callback Callback function with an Int parameter representing the HTTP status code of the response.
+     */
     fun testSound(callback : (Int) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
         retrofit.testSound().enqueue(object : Callback<Void> {
@@ -161,7 +189,12 @@ class RestApiService {
         })
     }
 
-
+    /**
+     * Sets the auto volume state for a Balise through the API.
+     *
+     * @param baliseData The BaliseDto object containing the auto volume state to be set.
+     * @param onResult Callback function with a nullable BaliseDto parameter that will be called with the updated BaliseDto or null if an error occurs.
+     */
     fun setAutoVolume(baliseData: BaliseDto, onResult: (BaliseDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
         val buttonState = JsonObject().apply {
@@ -180,7 +213,12 @@ class RestApiService {
         )
     }
 
-
+    /**
+     * Downloads audio file associated with a specific announcement ID from the API.
+     *
+     * @param id_annonce The ID of the announcement whose audio file is to be downloaded.
+     * @param callback Callback function with a nullable ByteArray parameter representing the downloaded audio file bytes or null if an error occurs.
+     */
     fun downloadAudio(id_annonce: Int, callback: (ByteArray?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
         retrofit.downloadAudio(id_annonce).enqueue(object : Callback<ResponseBody> {
@@ -203,6 +241,13 @@ class RestApiService {
 
 
     // Page choix des annonces
+
+    /**
+     * Sets the default message for a Balise through the API.
+     *
+     * @param baliseData The BaliseDto object containing the ID of the default message to be set.
+     * @param onResult Callback function with a nullable BaliseDto parameter that will be called with the updated BaliseDto or null if an error occurs.
+     */
     fun setDefaultMessage(baliseData: BaliseDto, onResult: (BaliseDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
         val defaultMessage = JsonObject().apply {
@@ -221,7 +266,12 @@ class RestApiService {
         )
     }
 
-
+    /**
+     * Sets the button state (timeslots) for a Balise through the API.
+     *
+     * @param baliseData The BaliseDto object containing the new button state information.
+     * @param onResult Callback function with a nullable BaliseDto parameter that will be called with the updated BaliseDto or null if an error occurs.
+     */
     fun setButtonState(baliseData: BaliseDto, onResult: (BaliseDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
         val buttonState = JsonObject().apply {
@@ -243,6 +293,13 @@ class RestApiService {
 
 
     // Création d'annonce
+
+    /**
+     * Creates a new announcement through the API.
+     *
+     * @param annonceData The AnnonceDto object containing the information of the announcement to be created.
+     * @param onResult Callback function with a nullable AnnonceDto parameter that will be called with the created AnnonceDto or null if an error occurs.
+     */
     fun createAnnonce(annonceData: AnnonceDto, onResult: (AnnonceDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
         val annonce = JsonObject().apply {
@@ -269,6 +326,12 @@ class RestApiService {
     }
 
 
+    /**
+     * Modifies an existing announcement through the API.
+     *
+     * @param annonceData The AnnonceDto object containing the updated information of the announcement.
+     * @param onResult Callback function with a nullable AnnonceDto parameter that will be called with the modified AnnonceDto or null if an error occurs.
+     */
     fun modifyAnnonce(annonceData: AnnonceDto, onResult: (AnnonceDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
         val annonce = JsonObject().apply {
@@ -295,6 +358,12 @@ class RestApiService {
     }
 
 
+    /**
+     * Deletes an announcement through the API.
+     *
+     * @param annonceData The AnnonceDto object containing the ID of the announcement to be deleted.
+     * @param onResult Callback function with a nullable AnnonceDto parameter that will be called with the deleted AnnonceDto or null if an error occurs.
+     */
     fun deleteAnnonce(annonceData: AnnonceDto, onResult: (AnnonceDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
         val annonce = JsonObject().apply {
@@ -313,7 +382,12 @@ class RestApiService {
         )
     }
 
-
+    /**
+     * Uploads an audio file for a new announcement through the API.
+     *
+     * @param fileAnnonceData The FileAnnonceDto object containing the audio file and its description.
+     * @param onResult Callback function with a nullable FileAnnonceDto parameter that will be called with the uploaded FileAnnonceDto or null if an error occurs.
+     */
     fun createAudio(fileAnnonceData: FileAnnonceDto, onResult: (FileAnnonceDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
 
@@ -340,6 +414,13 @@ class RestApiService {
 
 
     // Plages horaires
+
+    /**
+     * Creates a new timeslot (plage horaire) through the API.
+     *
+     * @param timeslotData The TimeslotDto object containing the information of the timeslot to be created.
+     * @param onResult Callback function with a nullable TimeslotDto parameter that will be called with the created TimeslotDto or null if an error occurs.
+     */
     fun createTimeslot(timeslotData: TimeslotDto, onResult: (TimeslotDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
         val timeslot = JsonObject().apply {
@@ -370,6 +451,12 @@ class RestApiService {
     }
 
 
+    /**
+     * Modifies an existing timeslot (plage horaire) through the API.
+     *
+     * @param timeslotData The TimeslotDto object containing the updated information of the timeslot.
+     * @param onResult Callback function with a nullable TimeslotDto parameter that will be called with the modified TimeslotDto or null if an error occurs.
+     */
     fun modifyTimeslot(timeslotData: TimeslotDto, onResult: (TimeslotDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
         val timeslot = JsonObject().apply {
@@ -400,6 +487,12 @@ class RestApiService {
     }
 
 
+    /**
+     * Deletes a timeslot (plage horaire) through the API.
+     *
+     * @param timeslotData The TimeslotDto object containing the ID of the timeslot to be deleted.
+     * @param onResult Callback function with a nullable TimeslotDto parameter that will be called with the deleted TimeslotDto or null if an error occurs.
+     */
     fun deleteTimeslot(timeslotData: TimeslotDto, onResult: (TimeslotDto?) -> Unit) {
         val retrofit = RetrofitClient.buildService(OuisticiApi::class.java)
         val timeslot = JsonObject().apply {

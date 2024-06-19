@@ -12,6 +12,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
+/**
+ * Composable function for displaying a loading indicator.
+ *
+ * @param isLoading Boolean flag indicating whether to display the loader.
+ */
 @Composable
 fun Loader(
     isLoading: Boolean

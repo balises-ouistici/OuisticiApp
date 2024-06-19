@@ -1,5 +1,6 @@
 package com.example.ouistici.ui.infosBalise
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
@@ -227,6 +228,7 @@ fun ModifyInfosBalisePopup(
  * @param navController NavController for navigating between composables.
  * @param onDismiss Callback function to dismiss the popup.
  */
+@SuppressLint("StringFormatMatches")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ModifyAnnoncesBaliseTextePopup(
@@ -552,6 +554,7 @@ fun ModifyAnnoncesBaliseTextePopup(
  * @param navController NavController for navigating between composables.
  * @param onDismiss Callback function to dismiss the popup.
  */
+@SuppressLint("StringFormatMatches")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ModifyAnnoncesBaliseAudioPopup(

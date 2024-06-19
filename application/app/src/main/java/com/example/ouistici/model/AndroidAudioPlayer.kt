@@ -6,8 +6,9 @@ import androidx.core.net.toUri
 import java.io.File
 
 /**
- * @brief Implements the AudioPlayer interface to play audio files on Android.
- * @param context The context of the Android application.
+ * Implementation of AudioPlayer interface using Android's MediaPlayer.
+ *
+ * @property context The context used for creating MediaPlayer instances.
  */
 class AndroidAudioPlayer(
     private val context: Context
@@ -16,8 +17,9 @@ class AndroidAudioPlayer(
     private var player : MediaPlayer? = null
 
     /**
-     * @brief Plays the specified audio file.
-     * @param file The audio file to play.
+     * Plays the audio file using MediaPlayer.
+     *
+     * @param file The File object representing the audio file to be played.
      */
     override fun playFile(file: File) {
         MediaPlayer.create(context, file.toUri()).apply {
@@ -27,7 +29,7 @@ class AndroidAudioPlayer(
     }
 
     /**
-     * @brief Stops the audio playback.
+     * Stops the currently playing audio and releases resources.
      */
     override fun stop() {
         player?.stop()
@@ -36,6 +38,12 @@ class AndroidAudioPlayer(
     }
 
     companion object {
+        /**
+         * Retrieves the duration of an audio file.
+         *
+         * @param file The File object representing the audio file.
+         * @return The duration of the audio file in milliseconds, or 0 if an error occurs.
+         */
         fun getAudioDuration(file: File): Int {
             val mediaPlayer = MediaPlayer()
             return try {

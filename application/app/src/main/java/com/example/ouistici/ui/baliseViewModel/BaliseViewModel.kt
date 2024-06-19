@@ -12,8 +12,11 @@ import com.example.ouistici.model.Balise
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+
 /**
- * @brief ViewModel for managing the selected balise.
+ * ViewModel for managing Balise data.
+ *
+ * @param application The application context, typically used for database initialization.
  */
 class BaliseViewModel(application: Application) : AndroidViewModel(application) {
     /** The selected balise. */
@@ -23,27 +26,48 @@ class BaliseViewModel(application: Application) : AndroidViewModel(application) 
     val allBalises: LiveData<List<BaliseEntity>>
 
     init {
+        // Initialize repository using the application's context
         val baliseDao = BaliseDatabase.getDatabase(application).baliseDao()
         repository = BaliseRepository(baliseDao)
         allBalises = repository.allBalises
     }
 
+    /**
+     * Inserts a new BaliseEntity into the database.
+     *
+     * @param balise The BaliseEntity to insert.
+     */
     fun insert(balise: BaliseEntity) = viewModelScope.launch(Dispatchers.IO) {
         repository.insert(balise)
     }
 
+    /**
+     * Deletes a BaliseEntity from the database.
+     *
+     * @param balise The BaliseEntity to delete.
+     */
     fun deleteBalise(balise: BaliseEntity) {
         viewModelScope.launch {
             repository.delete(balise)
         }
     }
 
+    /**
+     * Updates an existing BaliseEntity in the database.
+     *
+     * @param balise The BaliseEntity to update.
+     */
     fun updateBalise(balise: BaliseEntity) {
         viewModelScope.launch {
             repository.update(balise)
         }
     }
 
+    /**
+     * Retrieves the maximum ID present in the database asynchronously.
+     *
+     * @param callback Callback function with the maximum ID.
+     */
     fun getMaxId(callback: (Int) -> Unit) {
         viewModelScope.launch {
             val maxId = repository.getMaxId()
@@ -51,8 +75,12 @@ class BaliseViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-
-
+    /**
+     * Loads detailed information for a BaliseEntity from a remote API service.
+     *
+     * @param balise The BaliseEntity for which to fetch additional information.
+     * @param onResult Callback function with the fetched Balise details.
+     */
     fun loadBaliseInfo(balise: BaliseEntity, onResult: (Balise?) -> Unit) {
         val apiService = RestApiService()
         viewModelScope.launch {

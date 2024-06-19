@@ -40,6 +40,12 @@ import com.example.ouistici.R
 import com.example.ouistici.data.entity.BaliseEntity
 import com.example.ouistici.ui.loader.Loader
 
+/**
+ * Composable function for displaying a dialog to enter IP, port, and name for a beacon.
+ *
+ * @param onDismiss Callback invoked when the dialog is dismissed.
+ * @param onConfirm Callback invoked when the user confirms the entered IP, port, and name.
+ */
 @Composable
 fun IpPortDialog(onDismiss: () -> Unit, onConfirm: (String, String, String) -> Unit) {
     var ip by remember { mutableStateOf("") }
@@ -133,6 +139,13 @@ fun IpPortDialog(onDismiss: () -> Unit, onConfirm: (String, String, String) -> U
 }
 
 
+/**
+ * Composable function for displaying a dialog to edit a beacon's name, IP, and port.
+ *
+ * @param balise The BaliseEntity object representing the beacon to edit.
+ * @param onDismiss Callback invoked when the dialog is dismissed.
+ * @param onConfirm Callback invoked when the user confirms the edited name, IP, and port.
+ */
 @Composable
 fun EditBaliseDialog(balise: BaliseEntity, onDismiss: () -> Unit, onConfirm: (String, String, String) -> Unit) {
     val urlPattern = "http://(.*):(.*)/".toRegex()
@@ -233,7 +246,14 @@ fun EditBaliseDialog(balise: BaliseEntity, onDismiss: () -> Unit, onConfirm: (St
     }
 }
 
-
+/**
+ * Composable function for displaying a dialog to confirm deletion of a beacon.
+ *
+ * @param balise The BaliseEntity object representing the beacon to delete.
+ * @param navController NavController used for navigation after deletion.
+ * @param onDismiss Callback invoked when the dialog is dismissed.
+ * @param onConfirm Callback invoked when the user confirms deletion of the beacon.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ConfirmDeleteBalisePopup(

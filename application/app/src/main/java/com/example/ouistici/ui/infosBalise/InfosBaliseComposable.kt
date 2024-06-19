@@ -352,7 +352,12 @@ fun InfosBalise(
 
 
 
-
+/**
+ * Composable function representing a switch button for controlling auto volume setting of a Balise.
+ *
+ * @param balise The Balise object whose auto volume setting is controlled by this button.
+ * @param navController The NavController used for navigating to other destinations.
+ */
 @Composable
 fun AutoVolumeButton(balise: Balise, navController: NavController) {
     val checkedState = remember { mutableStateOf(balise.autovolume) }

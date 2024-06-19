@@ -1,5 +1,6 @@
 package com.example.ouistici.ui.choixAnnonce
 
+import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.os.Build
 import android.util.Log
@@ -188,6 +189,7 @@ fun DefaultMessagePopup(
  * @param onDismiss Callback function to be invoked when the popup is dismissed.
  * @param navController NavController for navigating between composables.
  */
+@SuppressLint("StringFormatMatches")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AddPlageHorairePopup(
@@ -478,6 +480,7 @@ fun AddPlageHorairePopup(
  * @param navController NavController for navigating between composables.
  * @param onDismiss Callback function to be invoked when the popup is dismissed.
  */
+@SuppressLint("StringFormatMatches")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ModifyPlageHorairePopup(

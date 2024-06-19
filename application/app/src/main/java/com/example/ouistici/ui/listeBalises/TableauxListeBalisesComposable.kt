@@ -59,7 +59,6 @@ import com.example.ouistici.ui.theme.TableHeaderColor
  * @param weight The weight of the header cell in the table layout.
  * @param textColor The color of the text in the header cell.
  */
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun RowScope.TableHeaderCell(
     text: String,
