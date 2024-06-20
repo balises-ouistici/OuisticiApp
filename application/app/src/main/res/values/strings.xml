@@ -320,4 +320,5 @@
     <string name="a11y_beaconlisttable_delete_beacon">Supprimer la balise %1$s</string>
     <string name="a11y_settings_title">Page des paramètres de l\'application.</string>
     <string name="a11y_settings_change_language">Changer la langue de l\'application.</string>
+    <string name="text_infos_volume_adapter">"Adaptation du volume : "</string>
 </resources>

@@ -321,4 +321,5 @@
     <string name="a11y_beaconlisttable_delete_beacon">Remove beacon %1$s</string>
     <string name="a11y_settings_title">Application settings page.</string>
     <string name="a11y_settings_change_language">Change the app language.</string>
+    <string name="text_infos_volume_adapter">Volume adaptation :</string>
 </resources>

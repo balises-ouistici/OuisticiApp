@@ -260,7 +260,7 @@ fun InfosBalise(
 
                 Row {
                     Text(
-                        text = "Adaptation du volume : ",
+                        text = stringResource(R.string.text_infos_volume_adapter),
                         color = Color.Black,
                         modifier = Modifier
                             .padding(vertical = 10.dp)
